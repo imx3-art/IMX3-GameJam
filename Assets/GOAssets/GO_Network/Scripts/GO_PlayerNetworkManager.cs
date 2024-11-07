@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JAM_PlayerManager : NetworkBehaviour
+public class GO_PlayerNetworkManager : NetworkBehaviour
 {
     
     [Networked] public string playerName { get; set; }
     [Networked] public float playerLife { get; set; }
 
     public bool isLocalPlayer;
-    public static List<JAM_PlayerManager> PlayersList = new List<JAM_PlayerManager>();
+    public static List<GO_PlayerNetworkManager> PlayersList = new List<GO_PlayerNetworkManager>();
 
     public override void Spawned()
     {

@@ -4,52 +4,63 @@ using Fusion.Sockets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 public enum STATUSCONNECTION
 {
     Disconnected,
     Connecting,
     Connected,
+    ConnectedPlaying,
     Offline,
 
 }
 
 
-public class JAM_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
+public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 {
 
     [Tooltip("Player network prefab")]
     [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private int maxPlayers = 10;
+    [SerializeField] private int maxPlayersPublic = 3;
+    [SerializeField] private int maxPlayersInvite = 3;
     [SerializeField] private int maxSecondsAFK = 600;
-    [SerializeField] private NetworkRunner _runner;
-    [SerializeField] private JAM_SpawnPoint spawnPoint;
+    
+    [SerializeField] private GO_SpawnPoint spawnPoint;
 
-    private string nameSession = "GameRoom";
+    private NetworkRunner _runner;
+    private string _nameSession;
 
     private static STATUSCONNECTION statusConnection;
 
-    [ContextMenu("RUNNER")]
-    public async void Start()
+    public void Start()
     {
-        SetStatusConnection(STATUSCONNECTION.Connecting);
-        if(_runner)
-        {
-            Destroy(_runner);
-        }
-        _runner = gameObject.AddComponent<NetworkRunner>();
+        _ = JoinLobby();
+    }
 
-        if (_runner == null)
-            _runner = gameObject.AddComponent<NetworkRunner>();
+
+    [ContextMenu("RUNNER")]
+    public async void StartGame()
+    {
+        string nameSession = GenerateRandomString(4);
+
+        SetStatusConnection(STATUSCONNECTION.Connecting);
+        if (!_runner)
+        {
+            _runner = gameObject.AddComponent<NetworkRunner>();            
+        }
+        Debug.Log("Name sesion: " + _nameSession);
 
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Shared,
-            SessionName = string.IsNullOrEmpty(nameSession) ? _runner.SessionInfo.Name : nameSession,
-            PlayerCount = 10,
+            SessionName = string.IsNullOrEmpty(_nameSession) ? nameSession : _nameSession,
+            PlayerCount = maxPlayersPublic + maxPlayersInvite,
+            CustomLobbyName = "MyCustomLobby",
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
        
@@ -84,7 +95,9 @@ public class JAM_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        throw new NotImplementedException();
+        Debug.Log(runner.IsSharedModeMasterClient);
+
+        //throw new NotImplementedException();
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
@@ -104,10 +117,9 @@ public class JAM_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnConnectedToServer(NetworkRunner runner)
     {
-        SetStatusConnection(STATUSCONNECTION.Connected);
+        SetStatusConnection(STATUSCONNECTION.ConnectedPlaying);
         Debug.Log(runner.IsSharedModeMasterClient);
         spawnPlayer(runner);
-        //throw new NotImplementedException();
     }
 
     public void spawnPlayer(NetworkRunner runner)
@@ -128,7 +140,7 @@ public class JAM_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
     {
         SetStatusConnection(STATUSCONNECTION.Disconnected);
-
+        //_nameSession = null;
         throw new NotImplementedException();
     }
 
@@ -147,9 +159,54 @@ public class JAM_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
         throw new NotImplementedException();
     }
 
+    //Conecta con el lobby generico para poder acceder a la lista de usuarios
+    public async Task JoinLobby()
+    {
+
+        Connect();
+        SetStatusConnection(STATUSCONNECTION.Connecting);
+        var result = await _runner.JoinSessionLobby(SessionLobby.Custom, "MyCustomLobby");
+        if (result.Ok)
+        {
+            SetStatusConnection(STATUSCONNECTION.Connected);
+            Debug.Log($"Conexion Exitosa " + result + " - " + _runner);
+            //StartGame();
+        }
+        else
+        {
+            SetStatusConnection(STATUSCONNECTION.Disconnected);
+            Debug.LogError($"Failed to Start: {result.ShutdownReason}");
+        }
+    }
+
+    private void Connect()
+    {
+        if (_runner == null)
+        {
+            _runner = gameObject.AddComponent<NetworkRunner>();
+            _runner.AddCallbacks(this);
+        }
+    }
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        throw new NotImplementedException();
+        Debug.Log($"Session List Updated with {sessionList.Count} session(s)");
+
+        foreach (var session in sessionList)
+        {
+            Debug.Log("Name sesion: " + sessionList.Count + " " + session.Name + " " + session.MaxPlayers + " " + session.PlayerCount);
+        }
+
+        List<SessionInfo> _sessionList = sessionList.OrderByDescending(p => p.PlayerCount).ToList();
+
+        foreach (var session in _sessionList)
+        {
+            if (session.PlayerCount < maxPlayersPublic)
+            {
+                _nameSession = session.Name;
+                Debug.Log("Name sesion Order: " + sessionList.Count + " " + _nameSession + " " + session.MaxPlayers + " " + session.PlayerCount + " " + maxPlayersPublic);
+                break;
+            }
+        }
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
@@ -183,9 +240,34 @@ public class JAM_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     }
     // Update is called once per frame
 
+
+    #region Utils
     public void SetStatusConnection(STATUSCONNECTION _status)
     {
         statusConnection = _status;
     }
+
+
+
+
+    public static string GenerateRandomString(int length)
+    {
+        string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var random = new System.Random();
+        var stringChars = new char[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            stringChars[i] = chars[random.Next(chars.Length)];
+        }
+
+        return new string(stringChars);
+    }
+
+
+
+
+
+    #endregion
 
 }
