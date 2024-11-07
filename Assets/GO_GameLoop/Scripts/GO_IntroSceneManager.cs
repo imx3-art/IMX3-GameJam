@@ -7,7 +7,7 @@ public class GO_IntroSceneManager : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("Nivel1");
+        SceneManager.LoadScene("Nivel0");
     }
 
     public void ShowCredits()

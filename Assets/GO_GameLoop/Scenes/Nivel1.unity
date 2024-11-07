@@ -478,7 +478,7 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1273784235}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1787121768
+--- !u!1001 &1325762752
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -509,17 +509,17 @@ PrefabInstance:
     - target: {fileID: 2603161253245633916, guid: bd2051490818ae348a5b4ab7e228f5ac,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2603161253245633916, guid: bd2051490818ae348a5b4ab7e228f5ac,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2603161253245633916, guid: bd2051490818ae348a5b4ab7e228f5ac,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2603161253245633916, guid: bd2051490818ae348a5b4ab7e228f5ac,
         type: 3}
@@ -540,21 +540,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PF_LevelManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5256441765961244749, guid: bd2051490818ae348a5b4ab7e228f5ac,
-        type: 3}
-      propertyPath: spawnPoint
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5256441765961244749, guid: bd2051490818ae348a5b4ab7e228f5ac,
-        type: 3}
-      propertyPath: playerPrefab
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5256441765961244749, guid: bd2051490818ae348a5b4ab7e228f5ac,
-        type: 3}
-      propertyPath: playerInstance
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -924,4 +909,4 @@ SceneRoots:
   - {fileID: 150736}
   - {fileID: 8944336655439506787}
   - {fileID: 1126034550}
-  - {fileID: 1787121768}
+  - {fileID: 1325762752}
