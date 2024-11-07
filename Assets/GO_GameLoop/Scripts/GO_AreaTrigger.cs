@@ -16,4 +16,3 @@ public class GO_AreaTrigger : MonoBehaviour
         }
     }
 }
-
