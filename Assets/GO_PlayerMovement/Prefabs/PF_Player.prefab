@@ -54,12 +54,12 @@ PrefabInstance:
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.9783807
+      value: 2.9783802
       objectReference: {fileID: 0}
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.6873116
+      value: 2.6873121
       objectReference: {fileID: 0}
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
@@ -142,6 +142,11 @@ PrefabInstance:
       propertyPath: _virtualCamera
       value: 
       objectReference: {fileID: 1745950554439976803}
+    - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: GroundLayers.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6076957087478959219, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: m_LocalPosition.x
