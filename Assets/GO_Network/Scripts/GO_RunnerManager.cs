@@ -207,6 +207,11 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
                 break;
             }
         }
+
+        
+        StartGame();
+         
+
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
@@ -246,10 +251,6 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         statusConnection = _status;
     }
-
-
-
-
     public static string GenerateRandomString(int length)
     {
         string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -263,6 +264,8 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
         return new string(stringChars);
     }
+
+    
 
 
 

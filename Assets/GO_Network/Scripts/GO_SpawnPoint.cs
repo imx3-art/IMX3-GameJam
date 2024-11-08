@@ -7,7 +7,12 @@ public class GO_SpawnPoint : MonoBehaviour
     [Range(5f, 20f)]
     [SerializeField] float radiusSpawn = 3;
     private Transform _radius;
+    public static GO_SpawnPoint spawPointCurrent;
 
+    private void Awake()
+    {
+        spawPointCurrent = this;
+    }
     public (Vector3 pos, Quaternion rot) getSpawPointPosition()
     {
         Vector3 position = transform.position;
@@ -15,12 +20,14 @@ public class GO_SpawnPoint : MonoBehaviour
 
         return (RandomPosition(position, radiusSpawn), rotation);
     }
+
     public static Vector3 RandomPosition(Vector3 _position, float _maxRadius)
     {
         Vector3 _upVector = Vector3.up;
         _maxRadius = 5 * _maxRadius / 19;
         return _position + (Vector3.forward * Random.Range(-_maxRadius, _maxRadius)) + (Vector3.right * Random.Range(-_maxRadius, _maxRadius)) + (_upVector);
     }
+
     #region EDITOR
     void OnValidate()
     {
