@@ -90,7 +90,8 @@ namespace StarterAssets
 
         private void Awake()
         {
-            _mainCamera = Camera.main.gameObject;
+            //_mainCamera = Camera.main.gameObject; ALBERT
+            _mainCamera = GO_MainCamera.MainCamera.gameObject;
             _framingTransposer = _virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         }
 
@@ -162,7 +163,8 @@ namespace StarterAssets
             if (_input.move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
+                                  //_mainCamera.transform.eulerAngles.y;ALBERT
+                                  GO_MainCamera.MainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1332848063146851742}
   - component: {fileID: 1948694262162892982}
   - component: {fileID: 3099320033930519923}
-  - component: {fileID: 4148991776138508979}
+  - component: {fileID: 694562673989613339}
   m_Layer: 6
   m_Name: SpawnPoint
   m_TagString: Untagged
@@ -85,27 +85,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4148991776138508979
-SphereCollider:
+--- !u!114 &694562673989613339
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2718273518105580807}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63f8c03e7c179da408ff7b9966de14f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radiusSpawn: 3
 --- !u!1 &7187543595157133490
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +109,6 @@ GameObject:
   - component: {fileID: 5573953542874997801}
   - component: {fileID: 1491769410521936746}
   - component: {fileID: 591374225233870556}
-  - component: {fileID: 1311639924680572646}
   m_Layer: 6
   m_Name: Radius
   m_TagString: Untagged
@@ -135,7 +126,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 0.02, z: 6}
+  m_LocalScale: {x: 3, y: 0.02, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1332848063146851742}
@@ -190,26 +181,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1311639924680572646
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7187543595157133490}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}

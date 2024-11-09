@@ -13,6 +13,7 @@ public class GO_AreaTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             OnPlayerEnterArea?.Invoke();
+            gameObject.SetActive(false);
         }
     }
 }

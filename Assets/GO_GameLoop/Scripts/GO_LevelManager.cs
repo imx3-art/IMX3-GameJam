@@ -1,4 +1,5 @@
 using Fusion;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,7 +25,8 @@ public class GO_LevelManager : MonoBehaviour
 
     private int _currentLives;
 
-    private GameObject _playerInstance;
+    //private GameObject _playerInstance;
+    private GO_PlayerNetworkManager _playerInstance;
     private GameObject _playerPrefab;
 
     private Level _currentLevel = Level.Nivel0;
@@ -47,17 +49,31 @@ public class GO_LevelManager : MonoBehaviour
         }
     }
 
-    void Start()
+    async void Start()
     {
         _currentLives = totalLives;
 
-        _playerInstance = GameObject.FindWithTag("Player");
+        //_playerInstance = GameObject.FindWithTag("Player");
+
+        while (true)
+        {
+            await Task.Delay(100);
+            Debug.Log("No player Ready");
+            if(GO_PlayerNetworkManager.localPlayer != null)
+            {
+                _playerInstance = GO_PlayerNetworkManager.localPlayer;
+                break;
+            }
+        }
+
+
         if (_playerInstance == null)
         {
             SpawnPlayer();
         }
 
-        _spawnPoint = GameObject.FindWithTag("Spawn")?.transform;
+        //_spawnPoint = GameObject.FindWithTag("Spawn")?.transform;
+        
         if (_spawnPoint == null)
         {
             Debug.LogError("No se encontró un objeto con el tag 'Spawn' en la escena.");
@@ -72,11 +88,14 @@ public class GO_LevelManager : MonoBehaviour
         LoadLevel(_currentLevel);
     }
 
+    [ContextMenu("Teleport last Pont")]
     void SpawnPlayer()
     {
-        if (_playerInstance == null)
+        if (_playerInstance != null)
         {
-            _playerInstance = Instantiate(_playerPrefab, _spawnPoint.position, Quaternion.identity);
+            //_playerInstance = Instantiate(_playerPrefab, _spawnPoint.position, Quaternion.identity);
+            (Vector3 pos, Quaternion rot) = GO_SpawnPoint.spawPointCurrent.getSpawPointPosition();
+            _playerInstance.teleportPlayer(pos, rot);
         }
     }
 
@@ -90,11 +109,14 @@ public class GO_LevelManager : MonoBehaviour
         GO_AreaTrigger.OnPlayerEnterArea -= HandlePlayerEnterArea;
     }
 
-    private void HandlePlayerEnterArea()
+    private async void HandlePlayerEnterArea()
     {
         if (!isChangingScene)
         {
             ChangeScene();
+            await Task.Delay(1000);
+            SpawnPlayer();
+            //ResetPlayerPosition();
         }
     }
 
@@ -144,9 +166,10 @@ public class GO_LevelManager : MonoBehaviour
     {
         if (_currentLives > 0)
         {
-            _spawnPoint = GameObject.FindWithTag("Spawn")?.transform;
-            _playerInstance = GameObject.FindWithTag("Player");
+            //_spawnPoint = GameObject.FindWithTag("Spawn")?.transform;
+            //_playerInstance = GameObject.FindWithTag("Player");
 
+            /*
             if (_playerInstance == null)
             {
                 Debug.LogError("playerInstance es nulo. Asegúrate de que el jugador esté correctamente instanciado.");
@@ -157,9 +180,10 @@ public class GO_LevelManager : MonoBehaviour
             {
                 Debug.LogError("spawnPoint es nulo. Asegúrate de que el punto de spawn esté correctamente asignado.");
                 return;
-            }
+            }*/
+            //_playerInstance.transform.position = _spawnPoint.position;
 
-            _playerInstance.transform.position = _spawnPoint.position;
+            SpawnPlayer();
             isChangingScene = false;
         }
         else
@@ -173,7 +197,6 @@ public class GO_LevelManager : MonoBehaviour
                 Instantiate(popupManagerPrefab);
             }
             GO_PopUpManager.Instance.ShowPopup();
-
         }
     }
 

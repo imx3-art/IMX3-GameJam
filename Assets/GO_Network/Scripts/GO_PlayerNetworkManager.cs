@@ -12,7 +12,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     [Networked] public string playerName { get; set; }
     [Networked] public float playerLife { get; set; }
 
-    public NetworkTransform playerTransform { get; set; }
+    public NetworkTransform playerTransform;
     public bool isLocalPlayer;
     public static List<GO_PlayerNetworkManager> PlayersList = new List<GO_PlayerNetworkManager>();
     public static GO_PlayerNetworkManager localPlayer;
@@ -24,7 +24,6 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         {
             localPlayer = this;
             isLocalPlayer = true;
-            playerTransform = GetComponentInChildren<NetworkTransform>();
             playerTransform.gameObject.transform.localPosition = Vector3.zero;
         }
         else
@@ -40,8 +39,13 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         (controller = GetComponentInChildren<GO_ThirdPersonController>()).enabled = isLocalPlayer;
         
     }
+    
     public void teleportPlayer(Vector3 _pos, Quaternion _rot)
     {
+        Debug.Log("TELEPORT: " + playerTransform +" - " + _pos +" - " + _rot + " - " + playerTransform.name);
         playerTransform.Teleport(_pos, _rot);
+        Time.timeScale= 0;
+        //transform.SetPositionAndRotation(_pos, _rot);
+        //playerTransform.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 }

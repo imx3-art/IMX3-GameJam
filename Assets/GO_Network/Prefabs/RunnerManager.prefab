@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb6bb774fc36601498877b13fd17783c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 7884855646328314187, guid: 82ac6c0f349a62c4f90bb2d567613856,
+  playerPrefab: {fileID: 104718410454522477, guid: cbaa38341cb985a43be7a3f843fc8aa5,
     type: 3}
-  maxPlayers: 10
+  maxPlayersPublic: 3
+  maxPlayersInvite: 3
   maxSecondsAFK: 600
-  _runner: {fileID: 0}
   spawnPoint: {fileID: 865269355184523033}
 --- !u!1001 &9179135162440777359
 PrefabInstance:

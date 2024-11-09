@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GO_SpawnPoint : MonoBehaviour
 {
-    [Range(5f, 20f)]
-    [SerializeField] float radiusSpawn = 3;
+    [Range(3f, 20f)]
+    [SerializeField] float radiusSpawnPlayer = 5;
     private Transform _radius;
     public static GO_SpawnPoint spawPointCurrent;
 
@@ -18,7 +18,7 @@ public class GO_SpawnPoint : MonoBehaviour
         Vector3 position = transform.position;
         Quaternion rotation = transform.rotation;
 
-        return (RandomPosition(position, radiusSpawn), rotation);
+        return (RandomPosition(position, radiusSpawnPlayer), rotation);
     }
 
     public static Vector3 RandomPosition(Vector3 _position, float _maxRadius)
@@ -37,7 +37,7 @@ public class GO_SpawnPoint : MonoBehaviour
             {
                 _radius = transform.GetChild(0);
             }
-            _radius.localScale = new Vector3(radiusSpawn, _radius.localScale.y, radiusSpawn);
+            _radius.localScale = new Vector3(radiusSpawnPlayer, _radius.localScale.y, radiusSpawnPlayer);
         }
     }
     #endregion
