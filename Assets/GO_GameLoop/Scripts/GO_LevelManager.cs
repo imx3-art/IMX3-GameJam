@@ -76,7 +76,7 @@ public class GO_LevelManager : MonoBehaviour
         
         if (_spawnPoint == null)
         {
-            Debug.LogError("No se encontró un objeto con el tag 'Spawn' en la escena.");
+            Debug.LogError("No se encontrï¿½ un objeto con el tag 'Spawn' en la escena.");
             return;
         }
 
@@ -94,6 +94,7 @@ public class GO_LevelManager : MonoBehaviour
         if (_playerInstance != null)
         {
             //_playerInstance = Instantiate(_playerPrefab, _spawnPoint.position, Quaternion.identity);
+            
             (Vector3 pos, Quaternion rot) = GO_SpawnPoint.spawPointCurrent.getSpawPointPosition();
             _playerInstance.teleportPlayer(pos, rot);
         }
@@ -172,13 +173,13 @@ public class GO_LevelManager : MonoBehaviour
             /*
             if (_playerInstance == null)
             {
-                Debug.LogError("playerInstance es nulo. Asegúrate de que el jugador esté correctamente instanciado.");
+                Debug.LogError("playerInstance es nulo. Asegï¿½rate de que el jugador estï¿½ correctamente instanciado.");
                 return;
             }
 
             if (_spawnPoint == null)
             {
-                Debug.LogError("spawnPoint es nulo. Asegúrate de que el punto de spawn esté correctamente asignado.");
+                Debug.LogError("spawnPoint es nulo. Asegï¿½rate de que el punto de spawn estï¿½ correctamente asignado.");
                 return;
             }*/
             //_playerInstance.transform.position = _spawnPoint.position;

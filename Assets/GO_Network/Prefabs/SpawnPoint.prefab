@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 694562673989613339}
   m_Layer: 6
   m_Name: SpawnPoint
-  m_TagString: Untagged
+  m_TagString: Spawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f8c03e7c179da408ff7b9966de14f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiusSpawn: 3
+  radiusSpawnPlayer: 5
 --- !u!1 &7187543595157133490
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 0.02, z: 3}
+  m_LocalScale: {x: 5, y: 0.02, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1332848063146851742}

@@ -15,9 +15,10 @@ public class GO_SpawnPoint : MonoBehaviour
     }
     public (Vector3 pos, Quaternion rot) getSpawPointPosition()
     {
+        
         Vector3 position = transform.position;
         Quaternion rotation = transform.rotation;
-
+        
         return (RandomPosition(position, radiusSpawnPlayer), rotation);
     }
 

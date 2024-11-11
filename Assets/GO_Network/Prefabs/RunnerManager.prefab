@@ -119,6 +119,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 2718273518105580807, guid: 1d2709d175610354d8902e0e691a38db,
+        type: 3}
+      propertyPath: m_TagString
+      value: Spawn
+      objectReference: {fileID: 0}
     - target: {fileID: 3099320033930519923, guid: 1d2709d175610354d8902e0e691a38db,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -127,12 +132,12 @@ PrefabInstance:
     - target: {fileID: 5573953542874997801, guid: 1d2709d175610354d8902e0e691a38db,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 7.68
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5573953542874997801, guid: 1d2709d175610354d8902e0e691a38db,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 7.68
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4148991776138508979, guid: 1d2709d175610354d8902e0e691a38db, type: 3}
@@ -163,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f8c03e7c179da408ff7b9966de14f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiusSpawn: 7.68
+  radiusSpawnPlayer: 5
 --- !u!4 &7862700612142170897 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1332848063146851742, guid: 1d2709d175610354d8902e0e691a38db,

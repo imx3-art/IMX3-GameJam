@@ -118,6 +118,24 @@ namespace StarterAssets
         {
             
         }
+        
+        public void CenterCameraOnPlayer()
+        {
+            if (_virtualCamera != null)
+            {
+                var framingTransposer = _virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+                if (framingTransposer != null)
+                {
+                    framingTransposer.m_ScreenX = 0.5f;
+                    framingTransposer.m_ScreenY = 0.5f;
+                }
+
+                // Informar a Cinemachine del teletransporte
+                Vector3 positionDelta = transform.position - _virtualCamera.transform.position;
+                _virtualCamera.OnTargetObjectWarped(transform, positionDelta);
+            }
+        }
+
 
         private void Move()
         {
@@ -164,10 +182,10 @@ namespace StarterAssets
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
                                   //_mainCamera.transform.eulerAngles.y;ALBERT
-                                  GO_MainCamera.MainCamera.transform.eulerAngles.y;
+                                  _virtualCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
-
+    
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }

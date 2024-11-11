@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2603161253245633916}
   - component: {fileID: 5256441765961244749}
-  - component: {fileID: -4503436873051429649}
   m_Layer: 0
   m_Name: PF_LevelManager
   m_TagString: Untagged
@@ -48,15 +47,4 @@ MonoBehaviour:
   popupManagerPrefab: {fileID: 637766446433955878, guid: b95c168b1bb10c24ab2a950840d200b1,
     type: 3}
   totalLives: 3
---- !u!114 &-4503436873051429649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3394995856198306930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f172b63a3a6d40049b003228c67209af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  DidSabotage: 0
