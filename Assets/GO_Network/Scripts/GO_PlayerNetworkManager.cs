@@ -43,13 +43,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public void teleportPlayer(Vector3 _pos, Quaternion _rot)
     {
         Debug.Log("TELEPORT: " + playerTransform +" - " + _pos +" - " + _rot + " - " + playerTransform.name);
-        
-        
         playerTransform.Teleport(_pos, _rot); 
-        //Time.timeScale= 0;
-        
-        
-        //transform.SetPositionAndRotation(_pos, _rot);
-        //playerTransform.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
     }
 }

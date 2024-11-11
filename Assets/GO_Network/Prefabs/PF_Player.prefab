@@ -162,6 +162,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_PlayerArmature
       objectReference: {fileID: 0}
+    - target: {fileID: 8263603786362908439, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: canPush
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8263603786362908439, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: pushLayers.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
