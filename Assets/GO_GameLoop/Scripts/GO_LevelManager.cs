@@ -96,7 +96,7 @@ public class GO_LevelManager : MonoBehaviour
             //_playerInstance = Instantiate(_playerPrefab, _spawnPoint.position, Quaternion.identity);
             
             (Vector3 pos, Quaternion rot) = GO_SpawnPoint.spawPointCurrent.getSpawPointPosition();
-            _playerInstance.teleportPlayer(pos, rot);
+            _playerInstance.TeleportPlayer(pos, rot);
         }
     }
 

@@ -50,8 +50,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerName: Player Name String
   _playerLife: 100
+  _playerID: 0
+  _movePlayerNetwork: {x: 0, y: 0}
+  _isDrag: 0
   playerTransform: {fileID: 7611129480513107271}
   isLocalPlayer: 0
+  otherPlayerTarget: {fileID: 0}
 --- !u!114 &-3133598056451371490
 MonoBehaviour:
   m_ObjectHideFlags: 0
