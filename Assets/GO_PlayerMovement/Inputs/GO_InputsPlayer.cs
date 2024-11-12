@@ -9,6 +9,7 @@ namespace StarterAssets
     {
         [Header("Custom Input Values")]
         public bool stealth;
+        public bool Grab;
         public static bool IsPause = false;
 
 #if ENABLE_INPUT_SYSTEM
@@ -20,10 +21,20 @@ namespace StarterAssets
         {
             StealthInput(value.isPressed);
         }
+
+        public void OnGrab(InputValue value)
+        {
+            GrabInput(value.isPressed);
+        }
 #endif
         public void StealthInput(bool newStealthState)
         {
             stealth = newStealthState;
+        }
+
+        public void GrabInput(bool newGrabState)
+        {
+            Grab = newGrabState;
         }
 
         public new void MoveInput(Vector2 newMoveDirection)

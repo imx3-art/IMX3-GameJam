@@ -11,7 +11,7 @@ namespace StarterAssets
         [Header("Player Movementa")]
         [Tooltip("Velocidad de sigilo del personaje en m/s")]
         public float StealthSpeed = 1.0f;
-        
+
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
 
@@ -20,21 +20,21 @@ namespace StarterAssets
 
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
-        
+
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
-        
+
         public AudioClip LandingAudioClip;
         public AudioClip[] FootstepAudioClips;
         [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
-        
+
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
-        
+
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
         public float FallTimeout = 0.15f;
-        
+
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
@@ -47,11 +47,11 @@ namespace StarterAssets
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
-        
+
         [Header("Camera Movement")]
         [SerializeField] private CinemachineVirtualCamera _virtualCamera;
         private CinemachineFramingTransposer _framingTransposer;
-    
+
         [Header("Camera Settings")]
         [Tooltip("Desplazamiento máximo desde el centro en el eje X")]
         [SerializeField] private float maxOffsetX = 0.2f;
@@ -62,13 +62,19 @@ namespace StarterAssets
         [Tooltip("Tiempo de suavizado para el movimiento de la cámara")]
         [SerializeField] private float smoothTime = 0.2f;
 
+        private Transform _grabbedObject;
+        private GO_GrabLimits _grabLimits;
+
+        public float grabDistance = 2.0f; // Distancia máxima para agarrar objetos
+        public LayerMask grabbableLayer;  // Capa para objetos que pueden ser agarrados
+
         private CharacterController _controller;
         private GO_InputsPlayer _input;
         private GameObject _mainCamera;
-        
+
         private float _screenXVelocity = 0f;
         private float _screenYVelocity = 0f;
-        
+
         private Animator _animator;
         private bool _hasAnimator;
         // player
@@ -78,13 +84,13 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
-        
+
         // animation IDs
         private int _animIDSpeed;
         private int _animIDGrounded;
         private int _animIDMotionSpeed;
         private int _animIDFreeFall;
-        
+
         // timeout deltatime
         private float _fallTimeoutDelta;
 
@@ -112,13 +118,26 @@ namespace StarterAssets
             GroundedCheck();
             Move();
             AdjustCameraFraming();
+            // Verifica si el jugador está presionando una tecla para agarrar un objeto
+            if (_input.Grab) // Suponiendo que has configurado la acción de 'grabar' en el sistema de entrada
+            {
+                TryGrabObject();
+            }else
+            {
+                ReleaseObject();
+            }
+            // Si el jugador está agarrando un objeto, aplica las restricciones
+            if (_grabbedObject != null)
+            {
+                MoveGrabbedObjectWithLimits();
+            }
         }
-        
+
         private void LateUpdate()
         {
-            
+
         }
-        
+
         public void CenterCameraOnPlayer()
         {
             if (_virtualCamera != null)
@@ -185,7 +204,7 @@ namespace StarterAssets
                                   _virtualCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
-    
+
                 // rotate to face input direction relative to camera position
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
@@ -204,7 +223,7 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
-        
+
         private void FalloutGravity()
         {
             if (Grounded)
@@ -263,7 +282,7 @@ namespace StarterAssets
             _framingTransposer.m_ScreenX = Mathf.SmoothDamp(_framingTransposer.m_ScreenX, targetScreenX, ref _screenXVelocity, smoothTime);
             _framingTransposer.m_ScreenY = Mathf.SmoothDamp(_framingTransposer.m_ScreenY, targetScreenY, ref _screenYVelocity, smoothTime);
         }
-        
+
         private void AssignAnimationIDs()
         {
             _animIDSpeed = Animator.StringToHash("Speed");
@@ -283,7 +302,7 @@ namespace StarterAssets
                 _animator.SetBool(_animIDGrounded, Grounded);
             }
         }
-        
+
         private void OnFootstep(AnimationEvent animationEvent)
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
@@ -302,6 +321,94 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
+        }
+
+        private void TryGrabObject()
+        {
+            Transform objectTransform = transform;
+
+            Vector3 rayOrigin = new Vector3(objectTransform.position.x, objectTransform.position.y +1f, objectTransform.position.z);
+
+            Ray ray = new Ray(rayOrigin, transform.forward); // Usamos la posición de la cámara y su dirección hacia adelante
+            RaycastHit hit;
+
+            // Hacer visible el raycast en el editor de Unity
+            Debug.DrawRay(ray.origin, ray.direction * grabDistance, Color.red, 0, true);
+
+            // Verifica si el Raycast detecta algún objeto dentro de la distancia de agarre
+            if (Physics.Raycast(ray, out hit, grabDistance, grabbableLayer))
+            {
+                Transform objectToGrab = hit.transform;
+                GO_GrabLimits grabProperties = objectToGrab.GetComponent<GO_GrabLimits>();
+
+                // Verifica si el objeto tiene la propiedad grabable configurada
+                if (grabProperties != null)
+                {
+                    Debug.Log($"Objeto detectado para agarrar: {objectToGrab.name}");
+                    GrabObject(objectToGrab);
+                }
+                else
+                {
+                    Debug.LogWarning("El objeto no tiene límites configurados en GrabProperties.");
+                }
+            }
+            else
+            {
+                Debug.Log("No se detectó ningún objeto en la distancia de agarre.");
+            }
+        }
+
+        private void MoveGrabbedObjectWithLimits()
+        {
+            if (_grabbedObject == null || _grabLimits == null)
+            {
+                Debug.LogWarning("No hay objeto agarrado o no tiene límites configurados.");
+                return;
+            }
+
+            Vector3 currentPosition = _grabbedObject.position;
+
+            float moveX = Input.GetAxis("Horizontal") * Time.deltaTime;
+            float moveY = Input.GetAxis("Vertical") * Time.deltaTime;
+
+            Vector3 targetPosition = currentPosition;
+            // Actualiza la posición en función del movimiento del jugador
+            targetPosition.x += _input.move.x;
+            targetPosition.z += _input.move.y;
+
+            // Aplica los límites en X y Z
+            targetPosition.x = Mathf.Clamp(targetPosition.x, _grabLimits.minX, _grabLimits.maxX);
+            targetPosition.z = Mathf.Clamp(targetPosition.z, _grabLimits.MinZ, _grabLimits.MaxZ);
+
+            // Actualiza la posición del objeto
+            _grabbedObject.position = Vector3.Lerp(currentPosition, targetPosition, 0.045f);
+
+            Debug.Log($"Objeto {_grabbedObject.name} movido a la posición {_grabbedObject.position}");
+        }
+
+        private void GrabObject(Transform objectToGrab)
+        {
+            _grabbedObject = objectToGrab;
+            _grabLimits = objectToGrab.GetComponent<GO_GrabLimits>();
+
+            if (_grabLimits == null)
+            {
+                Debug.LogWarning("El objeto no tiene límites configurados en GrabProperties.");
+            }
+            else
+            {
+                Debug.Log($"Objeto {objectToGrab.name} agarrado con límites configurados.");
+            }
+        }
+
+        private void ReleaseObject()
+        {
+            if (_grabbedObject != null)
+            {
+                Debug.Log($"Objeto {_grabbedObject.name} soltado.");
+            }
+            _grabbedObject = null;
+            _grabLimits = null;
         }
     }
 }

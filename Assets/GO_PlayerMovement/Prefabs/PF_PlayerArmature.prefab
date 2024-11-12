@@ -1800,6 +1800,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.5
+  Gravity: -15
+  FallTimeout: 0.15
   Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.28
@@ -1810,6 +1812,10 @@ MonoBehaviour:
   maxOffsetX: 0.2
   maxOffsetY: 0.2
   smoothTime: 1
+  grabDistance: 5
+  grabbableLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &7257542392921084583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1830,6 +1836,7 @@ MonoBehaviour:
   cursorLocked: 1
   cursorInputForLook: 1
   stealth: 0
+  Grab: 0
 --- !u!114 &8263603786362908439
 MonoBehaviour:
   m_ObjectHideFlags: 0
