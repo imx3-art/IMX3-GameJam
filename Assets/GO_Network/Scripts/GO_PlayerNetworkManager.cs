@@ -15,6 +15,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     [Networked] public Vector2 movePlayerNetwork { get; set; }
     [Networked] public short isDrag { get; set; }
 
+    [SerializeField] private GameObject cameraTargetFollow;
+
     public NetworkTransform playerTransform;
     public bool isLocalPlayer;
     public static List<GO_PlayerNetworkManager> PlayersList = new List<GO_PlayerNetworkManager>();
@@ -36,6 +38,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         {
 
         }
+        cameraTargetFollow.SetActive(isLocalPlayer);
+
         //GetComponentInChildren<Rigidbody>().isKinematic = !isLocalPlayer;
         //(controller = GetComponentInChildren<GO_ThirdPersonController>()).enabled = isLocalPlayer;
 
@@ -64,26 +68,30 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public void EnddragMode(bool _RPC = false)
     {
         isDrag = 0;
+
         if (_RPC && otherPlayerTarget != null)
         {
             RPC_setOtherPlayer(otherPlayerTarget.playerID, playerID, false);
         }
+        otherPlayerTarget = null;
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
     public void RPC_setOtherPlayer(short _playerID, short _otherPlayer, bool start)
     {
-        if (_playerID == playerID)
+        GO_PlayerNetworkManager otherPlayerTargetTMP = PlayersList.Find(player => player.playerID == _playerID);
+        if (otherPlayerTargetTMP)
         {
-            otherPlayerTarget = PlayersList.Find(player => player.playerID == _otherPlayer);
             if (start)
             {
-                StartdragMode();
+                otherPlayerTargetTMP.otherPlayerTarget = PlayersList.Find(player => player.playerID == _otherPlayer);
+                otherPlayerTargetTMP.StartdragMode();
             }
             else
             {
-                EnddragMode();
+                otherPlayerTargetTMP.EnddragMode();
             }
+            Debug.Log("*****EL RPC FUNCIONA SOY: " + _playerID + " - Busco a: " + _otherPlayer + " - otherPlayer: " + otherPlayerTarget);
         }
     }
 

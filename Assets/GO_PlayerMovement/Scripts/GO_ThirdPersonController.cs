@@ -158,13 +158,14 @@ namespace StarterAssets
 
         private void Move()
         {
-            float targetSpeed = _input.stealth ? StealthSpeed : _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = _input.stealth ? StealthSpeed : _input.sprint ? (GO_PlayerNetworkManager.localPlayer.isDrag == 0 ? SprintSpeed : MoveSpeed) : MoveSpeed;
+                        
 
-            // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+                // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
-            // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is no input, set the target speed to 0
-            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+                // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+                // if there is no input, set the target speed to 0
+                if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -206,7 +207,10 @@ namespace StarterAssets
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                if (GO_PlayerNetworkManager.localPlayer.isDrag == 0)
+                {
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
             }
 
 

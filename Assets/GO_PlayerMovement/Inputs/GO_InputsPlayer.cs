@@ -39,9 +39,11 @@ namespace StarterAssets
 
         public void DragInput(bool newDragthState)
         {
+            Debug.Log("***EL Drag esta: " + drag);
             if(drag) 
             {
                 GO_PlayerNetworkManager.localPlayer.EnddragMode(true);
+                move = Vector2.zero;
             }
             drag = newDragthState;
             //GO_PlayerNetworkManager.localPlayer.isDrag = (short)(drag ? 1 : 0);
@@ -60,23 +62,28 @@ namespace StarterAssets
             }
             else
             {
+                GO_PlayerNetworkManager.localPlayer.movePlayerNetwork = Vector2.zero;
                 move.x = IsPause ? Vector2.zero.x : newMoveDirection.x;
                 move.y = IsPause ? Vector2.zero.y : newMoveDirection.y;
             }
         }
-
+        Vector2 moveTMP;
         private void Update()
         {
             if (GO_PlayerNetworkManager.localPlayer.isDrag == 1)
             {
-                Debug.Log("Revisando vector: " + GO_PlayerNetworkManager.localPlayer.movePlayerNetwork);
+                Debug.Log("****Revisando vector: " + GO_PlayerNetworkManager.localPlayer.movePlayerNetwork);
                 if (GO_PlayerNetworkManager.localPlayer.otherPlayerTarget != null)
                 {
                     Vector2 newMoveDirection = GO_PlayerNetworkManager.localPlayer.movePlayerNetwork + GO_PlayerNetworkManager.localPlayer.otherPlayerTarget.movePlayerNetwork;
-                    move.x = IsPause ? Vector2.zero.x : newMoveDirection.x;
-                    move.y = IsPause ? Vector2.zero.y : newMoveDirection.y;
-                }
-                
+                    moveTMP = Vector2.Lerp(moveTMP, newMoveDirection, Time.deltaTime );
+                    move.x = IsPause ? Vector2.zero.x : moveTMP.x / 2;
+                    move.y = IsPause ? Vector2.zero.y : moveTMP.y / 2;
+                }                
+            }
+            else if(moveTMP != Vector2.zero)
+            {
+                move = moveTMP = Vector2.zero;
             }
         }
     }
