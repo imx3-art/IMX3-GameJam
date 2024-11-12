@@ -39,10 +39,11 @@ public class GO_PlayerActions : MonoBehaviour
             else
             {
                 otherPlayerNetworkManager = null;
-                GO_PlayerNetworkManager.localPlayer.EnddragMode(true);
+                
             }
-        }
+        }        
     }
+
 
     private void MiniGameDrag()
     {
