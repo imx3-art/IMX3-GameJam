@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GO_LevelManager : MonoBehaviour
+public class GO_LevelManager : NetworkBehaviour
 {
     public enum Level
     {

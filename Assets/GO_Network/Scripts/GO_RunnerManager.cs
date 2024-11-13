@@ -26,6 +26,7 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
     [Tooltip("Player network prefab")]
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject gameManager;
     [SerializeField] private int maxPlayersPublic = 3;
     [SerializeField] private int maxPlayersInvite = 3;
     [SerializeField] private int maxSecondsAFK = 600;
@@ -119,6 +120,8 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         SetStatusConnection(STATUSCONNECTION.ConnectedPlaying);
         Debug.Log(runner.IsSharedModeMasterClient);
+        runner.Spawn(gameManager);
+
         spawnPlayer(runner);
     }
 
