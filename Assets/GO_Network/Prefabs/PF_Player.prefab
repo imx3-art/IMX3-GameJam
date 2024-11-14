@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: Player Name String
-  _playerLife: 100
+  _playerLives: 0
   _playerID: 0
   _movePlayerNetwork: {x: 0, y: 0}
   _isDrag: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   SyncScale: 0
   SyncParent: 0
   _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1001 &1547634112643291679
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102,6 +102,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5502584064351370505}
     m_Modifications:
+    - target: {fileID: 341225333634634659, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2376559194615770311, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a45d524abd264fd41a424f814a7176ad, type: 2}
     - target: {fileID: 4818616993116334801, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: m_LocalPosition.x

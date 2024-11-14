@@ -17,16 +17,17 @@ public class GO_LevelManager : NetworkBehaviour
         Nivel6
     }
 
+    public short id;
     public static GO_LevelManager instance;
     public GameObject popupManagerPrefab;
 
     public int totalLives = 3;
     public bool DidSabotage = false;
 
-    private int _currentLives;
+    //private int _currentLives;
 
     //private GameObject _playerInstance;
-    private GO_PlayerNetworkManager _playerInstance;
+    public GO_PlayerNetworkManager _playerInstance;
     private GameObject _playerPrefab;
 
     private Level _currentLevel = Level.Nivel0;
@@ -36,12 +37,23 @@ public class GO_LevelManager : NetworkBehaviour
 
     private bool isChangingScene = false;
 
-    void Awake()
+    [SerializeField] GameObject prefabNetworkObjects;
+
+
+
+
+    public override void Spawned()
     {
+        Debug.Log("Iniciando " + instance);
+
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            if (Runner.IsSharedModeMasterClient)
+            {
+                SpawnObjects();
+            }
         }
         else
         {
@@ -49,9 +61,8 @@ public class GO_LevelManager : NetworkBehaviour
         }
     }
 
-    async void Start()
+    private async void Start()
     {
-        _currentLives = totalLives;
 
         //_playerInstance = GameObject.FindWithTag("Player");
 
@@ -66,24 +77,28 @@ public class GO_LevelManager : NetworkBehaviour
             }
         }
 
+        //RPC_setLifes(_playerInstance.playerID, (short)totalLives);
+        _playerInstance.playerLives = totalLives;
 
-        if (_playerInstance == null)
+
+
+        /*if (_playerInstance == null)
         {
             SpawnPlayer();
-        }
+        }*/
 
         //_spawnPoint = GameObject.FindWithTag("Spawn")?.transform;
-        
-        if (_spawnPoint == null)
+
+        /*if (_spawnPoint == null)
         {
             Debug.LogError("No se encontr� un objeto con el tag 'Spawn' en la escena.");
             return;
-        }
+        }*/
 
-        if (_playerInstance != null)
+        /*if (_playerInstance != null)
         {
             _playerInstance.transform.position = _spawnPoint.position;
-        }
+        }*/
 
         LoadLevel(_currentLevel);
     }
@@ -120,16 +135,17 @@ public class GO_LevelManager : NetworkBehaviour
             //ResetPlayerPosition();
         }
     }
-
+    
     [ContextMenu("PERDER VIDA")]
-    private void perderUnaVida()
+    public void perderUnaVida()
     {
-        if(_currentLevel != Level.Nivel0)
+        if(_currentLevel != Level.Nivel0 || true)//REVERT
         {
-            _currentLives--;
+            //_playerInstance.playerLives--;
+            RPC_setLifes(_playerInstance.playerID, -1);
             ResetPlayerPosition();
         }
-        Debug.Log(_currentLives);
+        Debug.Log(_playerInstance.playerLives);
     }
 
     private void ChangeScene()
@@ -143,7 +159,8 @@ public class GO_LevelManager : NetworkBehaviour
                 _currentLevel++;
                 break;
             case Level.Nivel4:
-                _currentLives = 3;
+                _playerInstance.playerLives = 3;
+                //RPC_setLifes(_playerInstance.playerID, 3);
                 if (DidSabotage)
                 {
                     _currentLevel = Level.Nivel5;
@@ -156,7 +173,8 @@ public class GO_LevelManager : NetworkBehaviour
             case Level.Nivel5:
             case Level.Nivel6:
                 _currentLevel = Level.Nivel0;
-                _currentLives = 3;
+                _playerInstance.playerLives = 3;
+                //RPC_setLifes(_playerInstance.playerID, 3);
                 SceneManager.LoadScene("IntroScene");
                 return;
         }
@@ -165,7 +183,7 @@ public class GO_LevelManager : NetworkBehaviour
 
     private void ResetPlayerPosition()
     {
-        if (_currentLives > 0)
+        if (_playerInstance.playerLives > 0)
         {
             //_spawnPoint = GameObject.FindWithTag("Spawn")?.transform;
             //_playerInstance = GameObject.FindWithTag("Player");
@@ -190,9 +208,10 @@ public class GO_LevelManager : NetworkBehaviour
         else
         {
             // Instancia PopupManager si no existe
-            _currentLives = totalLives;
+            //RPC_setLifes(_playerInstance.playerID, (short)totalLives);
+            _playerInstance.playerLives = totalLives;
             _currentLevel = Level.Nivel0;
-            Debug.Log(_currentLives);
+            Debug.Log(_playerInstance.playerLives);
             if (GO_PopUpManager.Instance == null && popupManagerPrefab != null)
             {
                 Instantiate(popupManagerPrefab);
@@ -223,4 +242,26 @@ public class GO_LevelManager : NetworkBehaviour
     {
         isChangingScene = false;
     }
+
+
+    public void SpawnObjects()
+    {
+        Debug.Log("RESPQEN OBJETO");
+        Runner.Spawn(prefabNetworkObjects, Vector3.zero + Vector3.up * 10, Quaternion.identity);
+    }
+
+
+
+    //RPC
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_setLifes(short _playerID, short _value)
+    {
+        Debug.Log("RPC: " + _playerID + " - " + GO_PlayerNetworkManager.localPlayer.playerID);
+        if(_playerID == GO_PlayerNetworkManager.localPlayer.playerID)
+        {
+            GO_PlayerNetworkManager.localPlayer.playerLives += _value;
+        }
+
+    }
+
 }

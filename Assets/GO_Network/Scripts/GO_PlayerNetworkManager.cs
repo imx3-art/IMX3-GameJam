@@ -10,7 +10,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     private GO_ThirdPersonController controller;
 
     [Networked] public string playerName { get; set; }
-    [Networked] public float playerLife { get; set; }
+    [Networked] public float playerLives { get; set; }
     [Networked] public short playerID { get; set; }
     [Networked] public Vector2 movePlayerNetwork { get; set; }
     [Networked] public short isDrag { get; set; }
@@ -75,6 +75,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         }
         otherPlayerTarget = null;
     }
+
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
     public void RPC_setOtherPlayer(short _playerID, short _otherPlayer, bool start)

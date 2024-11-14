@@ -91,6 +91,7 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+
         //throw new NotImplementedException();
     }
 
@@ -120,8 +121,6 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         SetStatusConnection(STATUSCONNECTION.ConnectedPlaying);
         Debug.Log(runner.IsSharedModeMasterClient);
-        runner.Spawn(gameManager);
-
         spawnPlayer(runner);
     }
 
@@ -138,6 +137,11 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
             _roomPlayer = runner.Spawn(playerPrefab, positionPlayer, rotationPlayer);
             runner.SetPlayerObject(runner.LocalPlayer, _roomPlayer);
+
+            if (runner.IsSharedModeMasterClient)
+            {
+                runner.Spawn(gameManager);
+            }
         }
     }
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
