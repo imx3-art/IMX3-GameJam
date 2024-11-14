@@ -35,6 +35,9 @@ public abstract class GO_Enemy : MonoBehaviour
     public AudioClip[] FootstepAudioClips;
     [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
 
+    
+    [HideInInspector] public bool hasArm = false;
+
     protected virtual void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();

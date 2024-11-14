@@ -14,6 +14,18 @@ public class GO_State_Patrol : GO_State
 
     void Update()
     {
+        // Primero, verificar si el enemigo ve un brazo y no tiene ya uno
+        Transform armTransform;
+        if (!enemy.hasArm && enemy.visionController.SeeTheArm(out armTransform))
+        {
+            // Si ve un brazo, cambiar al estado de recogerlo
+            GO_State_PickUpArm pickUpArmState = GetComponent<GO_State_PickUpArm>();
+            pickUpArmState.SetArmTransform(armTransform);
+            stateMachine.ActivateState(pickUpArmState);
+            return;
+        }
+
+        // Si no hay brazo, comprobar si ve al jugador
         Transform playerTransform;
         if (enemy.visionController.SeeThePlayer(out playerTransform))
         {
@@ -22,6 +34,7 @@ public class GO_State_Patrol : GO_State
             return;
         }
 
+        // Lógica de patrulla normal
         if (enemy.navMeshController.ArrivedPoint())
         {
             _nextWaypoint = (_nextWaypoint + 1) % enemy.GetComponent<GO_PatrollingEnemy>().waypoints.Length;

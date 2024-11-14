@@ -22,4 +22,9 @@ public class GO_Enemy_State_Machine : MonoBehaviour
             meshRendererIndicator.material.color = currentState.colorState;
         }
     }
+    
+    public GO_State GetCurrentState()
+    {
+        return currentState;
+    }
 }

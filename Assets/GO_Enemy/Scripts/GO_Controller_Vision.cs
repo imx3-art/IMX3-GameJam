@@ -10,8 +10,18 @@ public class GO_Controller_Vision : MonoBehaviour
 {
     public Transform eyes;
 
+    public Material visionConeMaterial;
+    [Range(3, 100)]
+    public int meshSegments = 20;
+    
     private GO_Controller_NavMesh _controllerNavMesh;
     private GO_Enemy _enemy; 
+    
+    // Referencias para el cono de visión
+    private GameObject _visionConeObject;
+    private MeshFilter _visionConeMeshFilter;
+    private MeshRenderer _visionConeMeshRenderer;
+    private Mesh _visionConeMesh;
 
     private void Awake()
     {
@@ -20,6 +30,43 @@ public class GO_Controller_Vision : MonoBehaviour
         if (_enemy == null)
         {
             Debug.LogError("GO_Controller_Vision necesita estar en un GameObject con GO_Enemy.");
+        }
+        
+        _visionConeObject = new GameObject("VisionConeMesh");
+        _visionConeObject.transform.SetParent(transform);
+        _visionConeObject.transform.localPosition = Vector3.zero;
+        _visionConeObject.transform.localRotation = Quaternion.identity;
+
+        _visionConeMeshFilter = _visionConeObject.AddComponent<MeshFilter>();
+        _visionConeMeshRenderer = _visionConeObject.AddComponent<MeshRenderer>();
+
+        _visionConeMesh = new Mesh();
+        _visionConeMeshFilter.mesh = _visionConeMesh;
+
+        if (visionConeMaterial != null)
+        {
+            _visionConeMeshRenderer.material = visionConeMaterial;
+        }
+    }
+    
+    private void Update()
+    {
+        if (_enemy == null || eyes == null) return;
+
+        // Actualizar la geometría del cono de visión considerando obstrucciones
+        UpdateVisionConeMesh(_enemy.visionRange, _enemy.visionAngle);
+
+        // Orientar y colocar el cono en la posición y dirección de los ojos del enemigo
+        _visionConeObject.transform.position = eyes.position;
+        _visionConeObject.transform.rotation = Quaternion.LookRotation(eyes.forward, Vector3.up);
+
+        // Cambiar el color del cono según el estado actual del enemigo, si es posible
+        GO_State currentState = _enemy.stateMachine.GetCurrentState();
+        if (currentState != null && _visionConeMeshRenderer.material.HasProperty("_Color"))
+        {
+            Color coneColor = currentState.colorState;
+            coneColor.a = 0.5f; 
+            _visionConeMeshRenderer.material.color = coneColor;
         }
     }
     
@@ -64,6 +111,96 @@ public class GO_Controller_Vision : MonoBehaviour
         return false;
     }
 
+    public bool SeeTheArm(out Transform armTransform)
+    {
+        armTransform = null;
+
+        // Si el enemigo ya tiene un brazo, no buscará otro.
+        if (_enemy.hasArm)
+        {
+            return false;
+        }
+
+        Collider[] objectsInRange = Physics.OverlapSphere(eyes.position, _enemy.visionRange);
+
+        foreach (Collider collider in objectsInRange)
+        {
+            if (collider.CompareTag("Arm"))
+            {
+                Transform currentArmTransform = collider.transform;
+
+                Vector3 directionToArm = (currentArmTransform.position + _enemy.offset) - eyes.position;
+
+                Vector3 directionToArmNormalized = directionToArm.normalized;
+
+                float angleToArm = Vector3.Angle(eyes.forward, directionToArmNormalized);
+
+                if (angleToArm < _enemy.visionAngle / 2f)
+                {
+                    RaycastHit hitInfo;
+                    if (Physics.Raycast(eyes.position, directionToArmNormalized, out hitInfo, _enemy.visionRange))
+                    {
+                        if (hitInfo.collider.CompareTag("Arm"))
+                        {
+                            armTransform = currentArmTransform;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+    
+    private void UpdateVisionConeMesh(float range, float angle)
+    {
+        _visionConeMesh.Clear();
+
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
+        
+        vertices.Add(Vector3.zero);
+
+        float halfAngle = angle / 2.0f;
+        float angleIncrement = angle / meshSegments;
+        Vector3 origin = eyes.position; 
+
+        for (int i = 0; i <= meshSegments; i++)
+        {
+            float currentAngle = -halfAngle + angleIncrement * i;
+            float rad = currentAngle * Mathf.Deg2Rad;
+
+            Vector3 direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad)).normalized;
+
+            RaycastHit hitInfo;
+            float currentRange = range;
+
+            Vector3 globalDirection = eyes.transform.TransformDirection(direction);
+            if (Physics.Raycast(origin, globalDirection, out hitInfo, range))
+            {
+                currentRange = hitInfo.distance; 
+            }
+
+            Vector3 vertex = direction * currentRange;
+            vertices.Add(vertex);
+        }
+
+        // Construir triángulos para el sector
+        for (int i = 1; i <= meshSegments; i++)
+        {
+            triangles.Add(0);
+            triangles.Add(i);
+            triangles.Add(i + 1);
+        }
+
+        _visionConeMesh.SetVertices(vertices);
+        _visionConeMesh.SetTriangles(triangles, 0);
+
+        // Recalcular las normales del *mesh*
+        _visionConeMesh.RecalculateNormals();
+    }
+    
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

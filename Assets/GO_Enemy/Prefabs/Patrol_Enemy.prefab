@@ -392,6 +392,7 @@ GameObject:
   - component: {fileID: 2663507586073971507}
   - component: {fileID: 8700154681512087456}
   - component: {fileID: 8317483310122354829}
+  - component: {fileID: 2384291878216132415}
   - component: {fileID: 1631768145325938434}
   - component: {fileID: 4952390766255492612}
   - component: {fileID: 300813054334779169}
@@ -504,6 +505,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorState: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &2384291878216132415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805597571652975861}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48ef78a75a3316c4baf9e50ecf9d21e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorState: {r: 0, g: 0.39888763, b: 1, a: 0}
+  pickUpTime: 4
 --- !u!114 &1631768145325938434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,6 +532,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eyes: {fileID: 3205396699051537262}
+  visionConeMaterial: {fileID: 2100000, guid: ae36786ae151172439bca7006ab7d235, type: 2}
+  meshSegments: 20
 --- !u!114 &4952390766255492612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,6 +602,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.5
+  hasArm: 0
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
