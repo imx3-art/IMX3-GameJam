@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class GO_State_Persecution : GO_State
 {
+    
+    private float timeSincePlayerLost = 0f; // tiempo desde que el enemigo dejó de ver al jugador
+    [SerializeField]
+    private float persecutionDuration = 6f;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -14,6 +19,7 @@ public class GO_State_Persecution : GO_State
     {
         enemy.navMeshAgent.speed = enemy.runSpeed;
         enemy.UpdateAnimation("Run");
+        timeSincePlayerLost = 0f;
     }
 
     void Update()
@@ -33,11 +39,30 @@ public class GO_State_Persecution : GO_State
         {
             enemy.navMeshController.followObjective = playerTransform;
             enemy.navMeshController.UpdateDestinationPoint();
+            
+            timeSincePlayerLost = 0f;
         }
         else
         {
-            // Si ya no ve al jugador, volver al estado de patrulla
-            stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
+            Debug.Log("tiempo que lleva: "+ timeSincePlayerLost );
+            // Si el enemigo no ve al jugador:
+            timeSincePlayerLost += Time.deltaTime; // incrementar el tiempo perdido de vista
+            
+            if (timeSincePlayerLost >= persecutionDuration)
+            {
+                stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
+                return;
+            }
+
+            // Continuar persiguiendo al jugador con la última posición conocida 
+            if (enemy.navMeshController.followObjective != null)
+            {
+                enemy.navMeshController.UpdateDestinationPoint(enemy.navMeshController.followObjective.position);
+            }
+            else
+            {
+                stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
+            }
         }
     }
 }
