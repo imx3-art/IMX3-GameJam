@@ -1,7 +1,8 @@
+using Fusion;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class GO_Enemy : MonoBehaviour
+public abstract class GO_Enemy : NetworkBehaviour
 {
     [Header("Movement Settings")] public float walkSpeed = 2.0f;
     public float runSpeed = 5.0f;
@@ -10,12 +11,13 @@ public abstract class GO_Enemy : MonoBehaviour
     [Range(0, 360)] public float visionAngle = 90.0f;
     public Vector3 offset = new Vector3(0f, .5f, 0f);
 
-    [HideInInspector] public NavMeshAgent navMeshAgent;
-    [HideInInspector] public GO_Enemy_State_Machine stateMachine;
-    [HideInInspector] public GO_Controller_Vision visionController;
-    [HideInInspector] public GO_Controller_NavMesh navMeshController;
+    public NavMeshAgent navMeshAgent;
+    [Networked] public GO_Enemy_State_Machine stateMachine { get; set; }
+    public GO_Controller_Vision visionController;
+    public GO_Controller_NavMesh navMeshController;
 
-    [Header("Animator Settings")] private Animator _animator;
+    [Header("Animator Settings")] 
+    private Animator _animator;
     private bool _hasAnimator;
 
     // animation IDs
@@ -28,17 +30,16 @@ public abstract class GO_Enemy : MonoBehaviour
     private float _animationBlend = 0f;    // Blend actual de animación
     private float _motionSpeed = 0f;       // MotionSpeed actual
     private float _speedChangeRate = 10.0f; // Tasa de cambio para interpolación
-
-    // Velocidad objetivo basada en el estado actual
     private float _currentStateSpeed = 0f;
 
     public AudioClip[] FootstepAudioClips;
     [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
 
-    
-    [HideInInspector] public bool hasArm = false;
 
-    protected virtual void Awake()
+    [Networked] public NetworkBool hasArm { get; set; } = false;
+
+    /*protected virtual void Awake()*/
+    public override void Spawned()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         visionController = GetComponent<GO_Controller_Vision>();
@@ -58,7 +59,8 @@ public abstract class GO_Enemy : MonoBehaviour
     {
         _animationBlend = Mathf.Lerp(_animationBlend, _currentStateSpeed, Time.deltaTime * _speedChangeRate);
         
-        _motionSpeed = _animationBlend > 0.1f ? 1f : 0f;
+        Debug.Log("Motion Speed"+_motionSpeed+"Current state speed"+_currentStateSpeed);
+        _motionSpeed = 2f;
 
         if (_hasAnimator)
         {
@@ -76,6 +78,7 @@ public abstract class GO_Enemy : MonoBehaviour
     
     public virtual void UpdateAnimation(string state)
     {
+        Debug.Log("State Animation"+ state);
         switch (state)
         {
             case "Idle":

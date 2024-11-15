@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Fusion;
 using UnityEngine;
 
-public class GO_Enemy_State_Machine : MonoBehaviour
+public class GO_Enemy_State_Machine : NetworkBehaviour
 {
     [HideInInspector]
     public GO_State currentState;

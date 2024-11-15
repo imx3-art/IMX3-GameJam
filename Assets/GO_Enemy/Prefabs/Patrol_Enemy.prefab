@@ -397,9 +397,12 @@ GameObject:
   - component: {fileID: 4952390766255492612}
   - component: {fileID: 300813054334779169}
   - component: {fileID: 1776750042625654975}
+  - component: {fileID: 3426412638943614207}
+  - component: {fileID: 5487527325188617500}
+  - component: {fileID: 8527230730023415410}
   m_Layer: 8
   m_Name: Patrol_Enemy
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -492,6 +495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorState: {r: 1, g: 0, b: 0, a: 1}
+  persecutionDuration: 6
 --- !u!114 &8317483310122354829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,6 +523,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorState: {r: 0, g: 0.39888763, b: 1, a: 0}
   pickUpTime: 4
+  throwTime: 2
 --- !u!114 &1631768145325938434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,7 +592,7 @@ MonoBehaviour:
   visionAngle: 42
   offset: {x: 0, y: 0.5, z: 0}
   navMeshAgent: {fileID: 0}
-  stateMachine: {fileID: 0}
+  _stateMachine: {fileID: 0}
   visionController: {fileID: 0}
   navMeshController: {fileID: 0}
   FootstepAudioClips:
@@ -602,12 +607,68 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 274649b0e221539409070ebf6c18918b, type: 3}
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.5
-  hasArm: 0
+  _hasArm:
+    _value: 0
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &3426412638943614207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805597571652975861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1657435253
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2663507586073971507}
+  - {fileID: 1776750042625654975}
+  - {fileID: 5487527325188617500}
+  - {fileID: 8527230730023415410}
+--- !u!114 &5487527325188617500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805597571652975861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 1
+--- !u!114 &8527230730023415410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805597571652975861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 2995849089767934028}
+  TotalWords: 5
+  ApplyTiming: 2
+  SyncSettings: 127
+  StateHashes: 0000000084ca1cc0f9c6230b1c6a54339e2518b671a7e1076b36dbedb1afdc305a6c54cd
+  TriggerHashes: 00000000
 --- !u!1 &835201070227071687
 GameObject:
   m_ObjectHideFlags: 0

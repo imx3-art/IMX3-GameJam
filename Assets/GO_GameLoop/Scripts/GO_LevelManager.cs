@@ -52,7 +52,7 @@ public class GO_LevelManager : NetworkBehaviour
             DontDestroyOnLoad(gameObject);
             if (Runner.IsSharedModeMasterClient)
             {
-                SpawnObjects();
+                SpawnObjects(prefabNetworkObjects, Vector3.zero + Vector3.up * 10, Quaternion.identity);
             }
         }
         else
@@ -244,10 +244,11 @@ public class GO_LevelManager : NetworkBehaviour
     }
 
 
-    public void SpawnObjects()
+    public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot )
     {
         Debug.Log("RESPQEN OBJETO");
-        Runner.Spawn(prefabNetworkObjects, Vector3.zero + Vector3.up * 10, Quaternion.identity);
+        
+        return Runner.Spawn(prefabNetworkObjects, _pos, _rot);
     }
 
 
