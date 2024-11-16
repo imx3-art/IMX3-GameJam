@@ -66,7 +66,10 @@ namespace StarterAssets
         private GO_GrabLimits _grabLimits;
 
         public float grabDistance = 2.0f; // Distancia máxima para agarrar objetos
-        public LayerMask grabbableLayer;  // Capa para objetos que pueden ser agarrados
+        private bool isGrabbing = false;
+        private Rigidbody grabbedObjectRb;  // Rigidbody del objeto agarrado
+        private FixedJoint joint;
+
 
         private CharacterController _controller;
         private GO_InputsPlayer _input;
@@ -118,18 +121,14 @@ namespace StarterAssets
             GroundedCheck();
             Move();
             AdjustCameraFraming();
-            // Verifica si el jugador está presionando una tecla para agarrar un objeto
-            if (_input.Grab) // Suponiendo que has configurado la acción de 'grabar' en el sistema de entrada
+
+            if (_input.Grab)
             {
-                TryGrabObject();
-            }else
-            {
-                ReleaseObject();
+                HandleGrab();
             }
-            // Si el jugador está agarrando un objeto, aplica las restricciones
-            if (_grabbedObject != null)
+            else
             {
-                MoveGrabbedObjectWithLimits();
+                releaseObject();
             }
         }
 
@@ -159,13 +158,13 @@ namespace StarterAssets
         private void Move()
         {
             float targetSpeed = _input.stealth ? StealthSpeed : _input.sprint ? (GO_PlayerNetworkManager.localPlayer.isDrag == 0 ? SprintSpeed : MoveSpeed) : MoveSpeed;
-                        
 
-                // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
-                // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-                // if there is no input, set the target speed to 0
-                if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+            // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+
+            // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+            // if there is no input, set the target speed to 0
+            if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
@@ -327,92 +326,94 @@ namespace StarterAssets
             }
         }
 
-        private void TryGrabObject()
+        private void HandleGrab()
         {
-            Transform objectTransform = transform;
-
-            Vector3 rayOrigin = new Vector3(objectTransform.position.x, objectTransform.position.y +1f, objectTransform.position.z);
-
-            Ray ray = new Ray(rayOrigin, transform.forward); // Usamos la posición de la cámara y su dirección hacia adelante
-            RaycastHit hit;
-
-            // Hacer visible el raycast en el editor de Unity
-            Debug.DrawRay(ray.origin, ray.direction * grabDistance, Color.red, 0, true);
-
-            // Verifica si el Raycast detecta algún objeto dentro de la distancia de agarre
-            if (Physics.Raycast(ray, out hit, grabDistance, grabbableLayer))
+            if (_input.Grab && !isGrabbing)
             {
-                Transform objectToGrab = hit.transform;
-                GO_GrabLimits grabProperties = objectToGrab.GetComponent<GO_GrabLimits>();
-
-                // Verifica si el objeto tiene la propiedad grabable configurada
-                if (grabProperties != null)
+                Vector3 rayOrigin = transform.position + Vector3.up * 0.3f; // Eleva la posición en Y
+                RaycastHit hit;
+                if (Physics.Raycast(rayOrigin, transform.forward, out hit, grabDistance))
                 {
-                    Debug.Log($"Objeto detectado para agarrar: {objectToGrab.name}");
-                    GrabObject(objectToGrab);
+                    Debug.Log("Objeto detectado: " + hit.collider.name); // Mensaje de debug
+
+                    if (hit.collider.CompareTag("GrabbableObject") && hit.collider.attachedRigidbody != null)
+                    {
+                        grabbedObjectRb = hit.collider.attachedRigidbody;
+                        grabbedObjectRb.isKinematic = false;
+                        isGrabbing = true;
+
+                        joint = grabbedObjectRb.gameObject.AddComponent<FixedJoint>();
+                        joint.connectedBody = GetComponent<Rigidbody>();
+
+                        // Configurar los anclajes
+                        Vector3 objectMidPoint = GetMidPoint(grabbedObjectRb.transform);
+                        Vector3 playerMidPoint = GetMidPoint(this.transform);
+
+                        // Configurar los anclajes
+                        joint.anchor = grabbedObjectRb.transform.InverseTransformPoint(objectMidPoint);
+                        joint.connectedAnchor = transform.InverseTransformPoint(playerMidPoint);
+
+                        Debug.Log("Agarrando objeto: " + grabbedObjectRb.name);
+
+                        // Ajustar parámetros adicionales del joint
+                        joint.breakForce = 500f; // Ajusta según necesidad
+                        joint.breakTorque = 500f; // Ajusta según necesidad
+                        joint.enableCollision = true; // Permitir colisiones entre los cuerpos conectados
+                                                      // Obtener los límites del objeto si existen
+                        _grabLimits = hit.collider.GetComponent<GO_GrabLimits>();
+
+                    }
                 }
-                else
+            }
+            else if (isGrabbing && grabbedObjectRb != null)
+            {
+                // Validar la posición del objeto agarrado
+                if (_grabLimits != null)
                 {
-                    Debug.LogWarning("El objeto no tiene límites configurados en GrabProperties.");
+                    Vector3 clampedPosition = _grabLimits.ClampToLimits(grabbedObjectRb.position);
+
+                    // Aplicar el movimiento con física para mantener el objeto dentro de los límites
+                    grabbedObjectRb.MovePosition(clampedPosition);
+                }
+
+                // Soltar el objeto si se suelta el botón de agarrar
+                if (!_input.Grab)
+                {
+                    releaseObject();
                 }
             }
-            else
+
+        }
+
+        private void releaseObject()
+        {
+            if (isGrabbing)
             {
-                Debug.Log("No se detectó ningún objeto en la distancia de agarre.");
+                isGrabbing = false;
+                if (grabbedObjectRb != null)
+                {
+                    grabbedObjectRb.isKinematic = true;
+                    if (joint != null)
+                    {
+                        Destroy(joint);
+                    }
+                    _grabbedObject = null;
+                    Debug.Log("Soltando objeto");
+                }
             }
         }
 
-        private void MoveGrabbedObjectWithLimits()
+        Vector3 GetMidPoint(Transform obj)
         {
-            if (_grabbedObject == null || _grabLimits == null)
+            // Retorna el punto medio del objeto usando su posición y tamaño
+            Renderer renderer = obj.GetComponent<Renderer>();
+            if (renderer != null)
             {
-                Debug.LogWarning("No hay objeto agarrado o no tiene límites configurados.");
-                return;
+                return renderer.bounds.center;
             }
 
-            Vector3 currentPosition = _grabbedObject.position;
-
-            float moveX = Input.GetAxis("Horizontal") * Time.deltaTime;
-            float moveY = Input.GetAxis("Vertical") * Time.deltaTime;
-
-            Vector3 targetPosition = currentPosition;
-            // Actualiza la posición en función del movimiento del jugador
-            targetPosition.x += _input.move.x;
-            targetPosition.z += _input.move.y;
-
-            // Aplica los límites en X y Z
-            targetPosition.x = Mathf.Clamp(targetPosition.x, _grabLimits.minX, _grabLimits.maxX);
-            targetPosition.z = Mathf.Clamp(targetPosition.z, _grabLimits.MinZ, _grabLimits.MaxZ);
-
-            // Actualiza la posición del objeto
-            _grabbedObject.position = Vector3.Lerp(currentPosition, targetPosition, 0.045f);
-
-            Debug.Log($"Objeto {_grabbedObject.name} movido a la posición {_grabbedObject.position}");
-        }
-
-        private void GrabObject(Transform objectToGrab)
-        {
-            _grabbedObject = objectToGrab;
-            _grabLimits = objectToGrab.GetComponent<GO_GrabLimits>();
-
-            if (_grabLimits == null)
-            {
-                Debug.LogWarning("El objeto no tiene límites configurados en GrabProperties.");
-            }
-            else
-            {
-                Debug.Log($"Objeto {objectToGrab.name} agarrado con límites configurados.");
-            }
-        }
-
-        private void ReleaseObject()
-        {
-            if (_grabbedObject != null)
-            {
-                Debug.Log($"Objeto {_grabbedObject.name} soltado.");
-            }
-            _grabbedObject = null;
-            _grabLimits = null;
+            // Si no hay Renderer, retorna directamente la posición del objeto
+            return obj.position;
         }
     }
 }
