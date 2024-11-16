@@ -21,16 +21,16 @@ public class GO_PopUpManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public GameObject popupPanel; // Arrastra aquí el panel del popup desde el inspector
+    public GameObject popupPanel; // Arrastra aquï¿½ el panel del popup desde el inspector
 
-    // Método para mostrar el popup en un momento específico
+    // Mï¿½todo para mostrar el popup en un momento especï¿½fico
     public void ShowPopup()
     {
         GO_InputsPlayer.IsPause = true;
         Inputs.cursorLocked = false;
         popupPanel.SetActive(true);
     }
-    // Método para ocultar el popup canvas
+    // Mï¿½todo para ocultar el popup canvas
     public void HidePopup()
     {
         popupPanel.SetActive(false);
@@ -40,15 +40,15 @@ public class GO_PopUpManager : MonoBehaviour
 
     public void Retry()
     {
-        _currentLevel = GO_LevelManager.Level.Nivel1;  // Cambia a Nivel1 para reiniciar
+        _currentLevel = GO_LevelManager.Level.L_GO_Level1;  // Cambia a Nivel1 para reiniciar
         GO_LevelManager.instance.LoadLevel(_currentLevel);
-        HidePopup();  // Oculta el popup después de reiniciar el nivel
+        HidePopup();  // Oculta el popup despuï¿½s de reiniciar el nivel
     }
 
     public void QuitToIntro()
     {
         SceneManager.LoadScene("IntroScene");
-        HidePopup();  // Oculta el popup después de regresar a la escena de introducción
+        HidePopup();  // Oculta el popup despuï¿½s de regresar a la escena de introducciï¿½n
     }
 
 }

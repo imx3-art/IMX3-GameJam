@@ -51,7 +51,7 @@ MonoBehaviour:
   totalLives: 3
   DidSabotage: 0
   _playerInstance: {fileID: 0}
-  prefabNetworkObjects: {fileID: 6981363448839620254, guid: 6a7773bf78750c3448ebb592a1f8bf48,
+  prefabNetworkObjects: {fileID: 354092488122953088, guid: 0228359e5e017ce4eb88a95d420b9455,
     type: 3}
 --- !u!114 &6759906292592768241
 MonoBehaviour:

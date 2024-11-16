@@ -1,15 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Fusion;
 using UnityEngine;
 
 public class GO_State_Patrol : GO_State
 {
-    private int _nextWaypoint;
+    [Networked]
+    private int _nextWaypoint { get; set; }
+    
+    private GO_PatrollingEnemy patrollingEnemy;
 
     protected override void Awake()
     {
         base.Awake();
+        patrollingEnemy = enemy.GetComponent<GO_PatrollingEnemy>();
     }
 
     void Update()
@@ -37,7 +42,7 @@ public class GO_State_Patrol : GO_State
         // Lógica de patrulla normal
         if (enemy.navMeshController.ArrivedPoint())
         {
-            _nextWaypoint = (_nextWaypoint + 1) % enemy.GetComponent<GO_PatrollingEnemy>().waypoints.Length;
+            _nextWaypoint = (_nextWaypoint + 1) % patrollingEnemy.WaypointsPositions.Length;
             UpdateDestinationWaypoint();
         }
     }
@@ -52,6 +57,7 @@ public class GO_State_Patrol : GO_State
 
     private void UpdateDestinationWaypoint()
     {
-        enemy.navMeshController.UpdateDestinationPoint(enemy.GetComponent<GO_PatrollingEnemy>().waypoints[_nextWaypoint].position);
+        Vector3 targetPosition = patrollingEnemy.WaypointsPositions[_nextWaypoint];
+        enemy.navMeshController.UpdateDestinationPoint(targetPosition);
     }
 }

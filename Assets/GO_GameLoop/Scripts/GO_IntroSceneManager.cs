@@ -7,16 +7,16 @@ public class GO_IntroSceneManager : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("Nivel0");
+        SceneManager.LoadScene("L_GO_Level1");
     }
 
     public void ShowCredits()
     {
-        // Aquí puedes activar el panel de créditos.
+        // Aquï¿½ puedes activar el panel de crï¿½ditos.
     }
 
     public void HideCredits()
     {
-        // Aquí puedes ocultar el panel de créditos.
+        // Aquï¿½ puedes ocultar el panel de crï¿½ditos.
     }
 }
