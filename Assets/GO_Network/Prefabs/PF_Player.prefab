@@ -221,6 +221,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5502584064351370505}
     m_Modifications:
+    - target: {fileID: 2766379294100034270, guid: 103f36292552534449cf6c273892f3b9,
+        type: 3}
+      propertyPath: m_CameraDistance
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 3915357843216037327, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_Follow
@@ -234,7 +239,7 @@ PrefabInstance:
     - target: {fileID: 3915357843216037327, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_Lens.FieldOfView
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3915357843216037327, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
@@ -259,22 +264,22 @@ PrefabInstance:
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.7952013
+      value: 24.318054
       objectReference: {fileID: 0}
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.396927
+      value: -32.766083
       objectReference: {fileID: 0}
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9848078
+      value: 0.953717
       objectReference: {fileID: 0}
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.17364816
+      value: 0.30070576
       objectReference: {fileID: 0}
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
@@ -289,7 +294,7 @@ PrefabInstance:
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 20
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 8567900660872842755, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}

@@ -8,7 +8,7 @@ public class GO_LevelManager : NetworkBehaviour
 {
     public enum Level
     {
-        Nivel0,
+        L_GO_Level1,
         Nivel1,
         Nivel2,
         Nivel3,
@@ -30,7 +30,7 @@ public class GO_LevelManager : NetworkBehaviour
     public GO_PlayerNetworkManager _playerInstance;
     private GameObject _playerPrefab;
 
-    private Level _currentLevel = Level.Nivel0;
+    private Level _currentLevel = Level.L_GO_Level1;
 
     private Transform _spawnPoint;
     private Transform _endPoint;
@@ -139,7 +139,7 @@ public class GO_LevelManager : NetworkBehaviour
     [ContextMenu("PERDER VIDA")]
     public void perderUnaVida()
     {
-        if(_currentLevel != Level.Nivel0 || true)//REVERT
+        if(_currentLevel != Level.L_GO_Level1 || true)//REVERT
         {
             //_playerInstance.playerLives--;
             RPC_setLifes(_playerInstance.playerID, -1);
@@ -152,7 +152,7 @@ public class GO_LevelManager : NetworkBehaviour
     {
         switch (_currentLevel)
         {
-            case Level.Nivel0:
+            case Level.L_GO_Level1:
             case Level.Nivel1:
             case Level.Nivel2:
             case Level.Nivel3:
@@ -172,7 +172,7 @@ public class GO_LevelManager : NetworkBehaviour
                 break;
             case Level.Nivel5:
             case Level.Nivel6:
-                _currentLevel = Level.Nivel0;
+                _currentLevel = Level.L_GO_Level1;
                 _playerInstance.playerLives = 3;
                 //RPC_setLifes(_playerInstance.playerID, 3);
                 SceneManager.LoadScene("IntroScene");
@@ -210,7 +210,7 @@ public class GO_LevelManager : NetworkBehaviour
             // Instancia PopupManager si no existe
             //RPC_setLifes(_playerInstance.playerID, (short)totalLives);
             _playerInstance.playerLives = totalLives;
-            _currentLevel = Level.Nivel0;
+            _currentLevel = Level.L_GO_Level1;
             Debug.Log(_playerInstance.playerLives);
             if (GO_PopUpManager.Instance == null && popupManagerPrefab != null)
             {
