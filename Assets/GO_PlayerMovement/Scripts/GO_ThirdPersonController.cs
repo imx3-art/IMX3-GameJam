@@ -96,6 +96,8 @@ namespace StarterAssets
 
         // timeout deltatime
         private float _fallTimeoutDelta;
+        
+        private float _weight = 0;
 
         private void Awake()
         {
@@ -157,6 +159,9 @@ namespace StarterAssets
 
         private void Move()
         {
+            _weight = Mathf.Lerp(_weight, _input.stealth ? 1 : 0 , Time.deltaTime * 5);
+            _animator.SetLayerWeight(0, 1 - _weight);
+            _animator.SetLayerWeight(1, _weight);
             float targetSpeed = _input.stealth ? StealthSpeed : _input.sprint ? (GO_PlayerNetworkManager.localPlayer.isDrag == 0 ? SprintSpeed : MoveSpeed) : MoveSpeed;
 
 

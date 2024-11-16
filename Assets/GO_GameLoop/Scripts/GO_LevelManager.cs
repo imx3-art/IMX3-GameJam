@@ -9,7 +9,7 @@ public class GO_LevelManager : NetworkBehaviour
     public enum Level
     {
         L_GO_Level1,
-        Nivel1,
+        L_GO_Level2,
         Nivel2,
         Nivel3,
         Nivel4,
@@ -153,7 +153,7 @@ public class GO_LevelManager : NetworkBehaviour
         switch (_currentLevel)
         {
             case Level.L_GO_Level1:
-            case Level.Nivel1:
+            case Level.L_GO_Level2:
             case Level.Nivel2:
             case Level.Nivel3:
                 _currentLevel++;
@@ -247,8 +247,12 @@ public class GO_LevelManager : NetworkBehaviour
     public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot )
     {
         Debug.Log("RESPQEN OBJETO");
-        
-        return Runner.Spawn(prefabNetworkObjects, _pos, _rot);
+        if (Runner.IsSharedModeMasterClient)
+        {
+            return Runner.Spawn(prefabNetworkObjects, _pos, _rot);
+        }
+
+        return null;
     }
 
 
