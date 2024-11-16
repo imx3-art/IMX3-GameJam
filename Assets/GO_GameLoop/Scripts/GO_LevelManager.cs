@@ -247,7 +247,7 @@ public class GO_LevelManager : NetworkBehaviour
     public void SpawnObjects()
     {
         Debug.Log("RESPQEN OBJETO");
-        Runner.Spawn(prefabNetworkObjects, Vector3.zero + Vector3.up * 10, Quaternion.identity);
+        Runner.Spawn(prefabNetworkObjects, Vector3.right * 2, Quaternion.identity);
     }
 
 

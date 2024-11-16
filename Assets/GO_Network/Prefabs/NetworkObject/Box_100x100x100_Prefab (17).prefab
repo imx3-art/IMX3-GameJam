@@ -16,9 +16,10 @@ GameObject:
   - component: {fileID: 7326914409923392545}
   - component: {fileID: 5873355619440504908}
   - component: {fileID: 3500589607666025835}
+  - component: {fileID: 5096804699426125729}
   m_Layer: 0
   m_Name: Box_100x100x100_Prefab (17)
-  m_TagString: Untagged
+  m_TagString: GrabbableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 73
@@ -152,7 +153,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6981363448839620254}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -169,7 +170,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &3500589607666025835
 MonoBehaviour:
@@ -184,3 +185,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkObject: {fileID: 0}
+--- !u!114 &5096804699426125729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6981363448839620254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4f94140714210546b26f1cd04b9aff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minX: -2
+  maxX: 2
+  MinZ: -2
+  MaxZ: 2
