@@ -52,7 +52,7 @@ public class GO_LevelManager : NetworkBehaviour
             DontDestroyOnLoad(gameObject);
             if (Runner.IsSharedModeMasterClient)
             {
-                SpawnObjects(prefabNetworkObjects, Vector3.zero + Vector3.up * 10, Quaternion.identity);
+                SpawnObjects(prefabNetworkObjects, prefabNetworkObjects.transform.position, Quaternion.identity);
             }
         }
         else
