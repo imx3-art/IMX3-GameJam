@@ -267,7 +267,6 @@ public class GO_LevelManager : NetworkBehaviour
 
     public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot, string _codeName = null )
     {
-        Debug.Log("position2"+_pos+"rotation2"+_rot);
         Debug.Log("MANDO SPAWN " + objectsSpawned.Count);
         if (_codeName == null || !objectsSpawned.Contains(_codeName))
         {

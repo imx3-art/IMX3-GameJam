@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Fusion;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GO_SpawnEnemy : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class GO_SpawnEnemy : MonoBehaviour
                 GO_LevelManager.instance.isReady)
             {
                 HumanSpawned = GO_LevelManager.instance.SpawnObjects(Human, transform.GetChild(0).position, transform.GetChild(0).rotation, name);
+                HumanSpawned.GetComponent<NavMeshAgent>().enabled = false;
                 if (HumanSpawned == null)
                 {
                     yield break;
@@ -38,7 +40,19 @@ public class GO_SpawnEnemy : MonoBehaviour
                     waypoints[i] = transform.GetChild(i).position;
                 }
                 HumanSpawned.gameObject.GetComponent<GO_PatrollingEnemy>().InitializeWaypoints(waypoints);
-                break;
+                
+                do
+                {
+                    HumanSpawned.GetComponent<NetworkTransform>().Teleport(transform.GetChild(0).position, transform.GetChild(0).rotation);
+                    yield return new WaitForSeconds(0.5f);
+                    Debug.Log("TELEPORT: " + HumanSpawned.GetComponent<NetworkTransform>().transform.position + " - " + transform.GetChild(0).position + " - " + (HumanSpawned.GetComponent<NetworkTransform>().transform.position - transform.GetChild(0).position).magnitude);
+                    if((HumanSpawned.GetComponent<NetworkTransform>().transform.position - transform.GetChild(0).position).magnitude < 2f)
+                    {
+                        HumanSpawned.GetComponent<NavMeshAgent>().enabled = true;
+                        break;
+                    }
+                }
+                while (true);
             }
         }
         yield break;

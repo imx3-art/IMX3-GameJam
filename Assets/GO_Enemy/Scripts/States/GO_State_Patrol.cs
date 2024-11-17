@@ -42,7 +42,7 @@ public class GO_State_Patrol : GO_State
         // Lógica de patrulla normal
         if (enemy.navMeshController.ArrivedPoint())
         {
-            _nextWaypoint = (_nextWaypoint + 1) % patrollingEnemy.WaypointsPositions.Length;
+            _nextWaypoint = (_nextWaypoint + 1) % patrollingEnemy.validWaypointCount;
             UpdateDestinationWaypoint();
         }
     }

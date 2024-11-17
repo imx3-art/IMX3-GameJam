@@ -5,6 +5,8 @@ public class GO_PatrollingEnemy : GO_Enemy
 {
     
     private const int MaxWaypoints = 10; 
+    [Networked]
+    public int validWaypointCount { get; set; }
 
     [Networked, Capacity(MaxWaypoints)]
     public NetworkArray<Vector3> WaypointsPositions { get; }
@@ -27,7 +29,8 @@ public class GO_PatrollingEnemy : GO_Enemy
     
     public void InitializeWaypoints(Vector3[] waypoints)
     {
-        for (int i = 0; i < waypoints.Length; i++)
+        validWaypointCount = Mathf.Min(waypoints.Length, MaxWaypoints); // Máximo hasta MaxWaypoints
+        for (int i = 0; i < validWaypointCount; i++)
         {
             WaypointsPositions.Set(i, waypoints[i]);
         }

@@ -230,6 +230,7 @@ MonoBehaviour:
   FootstepAudioVolume: 0.5
   _hasArm:
     _value: 0
+  _validWaypointCount: 0
   _WaypointsPositions: []
 --- !u!114 &3426412638943614207
 MonoBehaviour:
@@ -344,7 +345,7 @@ Transform:
   m_GameObject: {fileID: 7534181113278883401}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.057, z: 0}
+  m_LocalPosition: {x: 0, y: 1.506, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
