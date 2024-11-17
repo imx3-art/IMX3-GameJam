@@ -54,9 +54,6 @@ MonoBehaviour:
   _movePlayerNetwork: {x: 0, y: 0}
   _isDrag: 0
   cameraTargetFollow: {fileID: 6419920899746987804}
-  cameraChinemachine: {fileID: 6257182654009500447, guid: 81935f6bed15efb4eb52c7ee3a371a65,
-    type: 3}
-  rigibodyPlayer: {fileID: 0}
   playerTransform: {fileID: 8556223988473314288}
   isLocalPlayer: 0
   otherPlayerTarget: {fileID: 0}
@@ -165,6 +162,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5659773718839666751, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: _virtualCamera
@@ -180,8 +182,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_PlayerArmature
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5659773718839666751, guid: 3801d110c0f0f9244a347a16572a82c1, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

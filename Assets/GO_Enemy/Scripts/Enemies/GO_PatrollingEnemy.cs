@@ -13,7 +13,7 @@ public class GO_PatrollingEnemy : GO_Enemy
     protected override void Start()
     {
         base.Start();
-
+        DontDestroyOnLoad(gameObject);
         GO_State_Patrol patrolState = GetComponent<GO_State_Patrol>();
         if (patrolState != null)
         {

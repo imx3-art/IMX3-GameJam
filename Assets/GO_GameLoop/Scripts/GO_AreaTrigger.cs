@@ -1,3 +1,4 @@
+using StarterAssets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,11 +10,15 @@ public class GO_AreaTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Entro el player");
-        if (other.CompareTag("Player"))
+        GO_ThirdPersonController playerNetworkManager;
+
+        if (other.gameObject.TryGetComponent(out playerNetworkManager))
         {
-            OnPlayerEnterArea?.Invoke();
-            gameObject.SetActive(false);
+            if (playerNetworkManager.enabled)
+            { 
+                OnPlayerEnterArea?.Invoke();
+                gameObject.SetActive(false);
+            }
         }
     }
 }

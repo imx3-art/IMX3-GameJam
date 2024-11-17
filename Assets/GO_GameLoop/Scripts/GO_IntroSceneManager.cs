@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GO_IntroSceneManager : MonoBehaviour
 {
+
     public void PlayGame()
     {
         SceneManager.LoadScene("L_GO_Level1");
@@ -18,5 +20,10 @@ public class GO_IntroSceneManager : MonoBehaviour
     public void HideCredits()
     {
         // Aqu� puedes ocultar el panel de cr�ditos.
+    }
+
+    public void setCustomSessionName(TMP_InputField _input)
+    {
+        GO_RunnerManager._customNameSession = _input.text;
     }
 }

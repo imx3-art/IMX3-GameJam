@@ -59,7 +59,6 @@ public abstract class GO_Enemy : NetworkBehaviour
     {
         _animationBlend = Mathf.Lerp(_animationBlend, _currentStateSpeed, Time.deltaTime * _speedChangeRate);
         
-        Debug.Log("Motion Speed"+_motionSpeed+"Current state speed"+_currentStateSpeed);
         _motionSpeed = 2f;
 
         if (_hasAnimator)

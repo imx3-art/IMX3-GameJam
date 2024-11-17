@@ -609,11 +609,7 @@ MonoBehaviour:
   FootstepAudioVolume: 0.5
   _hasArm:
     _value: 0
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _WaypointsPositions: []
 --- !u!114 &3426412638943614207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,7 +624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 1657435253
   ObjectInterest: 1
-  Flags: 262145
+  Flags: 131073
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 2663507586073971507}

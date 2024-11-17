@@ -1,4 +1,7 @@
 using Fusion;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +20,11 @@ public class GO_LevelManager : NetworkBehaviour
         Nivel6
     }
 
+
+    //[Networked] public List<Level> levelsLoaded { get; set; } = new List<Level>();
+
+    public List<string> objectsSpawned = new List<string>();
+    public bool isReady;
     public short id;
     public static GO_LevelManager instance;
     public GameObject popupManagerPrefab;
@@ -50,9 +58,17 @@ public class GO_LevelManager : NetworkBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+
             if (Runner.IsSharedModeMasterClient)
             {
                 SpawnObjects(prefabNetworkObjects, prefabNetworkObjects.transform.position, Quaternion.identity);
+                isReady = true;
+            }
+            else
+            {
+                //objectsSpawned = RPC_GetPoolSpawnObject().ToList<string>();
+                RPC_GetPoolSpawnObject();
+
             }
         }
         else
@@ -61,14 +77,14 @@ public class GO_LevelManager : NetworkBehaviour
         }
     }
 
-    private async void Start()
+    private IEnumerator Start()
     {
 
         //_playerInstance = GameObject.FindWithTag("Player");
 
         while (true)
         {
-            await Task.Delay(100);
+            yield return new WaitForSeconds(.1f);
             Debug.Log("No player Ready");
             if(GO_PlayerNetworkManager.localPlayer != null)
             {
@@ -100,7 +116,7 @@ public class GO_LevelManager : NetworkBehaviour
             _playerInstance.transform.position = _spawnPoint.position;
         }*/
 
-        LoadLevel(_currentLevel);
+        _ = LoadLevelAsync(_currentLevel);
     }
 
     [ContextMenu("Teleport last Pont")]
@@ -108,8 +124,6 @@ public class GO_LevelManager : NetworkBehaviour
     {
         if (_playerInstance != null)
         {
-            //_playerInstance = Instantiate(_playerPrefab, _spawnPoint.position, Quaternion.identity);
-            
             (Vector3 pos, Quaternion rot) = GO_SpawnPoint.spawPointCurrent.getSpawPointPosition();
             _playerInstance.TeleportPlayer(pos, rot);
         }
@@ -125,14 +139,11 @@ public class GO_LevelManager : NetworkBehaviour
         GO_AreaTrigger.OnPlayerEnterArea -= HandlePlayerEnterArea;
     }
 
-    private async void HandlePlayerEnterArea()
+    private void HandlePlayerEnterArea()
     {
         if (!isChangingScene)
         {
             ChangeScene();
-            await Task.Delay(1000);
-            SpawnPlayer();
-            //ResetPlayerPosition();
         }
     }
     
@@ -178,7 +189,7 @@ public class GO_LevelManager : NetworkBehaviour
                 SceneManager.LoadScene("IntroScene");
                 return;
         }
-        LoadLevel(_currentLevel);
+        _ = LoadLevelAsync(_currentLevel);
     }
 
     private void ResetPlayerPosition()
@@ -220,13 +231,22 @@ public class GO_LevelManager : NetworkBehaviour
         }
     }
 
-    public void LoadLevel(Level level)
+    public async Task LoadLevelAsync(Level level)
     {
         string sceneName = level.ToString();
-
         if (SceneManager.GetActiveScene().name != sceneName)
         {
-            SceneManager.LoadScene(sceneName);
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+            while (!asyncLoad.isDone)
+            {
+                Debug.Log($"Cargando... {asyncLoad.progress * 100} %");
+                await Task.Yield();
+            }
+
+            Debug.Log("*** Mando SPAWN");
+            SpawnPlayer();
+            Debug.Log("*** Regreso SPAWN");
+
         }
     }
 
@@ -244,16 +264,47 @@ public class GO_LevelManager : NetworkBehaviour
     }
 
 
-    public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot )
+    public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot, string _codeName = null )
     {
-        Debug.Log("RESPQEN OBJETO");
-        if (Runner.IsSharedModeMasterClient)
+        Debug.Log("MANDO SPAWN " + objectsSpawned.Count);
+        if (_codeName == null || !objectsSpawned.Contains(_codeName))
         {
+            //Debug.Log("MANDO SPAWN un player " + objectsSpawned[0]);
+
+            if (_codeName != null) RPC_SetPoolSpawnObject(_codeName);
             return Runner.Spawn(prefabNetworkObjects, _pos, _rot);
         }
-
         return null;
     }
+
+
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_GetPoolSpawnObject()
+    {
+        RPC_SendPoolSpawnObject(objectsSpawned.ToArray());        
+    }
+
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SendPoolSpawnObject(string[] _listSpawnedObject)
+    {
+        if (objectsSpawned.Count == 0 && !Object.HasStateAuthority)
+        {
+            objectsSpawned = _listSpawnedObject.ToList<string>();
+        }
+        isReady = true;
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_SetPoolSpawnObject(string _nameObjectSpawned)
+    {
+        if (!objectsSpawned.Contains(_nameObjectSpawned))
+        {
+            objectsSpawned.Add(_nameObjectSpawned);
+        }
+    }
+    
 
 
 

@@ -35,6 +35,7 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner _runner;
     private string _nameSession;
+    public static string _customNameSession;
 
     private static STATUSCONNECTION statusConnection;
 
@@ -55,6 +56,11 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
             _runner = gameObject.AddComponent<NetworkRunner>();            
         }
         Debug.Log("Name sesion: " + _nameSession);
+
+        if(!string.IsNullOrEmpty(_customNameSession))
+        {
+            _nameSession = _customNameSession;
+        }
 
         await _runner.StartGame(new StartGameArgs()
         {
@@ -121,10 +127,10 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         SetStatusConnection(STATUSCONNECTION.ConnectedPlaying);
         Debug.Log(runner.IsSharedModeMasterClient);
-        spawnPlayer(runner);
+        StartCoroutine(spawnPlayerAsync(runner));
     }
 
-    public void spawnPlayer(NetworkRunner runner)
+    private IEnumerator spawnPlayerAsync(NetworkRunner runner)
     {
         if (runner != null)
         {
@@ -135,13 +141,20 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
             (positionPlayer, rotationPlayer) = spawnPoint.getSpawPointPosition();
 
-            _roomPlayer = runner.Spawn(playerPrefab, positionPlayer, rotationPlayer);
+            var playerTMP = (_roomPlayer = runner.Spawn(playerPrefab, positionPlayer, rotationPlayer)).GetComponent<GO_PlayerNetworkManager>();
+            runner.SetPlayerObject(runner.LocalPlayer, _roomPlayer);
             runner.SetPlayerObject(runner.LocalPlayer, _roomPlayer);
 
+            yield return new WaitForEndOfFrame();
+            playerTMP.TeleportPlayer(positionPlayer, rotationPlayer); 
+            
             if (runner.IsSharedModeMasterClient)
             {
                 runner.Spawn(gameManager);
             }
+
+          
+
         }
     }
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)

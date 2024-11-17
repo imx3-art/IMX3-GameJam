@@ -2,6 +2,7 @@ using Fusion;
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GO_PlayerNetworkManager : NetworkBehaviour
@@ -47,13 +48,26 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     private void Start()
     {
         (controller = GetComponentInChildren<GO_ThirdPersonController>()).enabled = isLocalPlayer;
-
     }
 
     public void TeleportPlayer(Vector3 _pos, Quaternion _rot)
     {
-        Debug.Log("TELEPORT: " + playerTransform + " - " + _pos + " - " + _rot + " - " + playerTransform.name);
-        playerTransform.Teleport(_pos, _rot);
+        StartCoroutine(TeleportPlayerCoroutine(_pos, _rot));
+    }
+    private IEnumerator TeleportPlayerCoroutine(Vector3 _pos, Quaternion _rot)
+    {
+        do
+        {
+            playerTransform.Teleport(_pos, _rot);
+            yield return new WaitForSeconds(1);
+            Debug.Log("TELEPORT: " + playerTransform.transform.position + " - " + _pos + " - " + (playerTransform.transform.position - _pos).magnitude);
+            if((playerTransform.transform.position - _pos).magnitude < 2f)
+            {
+                break;
+            }
+        }
+        while (true);// (playerTransform.transform.position - _pos).magnitude < .5f);
+        //QUITAR LA PANTALLA DE CARGA
 
     }
 
