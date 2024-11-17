@@ -1,10 +1,15 @@
+using System.Collections;
 using Fusion;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GO_PatrollingEnemy : GO_Enemy
 {
     
     private const int MaxWaypoints = 10; 
+    [Networked]
+    public NetworkBool initializedWaypoints { get; set; }
+    
     [Networked]
     public int validWaypointCount { get; set; }
 
@@ -16,9 +21,25 @@ public class GO_PatrollingEnemy : GO_Enemy
     {
         base.Start();
         DontDestroyOnLoad(gameObject);
+        GetComponent<NavMeshAgent>().enabled = false;
+        StartCoroutine(ActivatePatrolWhenReady());
+    }
+
+    private IEnumerator ActivatePatrolWhenReady()
+    {
         GO_State_Patrol patrolState = GetComponent<GO_State_Patrol>();
+
+        // Esperar hasta que los waypoints estén inicializados
+        while (!initializedWaypoints)
+        {
+            yield return null; // Espera al siguiente frame
+        }
+
         if (patrolState != null)
         {
+            Debug.Log("Activando patrullaje");
+            GetComponent<NetworkTransform>().Teleport(transform.GetChild(0).position, transform.GetChild(0).rotation);
+            GetComponent<NavMeshAgent>().enabled = true;
             stateMachine.ActivateState(patrolState);
         }
         else
@@ -34,6 +55,8 @@ public class GO_PatrollingEnemy : GO_Enemy
         {
             WaypointsPositions.Set(i, waypoints[i]);
         }
+        Debug.Log("waypoints inicializados");
+        initializedWaypoints = true;
     }
     
     

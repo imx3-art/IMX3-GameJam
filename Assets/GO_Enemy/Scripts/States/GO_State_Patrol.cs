@@ -42,8 +42,15 @@ public class GO_State_Patrol : GO_State
         // Lógica de patrulla normal
         if (enemy.navMeshController.ArrivedPoint())
         {
-            _nextWaypoint = (_nextWaypoint + 1) % patrollingEnemy.validWaypointCount;
-            UpdateDestinationWaypoint();
+            if (patrollingEnemy.validWaypointCount > 0)
+            {
+                _nextWaypoint = (_nextWaypoint + 1) % patrollingEnemy.validWaypointCount;
+                UpdateDestinationWaypoint();
+            }
+            else
+            {
+                Debug.LogWarning("No hay waypoints válidos para patrullar.");
+            }
         }
     }
 
@@ -57,7 +64,7 @@ public class GO_State_Patrol : GO_State
 
     private void UpdateDestinationWaypoint()
     {
-        Vector3 targetPosition = patrollingEnemy.WaypointsPositions[_nextWaypoint];
+        Vector3 targetPosition = patrollingEnemy.WaypointsPositions.Get(_nextWaypoint);
         enemy.navMeshController.UpdateDestinationPoint(targetPosition);
     }
 }
