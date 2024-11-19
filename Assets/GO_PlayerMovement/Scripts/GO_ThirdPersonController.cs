@@ -368,6 +368,8 @@ namespace StarterAssets
                         joint.breakTorque = 500f; // Ajusta según necesidad
                         joint.enableCollision = true; // Permitir colisiones entre los cuerpos conectados
                                                       // Obtener los límites del objeto si existen
+
+                        joint.massScale = 1000; //Ajusta la tension
                         _grabLimits = hit.collider.GetComponent<GO_GrabLimits>();
 
                     }
