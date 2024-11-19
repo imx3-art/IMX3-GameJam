@@ -15,7 +15,7 @@ public class GO_AreaTrigger : MonoBehaviour
         if (other.gameObject.TryGetComponent(out playerNetworkManager))
         {
             if (playerNetworkManager.enabled)
-            { 
+            {                
                 OnPlayerEnterArea?.Invoke();
                 gameObject.SetActive(false);
             }

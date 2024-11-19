@@ -344,7 +344,9 @@ namespace StarterAssets
                     if (hit.collider.CompareTag("GrabbableObject") && hit.collider.attachedRigidbody != null)
                     {
                         grabbedObjectRb = hit.collider.attachedRigidbody;
-                        grabbedObjectRb.isKinematic = false;
+                        //grabbedObjectRb.isKinematic = false;
+                        grabbedObjectRb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;                            
+
                         isGrabbing = true;
 
                         joint = grabbedObjectRb.gameObject.AddComponent<FixedJoint>();
@@ -397,7 +399,8 @@ namespace StarterAssets
                 isGrabbing = false;
                 if (grabbedObjectRb != null)
                 {
-                    grabbedObjectRb.isKinematic = true;
+                    //grabbedObjectRb.isKinematic = true;
+                    grabbedObjectRb.constraints = RigidbodyConstraints.FreezeAll;
                     if (joint != null)
                     {
                         Destroy(joint);

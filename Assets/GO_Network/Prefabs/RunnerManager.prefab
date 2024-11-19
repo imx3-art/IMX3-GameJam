@@ -63,6 +63,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 694562673989613339, guid: 1d2709d175610354d8902e0e691a38db,
         type: 3}
+      propertyPath: levelID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 694562673989613339, guid: 1d2709d175610354d8902e0e691a38db,
+        type: 3}
       propertyPath: radiusSpawn
       value: 5
       objectReference: {fileID: 0}

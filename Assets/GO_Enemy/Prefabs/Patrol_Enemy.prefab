@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 3426412638943614207}
   - component: {fileID: 5487527325188617500}
   - component: {fileID: 8527230730023415410}
+  - component: {fileID: 7684918491597381273}
   m_Layer: 8
   m_Name: Patrol_Enemy
   m_TagString: Untagged
@@ -230,6 +231,8 @@ MonoBehaviour:
   FootstepAudioVolume: 0.5
   _hasArm:
     _value: 0
+  _initializedWaypoints:
+    _value: 0
   _validWaypointCount: 0
   _WaypointsPositions: []
 --- !u!114 &3426412638943614207
@@ -246,13 +249,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 1657435253
   ObjectInterest: 1
-  Flags: 131073
+  Flags: 524289
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 2663507586073971507}
   - {fileID: 1776750042625654975}
   - {fileID: 5487527325188617500}
   - {fileID: 8527230730023415410}
+  - {fileID: 7684918491597381273}
 --- !u!114 &5487527325188617500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,6 +291,19 @@ MonoBehaviour:
   SyncSettings: 127
   StateHashes: 0000000084ca1cc0f9c6230b1c6a54339e2518b671a7e1076b36dbedb1afdc305a6c54cd
   TriggerHashes: 00000000
+--- !u!114 &7684918491597381273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805597571652975861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c9e59b6c135e54384c8924fa8f9878, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IgnoreColisionChangeAuthority: 1
 --- !u!1 &2851710751060393574
 GameObject:
   m_ObjectHideFlags: 0

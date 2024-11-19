@@ -6,12 +6,13 @@ public class GO_SpawnPoint : MonoBehaviour
 {
     [Range(3f, 20f)]
     [SerializeField] float radiusSpawnPlayer = 5;
+    public short level_ID = -1;
     private Transform _radius;
-    public static GO_SpawnPoint spawPointCurrent;
+    public static GO_SpawnPoint currentSpawPoint;
 
     private void Awake()
     {
-        spawPointCurrent = this;
+        currentSpawPoint = this;
     }
     public (Vector3 pos, Quaternion rot) getSpawPointPosition()
     {

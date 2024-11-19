@@ -13,6 +13,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     [Networked] public string playerName { get; set; }
     [Networked] public float playerLives { get; set; }
     [Networked] public short playerID { get; set; }
+    [Networked] public short currentLevel_ID { get; set; }
     [Networked] public Vector2 movePlayerNetwork { get; set; }
     [Networked] public short isDrag { get; set; }
 
@@ -45,9 +46,20 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         //(controller = GetComponentInChildren<GO_ThirdPersonController>()).enabled = isLocalPlayer;
 
     }
-    private void Start()
+    private IEnumerator Start()
     {
         (controller = GetComponentInChildren<GO_ThirdPersonController>()).enabled = isLocalPlayer;
+        yield return new WaitWhile(() => GO_LevelManager.instance == null); 
+        while (!GO_LevelManager.instance.isReady) 
+        {
+        yield return null;
+        }
+        GO_LevelManager.instance.StatusScene();
+    }
+    private void OnDisable()
+    {
+        PlayersList.Remove(this);
+
     }
 
     public void TeleportPlayer(Vector3 _pos, Quaternion _rot)
@@ -56,6 +68,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     }
     private IEnumerator TeleportPlayerCoroutine(Vector3 _pos, Quaternion _rot)
     {
+        currentLevel_ID = GO_SpawnPoint.currentSpawPoint.level_ID;
         do
         {
             playerTransform.Teleport(_pos, _rot);
