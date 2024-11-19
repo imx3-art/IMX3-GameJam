@@ -343,6 +343,7 @@ namespace StarterAssets
 
                     if (hit.collider.CompareTag("GrabbableObject") && hit.collider.attachedRigidbody != null)
                     {
+                        hit.collider.GetComponent<GO_NetworkObject>().ChangeAuthority();
                         grabbedObjectRb = hit.collider.attachedRigidbody;
                         //grabbedObjectRb.isKinematic = false;
                         grabbedObjectRb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;                            

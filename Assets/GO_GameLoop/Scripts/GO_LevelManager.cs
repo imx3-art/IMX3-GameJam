@@ -215,7 +215,7 @@ public class GO_LevelManager : NetworkBehaviour
         foreach(NetworkObject networkObject in networkObjectsSpawned)
         {
             Debug.Log("---COMPARAMOS EL SIGUIENTE OBJETO: " + networkObject.name);
-            if (networkObject.GetComponent<GO_NetworkObject>().levelID == GO_PlayerNetworkManager.localPlayer.currentLevel_ID)
+            if (networkObject.GetComponent<GO_NetworkObject>().level_ID == GO_PlayerNetworkManager.localPlayer.currentLevel_ID)
             {
                 Debug.Log("---APROBAMOS EN EL NIVEL ACUTAL EL SIGUIENTE OBJETO: " + networkObject.name);
                 networkObject.RequestStateAuthority();
@@ -360,6 +360,7 @@ public class GO_LevelManager : NetworkBehaviour
             Debug.Log("CAMBIO SCENE NO HAY PLAYER ACTIVOS EN LA ESCENA ACTUAL");
             CheckPlayerInNewLevel();
         }
+        OnPlayerChangeScene?.Invoke();
     }
 
     private void Update()

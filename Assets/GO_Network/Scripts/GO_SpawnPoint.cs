@@ -9,10 +9,11 @@ public class GO_SpawnPoint : MonoBehaviour
     public GO_LevelManager.Level level_ID;
     private Transform _radius;
     public static GO_SpawnPoint currentSpawPoint;
-
+    public static event System.Action OnPlayerChangeSceneComplete;
     private void Awake()
     {
         currentSpawPoint = this;
+        OnPlayerChangeSceneComplete?.Invoke();
     }
     public (Vector3 pos, Quaternion rot) getSpawPointPosition()
     {

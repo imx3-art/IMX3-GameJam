@@ -1,39 +1,49 @@
 using Fusion;
 using StarterAssets;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Networking;
 
 
 
 public class GO_NetworkObject : NetworkBehaviour
 {
-    [Networked] public short levelID { get; set; }
+    [Networked] public short level_ID { get; set; } = -1;
     
     [SerializeField] private bool IgnoreColisionChangeAuthority;
     
     private NetworkObject networkObject;
     public static bool readyChangeScene;
-    private void Start()
+    public override void Spawned()
     {
-        Debug.Log("Start " + name);
         networkObject = GetComponent<NetworkObject>();
-        levelID = (short) GO_SpawnPoint.currentSpawPoint.level_ID;
+        level_ID = (short) GO_SpawnPoint.currentSpawPoint.level_ID;
         DontDestroyOnLoad(gameObject);
+    }
 
+    private IEnumerator Start()
+    {
+        yield return new WaitWhile(() => level_ID == -1);
+        yield return new WaitForSeconds(1);        
+        gameObject.SetActive(level_ID == (short)GO_SpawnPoint.currentSpawPoint.level_ID);
     }
     private void OnEnable()
     {
         GO_LevelManager.OnPlayerChangeScene  += ChangeScene;
+        GO_SpawnPoint.OnPlayerChangeSceneComplete  += ChangeSceneComplete;
     }
 
-    private void OnDisable()
-    {
+    private void OnDestroy()
+    {        
         GO_LevelManager.OnPlayerChangeScene -= ChangeScene;
+        GO_SpawnPoint.OnPlayerChangeSceneComplete -= ChangeSceneComplete;
     }
 
     private void ChangeScene()
     {
+        Debug.Log("*-*MI NAME: " + name);
+        Debug.Log("*-*MI NAME: " + Object.StateAuthority);
+        Debug.Log("*-*MI NAME: " + GO_LevelManager.instance.CurrentPlayerRefChangeScene);
+
         if(GO_LevelManager.instance.CurrentPlayerRefChangeScene == Object.StateAuthority)
         {
             readyChangeScene = false;
@@ -42,7 +52,11 @@ public class GO_NetworkObject : NetworkBehaviour
         }
        // RPC_RequestStateAuthority(Runner.GetPlayerObject(Object.StateAuthority));
     }
-
+    private void ChangeSceneComplete()
+    {
+        Debug.Log("---ACTIVAR EL PLAYER: " + name + " " + level_ID + " CONTRA: " + GO_SpawnPoint.currentSpawPoint.level_ID);
+        gameObject.SetActive(level_ID == (short) GO_SpawnPoint.currentSpawPoint.level_ID);
+    }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_RequestStateAuthority(PlayerRef _player)
@@ -67,7 +81,7 @@ public class GO_NetworkObject : NetworkBehaviour
             Debug.Log("COLISION PLAYER: " + playerNetworkManager);
             if (playerNetworkManager.enabled && !networkObject.HasStateAuthority)
             {
-                networkObject.RequestStateAuthority();
+                ChangeAuthority();//;networkObject.RequestStateAuthority();
                 //networkObject.AssignInputAuthority(Runner.LocalPlayer);
             }
             else
@@ -79,7 +93,12 @@ public class GO_NetworkObject : NetworkBehaviour
 
     }
 
+    public void ChangeAuthority()
+    {
 
+            networkObject.RequestStateAuthority();
+
+    }
 
 
 }
