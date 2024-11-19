@@ -68,7 +68,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     }
     private IEnumerator TeleportPlayerCoroutine(Vector3 _pos, Quaternion _rot)
     {
-        currentLevel_ID = GO_SpawnPoint.currentSpawPoint.level_ID;
+        currentLevel_ID = (short) GO_SpawnPoint.currentSpawPoint.level_ID;
         do
         {
             playerTransform.Teleport(_pos, _rot);

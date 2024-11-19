@@ -170,7 +170,7 @@ public class GO_LevelManager : NetworkBehaviour
             }
             Debug.Log("*** CAMBIO SCENE " + player.currentLevel_ID + " - " + player.name + " POINT: " + GO_SpawnPoint.currentSpawPoint.level_ID);
 
-            if (GO_SpawnPoint.currentSpawPoint.level_ID == player.currentLevel_ID)
+            if ((short) GO_SpawnPoint.currentSpawPoint.level_ID == player.currentLevel_ID)
             {
                 Debug.Log("*** CAMBIO SCENE " + player.currentLevel_ID + " - " + player.name);
 
@@ -206,7 +206,7 @@ public class GO_LevelManager : NetworkBehaviour
 
             if (player != GO_PlayerNetworkManager.localPlayer)
             {
-                if (player.currentLevel_ID == GO_SpawnPoint.currentSpawPoint.level_ID)
+                if (player.currentLevel_ID == (short) GO_SpawnPoint.currentSpawPoint.level_ID)
                 {
                     Debug.Log("---ENTONTRAMOS PLAYER: " + player.playerID);
 

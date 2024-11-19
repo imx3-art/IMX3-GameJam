@@ -6,7 +6,7 @@ public class GO_SpawnPoint : MonoBehaviour
 {
     [Range(3f, 20f)]
     [SerializeField] float radiusSpawnPlayer = 5;
-    public short level_ID = -1;
+    public GO_LevelManager.Level level_ID;
     private Transform _radius;
     public static GO_SpawnPoint currentSpawPoint;
 

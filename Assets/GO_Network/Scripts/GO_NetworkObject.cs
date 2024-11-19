@@ -18,7 +18,7 @@ public class GO_NetworkObject : NetworkBehaviour
     {
         Debug.Log("Start " + name);
         networkObject = GetComponent<NetworkObject>();
-        levelID = GO_SpawnPoint.currentSpawPoint.level_ID;
+        levelID = (short) GO_SpawnPoint.currentSpawPoint.level_ID;
         DontDestroyOnLoad(gameObject);
 
     }
