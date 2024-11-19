@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 1713133035
   ObjectInterest: 1
-  Flags: 262145
+  Flags: 524289
   NestedObjects:
   - {fileID: 146381253626972079}
   - {fileID: 1657451275547629484}
@@ -89,7 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c9e59b6c135e54384c8924fa8f9878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkObject: {fileID: 0}
+  _level_ID: -1
+  IgnoreColisionChangeAuthority: 0
 --- !u!1001 &58662441320613619
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -172,11 +173,6 @@ PrefabInstance:
         type: 3}
       propertyPath: minX
       value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5873355619440504908, guid: 6a7773bf78750c3448ebb592a1f8bf48,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6981363448839620254, guid: 6a7773bf78750c3448ebb592a1f8bf48,
         type: 3}
@@ -289,11 +285,6 @@ PrefabInstance:
       propertyPath: minX
       value: -10
       objectReference: {fileID: 0}
-    - target: {fileID: 5873355619440504908, guid: 6a7773bf78750c3448ebb592a1f8bf48,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6981363448839620254, guid: 6a7773bf78750c3448ebb592a1f8bf48,
         type: 3}
       propertyPath: m_Name
@@ -405,11 +396,6 @@ PrefabInstance:
       propertyPath: minX
       value: -10
       objectReference: {fileID: 0}
-    - target: {fileID: 5873355619440504908, guid: 6a7773bf78750c3448ebb592a1f8bf48,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6981363448839620254, guid: 6a7773bf78750c3448ebb592a1f8bf48,
         type: 3}
       propertyPath: m_Name
@@ -520,11 +506,6 @@ PrefabInstance:
         type: 3}
       propertyPath: minX
       value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5873355619440504908, guid: 6a7773bf78750c3448ebb592a1f8bf48,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6981363448839620254, guid: 6a7773bf78750c3448ebb592a1f8bf48,
         type: 3}
