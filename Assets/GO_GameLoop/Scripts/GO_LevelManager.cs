@@ -160,7 +160,7 @@ public class GO_LevelManager : NetworkBehaviour
     /// True: Se encontro un player para pasarle la Autoridad, False: Se despawnean los Objetos.
     /// </summary>
     /// <returns></returns>
-    public bool StatusLevel()
+    public bool CheckPlayerInLastLevel()
     {
         foreach(GO_PlayerNetworkManager player in GO_PlayerNetworkManager.PlayersList) 
         {
@@ -197,9 +197,8 @@ public class GO_LevelManager : NetworkBehaviour
         return false;
     }
 
-    public void StatusScene()
+    public void CheckPlayerInNewLevel()
     {
-        bool _status = false;
         foreach (GO_PlayerNetworkManager player in GO_PlayerNetworkManager.PlayersList)
         {
             Debug.Log("---COMPARAMOS PLAYER: " + player.playerID);
@@ -208,9 +207,7 @@ public class GO_LevelManager : NetworkBehaviour
             {
                 if (player.currentLevel_ID == (short) GO_SpawnPoint.currentSpawPoint.level_ID)
                 {
-                    Debug.Log("---ENTONTRAMOS PLAYER: " + player.playerID);
-
-                    _status = true;
+                    Debug.Log("---ENTONTRAMOS PLAYER: " + player.playerID);        
                     return;
                 }
             }
@@ -224,7 +221,23 @@ public class GO_LevelManager : NetworkBehaviour
                 networkObject.RequestStateAuthority();
             }
         }
+    }
 
+    public void CheckPlayerInCurrentLevel(PlayerRef _player)
+    {
+
+        if (GO_PlayerNetworkManager.localPlayer.currentLevel_ID == (short)GO_SpawnPoint.currentSpawPoint.level_ID)
+        {
+            foreach (NetworkObject networkObject in networkObjectsSpawned)
+            {
+                Debug.Log("+++COMPARAMOS EL SIGUIENTE OBJETO: " + networkObject.name);
+
+                if (networkObject.StateAuthority == _player)
+                {
+                    networkObject.RequestStateAuthority();
+                }
+            }
+        }
     }
 
     [ContextMenu("PERDER VIDA")]
@@ -315,7 +328,7 @@ public class GO_LevelManager : NetworkBehaviour
     {
         string sceneName = level.ToString();
 
-        if (!StatusLevel())//
+        if (!CheckPlayerInLastLevel())//
         {
             Debug.Log("*** CAMBIO SCENE NO HAY PLAYER ACTIVOS");
         }
@@ -342,10 +355,10 @@ public class GO_LevelManager : NetworkBehaviour
             }
             SpawnPlayer();
         }
-        if (!StatusLevel())//
+        if (!CheckPlayerInLastLevel())//
         {
             Debug.Log("CAMBIO SCENE NO HAY PLAYER ACTIVOS EN LA ESCENA ACTUAL");
-            StatusScene();
+            CheckPlayerInNewLevel();
         }
     }
 
@@ -383,7 +396,6 @@ public class GO_LevelManager : NetworkBehaviour
         }
         return null;
     }
-
 
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]

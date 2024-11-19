@@ -54,7 +54,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         {
         yield return null;
         }
-        GO_LevelManager.instance.StatusScene();
+        GO_LevelManager.instance.CheckPlayerInNewLevel();
     }
     private void OnDisable()
     {

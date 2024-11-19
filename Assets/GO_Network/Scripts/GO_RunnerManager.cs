@@ -104,6 +104,7 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log(runner.IsSharedModeMasterClient);
+        GO_LevelManager.instance.CheckPlayerInCurrentLevel(player);
         //GO_PlayerNetworkManager.PlayersList.Remove(runner.GetPlayerObject(player).GetComponent<GO_PlayerNetworkManager>());
 
         //throw new NotImplementedException();
