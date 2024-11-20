@@ -36,12 +36,13 @@ public class GO_PopUpManager : MonoBehaviour
 
         popupPanel.SetActive(false);
         GO_InputsPlayer.IsPause = false;
-        Inputs.SetCursorState(true); 
         Destroy(gameObject);
     }
 
     public void Retry()
     {
+
+        GO_LoadScene.Instance.ShowLoadingScreen();
         _currentLevel = GO_LevelManager.Level.L_GO_Level1;  // Cambia a Nivel1 para reiniciar
         GO_LevelManager.instance.LoadLevelAsync();
         
