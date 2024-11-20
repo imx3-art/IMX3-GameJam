@@ -41,7 +41,8 @@ public class GO_PopUpManager : MonoBehaviour
     public void Retry()
     {
         _currentLevel = GO_LevelManager.Level.L_GO_Level1;  // Cambia a Nivel1 para reiniciar
-        StartCoroutine(GO_LevelManager.instance.LoadLevelAsync(_currentLevel));
+        GO_LevelManager.instance.LoadLevelAsync();
+        
         HidePopup();  // Oculta el popup despu�s de reiniciar el nivel
     }
 

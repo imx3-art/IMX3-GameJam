@@ -42,7 +42,7 @@ public class GO_LevelManager : NetworkBehaviour
     public GO_PlayerNetworkManager _playerInstance;
     private GameObject _playerPrefab;
 
-    private Level _currentLevel = Level.L_GO_Level1;
+    [SerializeField] private Level _currentLevel = Level.L_GO_Level1;
 
     private Transform _spawnPoint;
     private Transform _endPoint;
@@ -245,13 +245,12 @@ public class GO_LevelManager : NetworkBehaviour
     {
         if(_currentLevel != Level.L_GO_Level1 || true)//REVERT
         {
-            //_playerInstance.playerLives--;
-            RPC_setLifes(_playerInstance.playerID, -1);
+            _playerInstance.playerLives--;
+            //RPC_setLifes(_playerInstance.playerID, -1);
             ResetPlayerPosition();
         }
         Debug.Log(_playerInstance.playerLives);
     }
-
     private void ChangeScene()
     {
         switch (_currentLevel)
@@ -323,7 +322,11 @@ public class GO_LevelManager : NetworkBehaviour
             GO_PopUpManager.Instance.ShowPopup();
         }
     }
-
+    [ContextMenu("RESET LEVEL")]
+    public void LoadLevelAsync()
+    {
+        StartCoroutine(LoadLevelAsync(_currentLevel = Level.L_GO_Level1));
+    }
     public IEnumerator LoadLevelAsync(Level level)
     {
         string sceneName = level.ToString();
@@ -345,7 +348,7 @@ public class GO_LevelManager : NetworkBehaviour
             }
         }
 
-        if (SceneManager.GetActiveScene().name != sceneName)
+        if (SceneManager.GetActiveScene().name != sceneName || true)
         {
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
             while (!asyncLoad.isDone)
@@ -362,7 +365,6 @@ public class GO_LevelManager : NetworkBehaviour
         }
         OnPlayerChangeScene?.Invoke();
     }
-
     private void Update()
     {
         if (isChangingScene && SceneManager.GetActiveScene().name == _currentLevel.ToString())
@@ -370,13 +372,10 @@ public class GO_LevelManager : NetworkBehaviour
             OnSceneLoaded();
         }
     }
-
     public void OnSceneLoaded()
     {
         isChangingScene = false;
     }
-
-
     public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot, string _codeName = null )
     {
         Debug.Log("MANDO SPAWN " + objectsSpawned.Count);
@@ -397,21 +396,16 @@ public class GO_LevelManager : NetworkBehaviour
         }
         return null;
     }
-
-
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_GetPoolSpawnObject()
     {
         RPC_SendPoolSpawnObject(objectsSpawned.ToArray());        
     } 
-    
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_GetPoolSpawnNetWorkObject()
     {
         RPC_SendPoolSpawnObject(networkObjectsSpawned.ToArray());        
     }
-
-
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_SendPoolSpawnObject(string[] _listSpawnedObject)
     {
@@ -421,7 +415,6 @@ public class GO_LevelManager : NetworkBehaviour
         }
         isReady = true;
     }
-    
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_SendPoolSpawnObject(NetworkObject[] _listSpawnedObject)
     {
@@ -431,7 +424,6 @@ public class GO_LevelManager : NetworkBehaviour
         }
         isReady = true;
     }
-
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_SetPoolSpawnObject(string _nameObjectSpawned)
     {
@@ -448,10 +440,6 @@ public class GO_LevelManager : NetworkBehaviour
             networkObjectsSpawned.Add(_nameObjectSpawned);
         }
     }
-
-
-
-    //RPC
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
     public void RPC_setLifes(short _playerID, short _value)
     {

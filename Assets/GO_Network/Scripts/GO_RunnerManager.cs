@@ -36,8 +36,23 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkRunner _runner;
     private string _nameSession;
     public static string _customNameSession;
+    public static GO_RunnerManager Instance;
 
     private static STATUSCONNECTION statusConnection;
+
+    private void Awake()
+    {
+        
+        if(Instance == null)
+        {
+            transform.parent = null;
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void Start()
     {
