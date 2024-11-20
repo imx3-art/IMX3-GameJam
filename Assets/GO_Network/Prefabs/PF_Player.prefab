@@ -51,6 +51,7 @@ MonoBehaviour:
   _playerName: Player Name String
   _playerLives: 0
   _playerID: 0
+  _currentLevel_ID: 0
   _movePlayerNetwork: {x: 0, y: 0}
   _isDrag: 0
   cameraTargetFollow: {fileID: 6419920899746987804}
@@ -161,6 +162,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_Height
+      value: 1.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.62
       objectReference: {fileID: 0}
     - target: {fileID: 5659773718839666751, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}

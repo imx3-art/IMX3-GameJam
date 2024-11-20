@@ -246,6 +246,7 @@ public class GO_LevelManager : NetworkBehaviour
         if(_currentLevel != Level.L_GO_Level1 || true)//REVERT
         {
             _playerInstance.playerLives--;
+            Debug.Log($"Jugador Recibio ataque, vidas restantes"+_playerInstance.playerLives);
             //RPC_setLifes(_playerInstance.playerID, -1);
             ResetPlayerPosition();
         }

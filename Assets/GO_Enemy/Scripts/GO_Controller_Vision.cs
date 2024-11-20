@@ -22,6 +22,8 @@ public class GO_Controller_Vision : MonoBehaviour
     private MeshFilter _visionConeMeshFilter;
     private MeshRenderer _visionConeMeshRenderer;
     private Mesh _visionConeMesh;
+    
+    public LayerMask visionLayerMask;
 
     private void Awake()
     {
@@ -47,6 +49,8 @@ public class GO_Controller_Vision : MonoBehaviour
         {
             _visionConeMeshRenderer.material = visionConeMaterial;
         }
+        
+        visionLayerMask = ~(1 << LayerMask.NameToLayer("Enemy"));
     }
     
     private void Update()
@@ -82,21 +86,25 @@ public class GO_Controller_Vision : MonoBehaviour
             {
                 Transform currentPlayerTransform = collider.transform;
 
-                // Vector desde los ojos del enemigo hacia el jugador
+                // Vector desde los ojos del enemigo hacia el jugador ajustado con el offset
                 Vector3 directionToPlayer = (currentPlayerTransform.position + _enemy.offset) - eyes.position;
 
-                // Normalizar el vector de dirección
-                Vector3 directionToPlayerNormalized = directionToPlayer.normalized;
+                // Proyectar los vectores en el plano horizontal (ignorar Y) para calcular el ángulo
+                Vector3 directionToPlayerFlat = new Vector3(directionToPlayer.x, 0, directionToPlayer.z).normalized;
+                Vector3 eyesForwardFlat = new Vector3(eyes.forward.x, 0, eyes.forward.z).normalized;
 
-                // Calcular el ángulo entre la dirección frontal y la dirección al jugador
-                float angleToPlayer = Vector3.Angle(eyes.forward, directionToPlayerNormalized);
+                // Calcular el ángulo entre la dirección frontal y la dirección al jugador en el plano horizontal
+                float angleToPlayer = Vector3.Angle(eyesForwardFlat, directionToPlayerFlat);
+
+                // Dibujar el Raycast para visualización en el Editor
+                Debug.DrawRay(eyes.position, directionToPlayer, Color.blue);
 
                 // Verificar si el jugador está dentro del campo de visión
                 if (angleToPlayer < _enemy.visionAngle / 2f)
                 {
                     // Verificar si hay línea de visión directa al jugador
                     RaycastHit hitInfo;
-                    if (Physics.Raycast(eyes.position, directionToPlayerNormalized, out hitInfo, _enemy.visionRange))
+                    if (Physics.Raycast(eyes.position, directionToPlayer, out hitInfo, _enemy.visionRange, visionLayerMask))
                     {
                         if (hitInfo.collider.CompareTag("Player"))
                         {
@@ -138,7 +146,7 @@ public class GO_Controller_Vision : MonoBehaviour
                 if (angleToArm < _enemy.visionAngle / 2f)
                 {
                     RaycastHit hitInfo;
-                    if (Physics.Raycast(eyes.position, directionToArmNormalized, out hitInfo, _enemy.visionRange))
+                    if (Physics.Raycast(eyes.position, directionToArmNormalized, out hitInfo, _enemy.visionRange, visionLayerMask))
                     {
                         if (hitInfo.collider.CompareTag("Arm"))
                         {
