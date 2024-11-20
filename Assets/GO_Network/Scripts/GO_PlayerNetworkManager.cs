@@ -80,8 +80,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             }
         }
         while (true);// (playerTransform.transform.position - _pos).magnitude < .5f);
-        //QUITAR LA PANTALLA DE CARGA
-
+        GO_LoadScene.Instance.HideLoadingScreen();
     }
 
     public void StartdragMode(bool _RPC = false)

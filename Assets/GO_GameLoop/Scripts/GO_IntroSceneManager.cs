@@ -6,20 +6,33 @@ using UnityEngine.SceneManagement;
 
 public class GO_IntroSceneManager : MonoBehaviour
 {
-
     public void PlayGame()
     {
-        SceneManager.LoadScene("L_GO_Level1");
+        GO_LoadScene.Instance.ShowLoadingScreen();
+
+        StartCoroutine(LoadGameScene());
+    }
+
+    private IEnumerator LoadGameScene()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("L_GO_Level0");
+
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        GO_LoadScene.Instance.HideLoadingScreen();
     }
 
     public void ShowCredits()
     {
-        // Aqu� puedes activar el panel de cr�ditos.
+
     }
 
     public void HideCredits()
     {
-        // Aqu� puedes ocultar el panel de cr�ditos.
+
     }
 
     public void setCustomSessionName(TMP_InputField _input)

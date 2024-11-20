@@ -1,6 +1,7 @@
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 #endif
 
 namespace StarterAssets
@@ -17,6 +18,10 @@ namespace StarterAssets
         public new void OnMove(InputValue value)
         {
             MoveInput(value.Get<Vector2>());
+        }
+        public new void OnLook(InputValue value)
+        {
+            LookInput(value.Get<Vector2>());            
         }
         public void OnStealth(InputValue value)
         {
@@ -67,6 +72,12 @@ namespace StarterAssets
                 move.y = IsPause ? Vector2.zero.y : newMoveDirection.y;
             }
         }
+
+        public new void LookInput(Vector2 newLookDirection)
+        {
+            look.x = IsPause ? Vector2.zero.x : newLookDirection.x;
+            look.y = IsPause ? Vector2.zero.y : newLookDirection.y;
+        }
         Vector2 moveTMP;
         private void Update()
         {
@@ -85,6 +96,10 @@ namespace StarterAssets
             {
                 move = moveTMP = Vector2.zero;
             }
+        }
+        public void SetCursorState(bool newState)
+        {
+            Cursor.lockState = (cursorLocked = newState) ? CursorLockMode.Locked : CursorLockMode.None;
         }
     }
 }

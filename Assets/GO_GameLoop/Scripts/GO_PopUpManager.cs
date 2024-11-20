@@ -26,15 +26,17 @@ public class GO_PopUpManager : MonoBehaviour
     // M�todo para mostrar el popup en un momento espec�fico
     public void ShowPopup()
     {
-        GO_InputsPlayer.IsPause = true;
-        Inputs.cursorLocked = false;
+        Inputs.SetCursorState(false);
         popupPanel.SetActive(true);
+        GO_InputsPlayer.IsPause = true;
     }
     // M�todo para ocultar el popup canvas
     public void HidePopup()
     {
+
         popupPanel.SetActive(false);
         GO_InputsPlayer.IsPause = false;
+        Inputs.SetCursorState(true); 
         Destroy(gameObject);
     }
 

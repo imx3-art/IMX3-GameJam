@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4087791499dacb7439b5c85bf0495163, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Inputs: {fileID: 1559091376097257522, guid: 3801d110c0f0f9244a347a16572a82c1, type: 3}
+  Inputs: {fileID: 7257542392921084583, guid: 3801d110c0f0f9244a347a16572a82c1, type: 3}
   popupPanel: {fileID: 637766446433955878}
 --- !u!1001 &469296758963780909
 PrefabInstance:
@@ -251,32 +251,32 @@ PrefabInstance:
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 552.792
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 310.94556
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
@@ -321,7 +321,7 @@ PrefabInstance:
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7038001881846694758, guid: 73a54d933a30b884bae41c98129595ed,
         type: 3}
@@ -347,6 +347,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameOver_PopUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9155739006206558251, guid: 73a54d933a30b884bae41c98129595ed,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4202944893118925376, guid: 73a54d933a30b884bae41c98129595ed, type: 3}

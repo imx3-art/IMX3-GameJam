@@ -12,13 +12,13 @@ public class GO_LevelManager : NetworkBehaviour
 {
     public enum Level
     {
+        L_GO_Level0,
         L_GO_Level1,
         L_GO_Level2,
-        Nivel2,
-        Nivel3,
-        Nivel4,
-        Nivel5,
-        Nivel6
+        L_GO_Level3,
+        L_GO_Level4,
+        L_GO_Level5,
+        L_GO_Level6,
     }
 
 
@@ -42,7 +42,7 @@ public class GO_LevelManager : NetworkBehaviour
     public GO_PlayerNetworkManager _playerInstance;
     private GameObject _playerPrefab;
 
-    [SerializeField] private Level _currentLevel = Level.L_GO_Level1;
+    [SerializeField] private Level _currentLevel;
 
     private Transform _spawnPoint;
     private Transform _endPoint;
@@ -149,6 +149,7 @@ public class GO_LevelManager : NetworkBehaviour
         if (!isChangingScene)
         {
             //Muestra pantalla de Carga
+            GO_LoadScene.Instance.ShowLoadingScreen();
 
             CurrentPlayerRefChangeScene = Runner.LocalPlayer;
 
@@ -256,26 +257,26 @@ public class GO_LevelManager : NetworkBehaviour
     {
         switch (_currentLevel)
         {
+            case Level.L_GO_Level0:
             case Level.L_GO_Level1:
             case Level.L_GO_Level2:
-            case Level.Nivel2:
-            case Level.Nivel3:
+            case Level.L_GO_Level3:
                 _currentLevel++;
                 break;
-            case Level.Nivel4:
+            case Level.L_GO_Level4:
                 _playerInstance.playerLives = 3;
                 //RPC_setLifes(_playerInstance.playerID, 3);
                 if (DidSabotage)
                 {
-                    _currentLevel = Level.Nivel5;
+                    _currentLevel = Level.L_GO_Level5;
                 }
                 else
                 {
-                    _currentLevel = Level.Nivel6;
+                    _currentLevel = Level.L_GO_Level6;
                 }
                 break;
-            case Level.Nivel5:
-            case Level.Nivel6:
+            case Level.L_GO_Level5:
+            case Level.L_GO_Level6:
                 _currentLevel = Level.L_GO_Level1;
                 _playerInstance.playerLives = 3;
                 //RPC_setLifes(_playerInstance.playerID, 3);
