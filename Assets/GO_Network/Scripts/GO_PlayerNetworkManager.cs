@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
 
 public enum PlayerState
 {
@@ -26,7 +27,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     [Networked] public short currentLevel_ID { get; set; }
     [Networked] public Vector2 movePlayerNetwork { get; set; }
     [Networked] public short isDrag { get; set; }
-
+    [Networked] public short pullMiniGame { get; set; }
+    [Networked] public float timeMinigame { get; set; }
     [SerializeField] private GameObject cameraTargetFollow;
 
     [SerializeField]
@@ -37,7 +39,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public static List<GO_PlayerNetworkManager> PlayersList = new List<GO_PlayerNetworkManager>();
     public static GO_PlayerNetworkManager localPlayer;
     public GO_PlayerNetworkManager otherPlayerTarget;
-
+    private GO_PlayerActions actionPlayer;
     public PlayerState CurrentPlayerState;
     
     public override void Spawned()
@@ -46,6 +48,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
         if (Object.HasStateAuthority)
         {
+            GetComponentInChildren<PlayerInput>().enabled = true;
+            GetComponentInChildren<GO_PlayerActions>().enabled = true;
             localPlayer = this;
             isLocalPlayer = true;
             playerTransform.gameObject.transform.localPosition = Vector3.zero;
@@ -55,8 +59,9 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         }
         else
         {
-
+            Destroy(GetComponentInChildren<GO_InputsPlayer>());
         }
+        actionPlayer = GetComponentInChildren<GO_PlayerActions>();
         cameraTargetFollow.SetActive(isLocalPlayer);
 
         //GetComponentInChildren<Rigidbody>().isKinematic = !isLocalPlayer;
@@ -97,7 +102,10 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             }
         }
         while (true);// (playerTransform.transform.position - _pos).magnitude < .5f);
-        GO_LoadScene.Instance.HideLoadingScreen();
+        if (GO_LoadScene.Instance)
+        {
+            GO_LoadScene.Instance.HideLoadingScreen();
+        }
         ChangePlayerState(PlayerState.Normal);
         RPC_setState((int)PlayerState.Normal);
     }
@@ -119,13 +127,13 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             RPC_setOtherPlayer(otherPlayerTarget.playerID, playerID, false);
         }
         otherPlayerTarget = null;
+        actionPlayer.ActiveCanvas(false);
     }
     
     public void ChangePlayerState(PlayerState newState)
     {
         CurrentPlayerState = newState;
     }
-
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
     public void RPC_setOtherPlayer(short _playerID, short _otherPlayer, bool start)
@@ -136,7 +144,10 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             if (start)
             {
                 otherPlayerTargetTMP.otherPlayerTarget = PlayersList.Find(player => player.playerID == _otherPlayer);
-                otherPlayerTargetTMP.StartdragMode();
+                otherPlayerTargetTMP.isDrag = 2;
+                otherPlayerTargetTMP.pullMiniGame = 0;
+                otherPlayerTargetTMP.timeMinigame = 0;
+                //otherPlayerTargetTMP.StartdragMode();
             }
             else
             {
@@ -152,4 +163,34 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         ChangePlayerState((PlayerState)state);
     }
 
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_setWinnerMiniGame(short _playerWinID, short _playerLoseID)
+    {
+        GO_PlayerNetworkManager playerWin= PlayersList.Find(player => player.playerID == _playerWinID);
+        GO_PlayerNetworkManager playerLose= PlayersList.Find(player => player.playerID == _playerLoseID);
+        {
+
+            if (playerWin.Equals(localPlayer))
+            {
+                playerWin.DragArm();
+            }
+                
+            playerLose.DropArm();
+
+        }
+
+    }
+
+    public void DropArm()
+    {
+        Debug.Log("LOSE ARM");
+        actionPlayer.DropArm(false);
+    }
+
+    public void DragArm()
+    {
+        actionPlayer.SpawnArm();
+
+    }
 }

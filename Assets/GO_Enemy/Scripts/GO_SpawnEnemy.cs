@@ -45,7 +45,6 @@ public class GO_SpawnEnemy : MonoBehaviour
                 
             }
         }
-        yield break;
     }
 
     // Update is called once per frame

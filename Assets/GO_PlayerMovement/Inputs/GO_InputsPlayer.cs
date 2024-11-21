@@ -12,7 +12,9 @@ namespace StarterAssets
         public bool stealth;
         public bool Grab;
         public bool drag;
+        public bool pull;
         public static bool IsPause = false;
+
 
 #if ENABLE_INPUT_SYSTEM
         public new void OnMove(InputValue value)
@@ -31,6 +33,10 @@ namespace StarterAssets
         {
             DragInput(value.isPressed);
         }
+        public void OnPull(InputValue value)
+        {
+            PullInput(value.isPressed);
+        }
 
         public void OnGrab(InputValue value)
         {
@@ -41,13 +47,26 @@ namespace StarterAssets
         {
             stealth = newStealthState;
         }
+        public void PullInput(bool newStealthState)
+        {
+            pull = newStealthState;
+            if (GO_PlayerNetworkManager.localPlayer.isDrag > 0)
+            {
+                GO_PlayerNetworkManager.localPlayer.pullMiniGame++;
+            }
+
+        }
 
         public void DragInput(bool newDragthState)
         {
             Debug.Log("***EL Drag esta: " + drag);
-            if(drag) 
+            if (!newDragthState)
             {
-                GO_PlayerNetworkManager.localPlayer.EnddragMode(true);
+                return;
+            }
+
+            if (drag) 
+            {
                 move = Vector2.zero;
             }
             drag = newDragthState;
@@ -61,9 +80,10 @@ namespace StarterAssets
 
         public new void MoveInput(Vector2 newMoveDirection)
         {
-            if (GO_PlayerNetworkManager.localPlayer.isDrag == 1)
+            if (GO_PlayerNetworkManager.localPlayer.isDrag > 0)
             {
                 GO_PlayerNetworkManager.localPlayer.movePlayerNetwork = newMoveDirection;
+                move = Vector2.zero;
             }
             else
             {
@@ -78,7 +98,7 @@ namespace StarterAssets
             look.x = IsPause ? Vector2.zero.x : newLookDirection.x;
             look.y = IsPause ? Vector2.zero.y : newLookDirection.y;
         }
-        Vector2 moveTMP;
+        /*Vector2 moveTMP;
         private void Update()
         {
             if (GO_PlayerNetworkManager.localPlayer.isDrag == 1)
@@ -96,7 +116,7 @@ namespace StarterAssets
             {
                 move = moveTMP = Vector2.zero;
             }
-        }
+        }*/
         public void SetCursorState(bool newState)
         {
             Cursor.lockState = (cursorLocked = newState) ? CursorLockMode.Locked : CursorLockMode.None;

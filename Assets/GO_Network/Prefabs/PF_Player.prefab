@@ -54,13 +54,15 @@ MonoBehaviour:
   _currentLevel_ID: 0
   _movePlayerNetwork: {x: 0, y: 0}
   _isDrag: 0
+  _pullMiniGame: 0
+  _timeMinigame: 0
   cameraTargetFollow: {fileID: 6419920899746987804}
   canvasUIPlayer: {fileID: 6797291922913000451, guid: 5dcfd2f22ed2e004f8596fb3ff715b6f,
     type: 3}
   playerTransform: {fileID: 8556223988473314288}
   isLocalPlayer: 0
   otherPlayerTarget: {fileID: 0}
-  _CurrentPlayerState: 0
+  CurrentPlayerState: 0
 --- !u!114 &-3133598056451371490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,16 +108,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5502584064351370505}
     m_Modifications:
-    - target: {fileID: 341225333634634659, guid: 3801d110c0f0f9244a347a16572a82c1,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 2376559194615770311, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: a45d524abd264fd41a424f814a7176ad, type: 2}
+      propertyPath: m_UpdateMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4810402255355047554, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: dificult
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4818616993116334801, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -169,42 +171,27 @@ PrefabInstance:
     - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: m_Height
-      value: 1.27
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: m_Radius
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.62
-      objectReference: {fileID: 0}
-    - target: {fileID: 5659773718839666751, guid: 3801d110c0f0f9244a347a16572a82c1,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 0
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: _virtualCamera
       value: 
       objectReference: {fileID: 864961167180621693}
-    - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
-        type: 3}
-      propertyPath: GroundLayers.m_Bits
-      value: 1025
-      objectReference: {fileID: 0}
     - target: {fileID: 5966910880951827594, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: m_Name
       value: PF_PlayerArmature
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773092177965768475, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: maxPull
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
