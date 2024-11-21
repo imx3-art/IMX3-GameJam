@@ -13,8 +13,10 @@ namespace StarterAssets
         public bool Grab;
         public bool drag;
         public bool pull;
+        public bool interact;
         public static bool IsPause = false;
 
+        public event System.Action onInteract;
 
 #if ENABLE_INPUT_SYSTEM
         public new void OnMove(InputValue value)
@@ -42,7 +44,17 @@ namespace StarterAssets
         {
             GrabInput(value.isPressed);
         }
+        public void OnInteract(InputValue value)
+        {
+            ToggleInteract();
+        }
 #endif
+        private void ToggleInteract()
+        {
+            interact = !interact; // Invierte el estado actual.
+            Debug.Log($"Interactuar está ahora: {interact}");
+            onInteract?.Invoke(); // Dispara el evento de interacción.
+        }
         public void StealthInput(bool newStealthState)
         {
             stealth = newStealthState;
@@ -98,25 +110,6 @@ namespace StarterAssets
             look.x = IsPause ? Vector2.zero.x : newLookDirection.x;
             look.y = IsPause ? Vector2.zero.y : newLookDirection.y;
         }
-        /*Vector2 moveTMP;
-        private void Update()
-        {
-            if (GO_PlayerNetworkManager.localPlayer.isDrag == 1)
-            {
-                Debug.Log("****Revisando vector: " + GO_PlayerNetworkManager.localPlayer.movePlayerNetwork);
-                if (GO_PlayerNetworkManager.localPlayer.otherPlayerTarget != null)
-                {
-                    Vector2 newMoveDirection = GO_PlayerNetworkManager.localPlayer.movePlayerNetwork + GO_PlayerNetworkManager.localPlayer.otherPlayerTarget.movePlayerNetwork;
-                    moveTMP = Vector2.Lerp(moveTMP, newMoveDirection, Time.deltaTime );
-                    move.x = IsPause ? Vector2.zero.x : moveTMP.x / 2;
-                    move.y = IsPause ? Vector2.zero.y : moveTMP.y / 2;
-                }                
-            }
-            else if(moveTMP != Vector2.zero)
-            {
-                move = moveTMP = Vector2.zero;
-            }
-        }*/
         public void SetCursorState(bool newState)
         {
             Cursor.lockState = (cursorLocked = newState) ? CursorLockMode.Locked : CursorLockMode.None;
