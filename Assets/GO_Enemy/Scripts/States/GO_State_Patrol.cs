@@ -35,7 +35,7 @@ public class GO_State_Patrol : GO_State
         if (enemy.visionController.SeeThePlayer(out playerTransform))
         {
             GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
-            if (player != null && player.CurrentPlayerState != PlayerState.Duel)
+            if (player != null && player.CurrentPlayerState != PlayerState.Duel && player.CurrentPlayerState != PlayerState.Ghost)
             {
                 // Cambiar al estado de persecución si el jugador no está en duelo
                 enemy.navMeshController.followObjective = playerTransform;

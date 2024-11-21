@@ -34,6 +34,7 @@ public class GO_PlayerUIManager : MonoBehaviour
                 if (GO_PlayerNetworkManager.localPlayer != null)
                 {
                     playerNetworkManager = GO_PlayerNetworkManager.localPlayer;
+                    controller = GO_PlayerNetworkManager.localPlayer.playerTransform.GetComponent<GO_ThirdPersonController>();
 
                     GO_LevelManager.instance.OnLivesChanged += UpdateLivesUI;
                     controller.OnStaminaChanged += UpdateStaminaUI;

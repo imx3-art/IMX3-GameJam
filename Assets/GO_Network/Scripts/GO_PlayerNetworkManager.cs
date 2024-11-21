@@ -11,7 +11,8 @@ public enum PlayerState
 {
     Normal,
     Persecution,
-    Duel
+    Duel,
+    Ghost
 }
 
 public class GO_PlayerNetworkManager : NetworkBehaviour
@@ -28,14 +29,16 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
 
     [SerializeField] private GameObject cameraTargetFollow;
 
+    [SerializeField]
+    private GO_PlayerUIManager canvasUIPlayer;
+
     public NetworkTransform playerTransform;
     public bool isLocalPlayer;
     public static List<GO_PlayerNetworkManager> PlayersList = new List<GO_PlayerNetworkManager>();
     public static GO_PlayerNetworkManager localPlayer;
     public GO_PlayerNetworkManager otherPlayerTarget;
 
-    [Networked]
-    public PlayerState CurrentPlayerState { get; set; }
+    public PlayerState CurrentPlayerState;
     
     public override void Spawned()
     {
@@ -48,6 +51,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             playerTransform.gameObject.transform.localPosition = Vector3.zero;
             playerID = (short)Random.Range(1000, 9999);
             CurrentPlayerState = PlayerState.Normal;
+            Instantiate(canvasUIPlayer.gameObject, transform);
         }
         else
         {
@@ -87,13 +91,15 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             playerTransform.Teleport(_pos, _rot);
             yield return new WaitForSeconds(1);
             Debug.Log("TELEPORT: " + playerTransform.transform.position + " - " + _pos + " - " + (playerTransform.transform.position - _pos).magnitude);
-            if((playerTransform.transform.position - _pos).magnitude < 2f)
+            if((playerTransform.transform.position - _pos).magnitude < 4f)
             {
                 break;
             }
         }
         while (true);// (playerTransform.transform.position - _pos).magnitude < .5f);
         GO_LoadScene.Instance.HideLoadingScreen();
+        ChangePlayerState(PlayerState.Normal);
+        RPC_setState((int)PlayerState.Normal);
     }
 
     public void StartdragMode(bool _RPC = false)
@@ -138,6 +144,12 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             }
             Debug.Log("*****EL RPC FUNCIONA SOY: " + _playerID + " - Busco a: " + _otherPlayer + " - otherPlayer: " + otherPlayerTarget);
         }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)] 
+    public void RPC_setState(int state)
+    {
+        ChangePlayerState((PlayerState)state);
     }
 
 }

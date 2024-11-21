@@ -86,6 +86,16 @@ public class GO_Controller_Vision : MonoBehaviour
             {
                 Transform currentPlayerTransform = collider.transform;
 
+                GO_PlayerNetworkManager player = currentPlayerTransform.GetComponentInParent<GO_PlayerNetworkManager>();
+                
+                if (player != null &&
+                    player.CurrentPlayerState == PlayerState.Ghost)
+                {
+                    return false;
+                }
+
+                
+
                 // Vector desde los ojos del enemigo hacia el jugador ajustado con el offset
                 Vector3 directionToPlayer = (currentPlayerTransform.position + _enemy.offset) - eyes.position;
 

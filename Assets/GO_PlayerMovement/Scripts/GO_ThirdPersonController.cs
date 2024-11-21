@@ -113,7 +113,7 @@ namespace StarterAssets
         private float _fallTimeoutDelta;
         
         // Referencia al NetworkManager
-        private GO_PlayerNetworkManager networkManager;
+        //private GO_PlayerNetworkManager networkManager;
         
         private float _weight = 0;
         
@@ -133,7 +133,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<GO_InputsPlayer>();
-            networkManager = GetComponentInParent<GO_PlayerNetworkManager>();
+            //networkManager = GetComponentInParent<GO_PlayerNetworkManager>();
 
             AssignAnimationIDs();
         }
@@ -454,10 +454,10 @@ namespace StarterAssets
         
         private void HandleStaminaAndSpeed()
         {
-            if (networkManager == null)
+            if (GO_PlayerNetworkManager.localPlayer == null)
                 return;
 
-            switch (networkManager.CurrentPlayerState)
+            switch (GO_PlayerNetworkManager.localPlayer.CurrentPlayerState)
             {
                 case PlayerState.Normal:
                     RegenerateStamina();

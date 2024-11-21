@@ -18,6 +18,10 @@ public class GO_State_Persecution : GO_State
     [SerializeField]
     private float attackCooldown = 1f;
     private bool canAttack = true;
+
+    private bool isPlayerLocal;
+
+    private Transform currentTarget;
     
     protected override void Awake()
     {
@@ -44,12 +48,28 @@ public class GO_State_Persecution : GO_State
         }
 
         Transform playerTransform;
-        if (enemy.visionController.SeeThePlayer(out playerTransform))
+        if (enemy.visionController.SeeThePlayer(out playerTransform) )
         {
-            GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
+            if (currentTarget != null && currentTarget != playerTransform)
+            {
+                return;
+            }
+
+            currentTarget = playerTransform;
+            //GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
+            GO_PlayerNetworkManager player;
+            
+            isPlayerLocal = (player = playerTransform.GetComponentInParent<GO_PlayerNetworkManager>()).isLocalPlayer;
+            Debug.Log("iS PLAYER LOCAL"+isPlayerLocal);
             if (player != null)
             {
                 if (player.CurrentPlayerState == PlayerState.Duel)
+                {
+                    // El jugador está en duelo, la IA lo ignora
+                    return;
+                }
+                
+                if (player.CurrentPlayerState == PlayerState.Ghost)
                 {
                     // El jugador está en duelo, la IA lo ignora
                     return;
@@ -60,12 +80,15 @@ public class GO_State_Persecution : GO_State
                 enemy.navMeshController.followObjective = playerTransform;
                 enemy.navMeshController.UpdateDestinationPoint();
 
-                timeSincePlayerLost = 0f;
+                if (playerTransform == currentTarget)
+                {
+                    timeSincePlayerLost = 0f;
+                }
 
                 float distance = Vector3.Distance(enemy.transform.position, playerTransform.position);
                 if (distance <= attackDistance)
                 {
-                    AttemptAttack();
+                    AttemptAttack(player);
                 }
             }
         }
@@ -77,12 +100,17 @@ public class GO_State_Persecution : GO_State
             
             if (timeSincePlayerLost >= persecutionDuration)
             {
-                GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
-                if (player != null && player.CurrentPlayerState == PlayerState.Persecution)
+                if (currentTarget != null)
                 {
-                    player.ChangePlayerState(PlayerState.Normal);
+                    GO_PlayerNetworkManager player = currentTarget.GetComponentInParent<GO_PlayerNetworkManager>();
+                    if (player != null && player.CurrentPlayerState == PlayerState.Persecution)
+                    {
+                        player.ChangePlayerState(PlayerState.Normal);
+                    }
                 }
-                
+
+                currentTarget = null;
+                enemy.navMeshController.followObjective = null;
                 stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
                 return;
             }
@@ -94,30 +122,41 @@ public class GO_State_Persecution : GO_State
             }
             else
             {
+                currentTarget = null;
                 stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
             }
         }
     }
-    private void AttemptAttack()
+    private void AttemptAttack(GO_PlayerNetworkManager player)
     {
         if (canAttack)
         {
-            AttackPlayer();
+            AttackPlayer(player);
             StartCoroutine(AttackCooldownCoroutine());
         }
     }
 
-    private void AttackPlayer()
+    private void AttackPlayer(GO_PlayerNetworkManager player)
+    {
+        StartCoroutine(AttackPlayerCoroutine(player));
+    }
+    private IEnumerator AttackPlayerCoroutine(GO_PlayerNetworkManager player)
     {
         if (GO_LevelManager.instance != null)
         {
-            GO_LevelManager.instance.perderUnaVida();
-            Debug.Log($"IA atacó al jugador");
-
+            currentTarget = null;
+            player.ChangePlayerState(PlayerState.Ghost);
+            //animacion de muerte
+            yield return new WaitForSeconds(2.0f);
+            if (isPlayerLocal)
+            {
+                GO_LevelManager.instance.perderUnaVida();
+                Debug.Log($"IA atacó al jugador");
+            }
+            
             GO_State_Patrol patrolState = GetComponent<GO_State_Patrol>();
             if (patrolState != null)
             {
-                GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
                 if (player != null && player.CurrentPlayerState == PlayerState.Persecution)
                 {
                     player.ChangePlayerState(PlayerState.Normal);
