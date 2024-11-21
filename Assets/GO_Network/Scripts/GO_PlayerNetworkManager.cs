@@ -1,9 +1,18 @@
+using System;
 using Fusion;
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+public enum PlayerState
+{
+    Normal,
+    Persecution,
+    Duel
+}
 
 public class GO_PlayerNetworkManager : NetworkBehaviour
 {
@@ -25,6 +34,9 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public static GO_PlayerNetworkManager localPlayer;
     public GO_PlayerNetworkManager otherPlayerTarget;
 
+    [Networked]
+    public PlayerState CurrentPlayerState { get; set; }
+    
     public override void Spawned()
     {
         PlayersList.Add(this);
@@ -35,6 +47,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             isLocalPlayer = true;
             playerTransform.gameObject.transform.localPosition = Vector3.zero;
             playerID = (short)Random.Range(1000, 9999);
+            CurrentPlayerState = PlayerState.Normal;
         }
         else
         {
@@ -100,6 +113,11 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             RPC_setOtherPlayer(otherPlayerTarget.playerID, playerID, false);
         }
         otherPlayerTarget = null;
+    }
+    
+    public void ChangePlayerState(PlayerState newState)
+    {
+        CurrentPlayerState = newState;
     }
 
 

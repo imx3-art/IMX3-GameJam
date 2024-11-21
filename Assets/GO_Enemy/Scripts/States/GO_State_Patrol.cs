@@ -34,9 +34,14 @@ public class GO_State_Patrol : GO_State
         Transform playerTransform;
         if (enemy.visionController.SeeThePlayer(out playerTransform))
         {
-            enemy.navMeshController.followObjective = playerTransform;
-            stateMachine.ActivateState(GetComponent<GO_State_Persecution>());
-            return;
+            GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
+            if (player != null && player.CurrentPlayerState != PlayerState.Duel)
+            {
+                // Cambiar al estado de persecución si el jugador no está en duelo
+                enemy.navMeshController.followObjective = playerTransform;
+                stateMachine.ActivateState(GetComponent<GO_State_Persecution>());
+                return;
+            }
         }
 
         // Lógica de patrulla normal

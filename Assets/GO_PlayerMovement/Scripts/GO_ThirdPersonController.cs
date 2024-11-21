@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using Cinemachine;
+using Random = UnityEngine.Random;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -20,6 +22,19 @@ namespace StarterAssets
 
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
+        
+        // Variables para manejar la reducción de velocidad
+        public bool IsSpeedReduced { get; private set; } = false;
+        private float originalMoveSpeed;
+        
+        public float Stamina = 100f;
+
+        public float MaxStamina = 100f;
+        public float MinStamina = 0f;
+        public float StaminaDecreaseRate = 20f; 
+        public float StaminaIncreaseRate = 10f; 
+        
+        private float staminaTimer = 0f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -97,13 +112,20 @@ namespace StarterAssets
         // timeout deltatime
         private float _fallTimeoutDelta;
         
+        // Referencia al NetworkManager
+        private GO_PlayerNetworkManager networkManager;
+        
         private float _weight = 0;
+        
+        public event Action<float> OnStaminaChanged;
+        
 
         private void Awake()
         {
             //_mainCamera = Camera.main.gameObject; ALBERT
             _mainCamera = GO_MainCamera.MainCamera.gameObject;
             _framingTransposer = _virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+            originalMoveSpeed = SprintSpeed;
         }
 
         private void Start()
@@ -111,6 +133,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<GO_InputsPlayer>();
+            networkManager = GetComponentInParent<GO_PlayerNetworkManager>();
 
             AssignAnimationIDs();
         }
@@ -132,6 +155,8 @@ namespace StarterAssets
             {
                 releaseObject();
             }
+            
+            HandleStaminaAndSpeed();
         }
 
         private void LateUpdate()
@@ -425,6 +450,97 @@ namespace StarterAssets
 
             // Si no hay Renderer, retorna directamente la posición del objeto
             return obj.position;
+        }
+        
+        private void HandleStaminaAndSpeed()
+        {
+            if (networkManager == null)
+                return;
+
+            switch (networkManager.CurrentPlayerState)
+            {
+                case PlayerState.Normal:
+                    RegenerateStamina();
+                    break;
+
+                case PlayerState.Persecution:
+                    ConsumeStamina();
+                    break;
+
+                case PlayerState.Duel:
+                    RestoreSpeed();
+                    break;
+            }
+        }
+        
+        private void ConsumeStamina()
+        {
+            if (_input.sprint && Stamina > MinStamina)
+            {
+                staminaTimer += Time.deltaTime;
+                if (staminaTimer >= 1f)
+                {
+                    staminaTimer = 0f;
+                    Stamina -= StaminaDecreaseRate;
+                    Stamina = Mathf.Max(Stamina, MinStamina);
+                    OnStaminaChanged?.Invoke(Stamina);
+                    Debug.Log("Consumiendo stamina"+Stamina);
+                    if (Stamina <= MinStamina)
+                    {
+                        ReduceSpeed(0.2f); // Reducir la velocidad en un 80%
+                    }
+                }
+            }
+            else
+            {
+                // Si no está sprintando, resetear el temporizador
+                staminaTimer = 0f;
+            }
+        }
+
+        private void RegenerateStamina()
+        {
+            if (Stamina < MaxStamina)
+            {
+                staminaTimer += Time.deltaTime;
+                if (staminaTimer >= 1f)
+                {
+                    staminaTimer = 0f;
+                    Stamina += StaminaIncreaseRate;
+                    Stamina = Mathf.Min(Stamina, MaxStamina);
+                    OnStaminaChanged?.Invoke(Stamina);
+                    Debug.Log("Regenerando stamina"+Stamina);
+                    if (IsSpeedReduced && Stamina > MinStamina)
+                    {
+                        RestoreSpeed(); // Restaurar la velocidad al 100%
+                    }
+                }
+            }
+            else
+            {
+                // Si está al máximo, resetear el temporizador
+                staminaTimer = 0f;
+            }
+        }
+
+        // Métodos para manejar la reducción y restauración de velocidad
+        public void ReduceSpeed(float multiplier)
+        {
+            if (!IsSpeedReduced)
+            {
+                Debug.Log("movespeed"+SprintSpeed);
+                SprintSpeed *= multiplier;
+                IsSpeedReduced = true;
+            }
+        }
+
+        public void RestoreSpeed()
+        {
+            if (IsSpeedReduced)
+            {
+                SprintSpeed = originalMoveSpeed;
+                IsSpeedReduced = false;
+            }
         }
     }
 }

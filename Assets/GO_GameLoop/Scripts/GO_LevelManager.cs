@@ -52,6 +52,8 @@ public class GO_LevelManager : NetworkBehaviour
     [SerializeField] GameObject prefabNetworkObjects;
 
     public static event Action OnPlayerChangeScene;
+    
+    public event Action<float> OnLivesChanged;
 
 
 
@@ -100,6 +102,7 @@ public class GO_LevelManager : NetworkBehaviour
 
         //RPC_setLifes(_playerInstance.playerID, (short)totalLives);
         _playerInstance.playerLives = totalLives;
+        OnLivesChanged?.Invoke(_playerInstance.playerLives);
 
 
 
@@ -248,6 +251,7 @@ public class GO_LevelManager : NetworkBehaviour
         {
             _playerInstance.playerLives--;
             Debug.Log($"Jugador Recibio ataque, vidas restantes"+_playerInstance.playerLives);
+            OnLivesChanged?.Invoke(_playerInstance.playerLives);
             //RPC_setLifes(_playerInstance.playerID, -1);
             ResetPlayerPosition();
         }
@@ -265,6 +269,7 @@ public class GO_LevelManager : NetworkBehaviour
                 break;
             case Level.L_GO_Level4:
                 _playerInstance.playerLives = 3;
+                OnLivesChanged?.Invoke(_playerInstance.playerLives);
                 //RPC_setLifes(_playerInstance.playerID, 3);
                 if (DidSabotage)
                 {
@@ -279,6 +284,7 @@ public class GO_LevelManager : NetworkBehaviour
             case Level.L_GO_Level6:
                 _currentLevel = Level.L_GO_Level1;
                 _playerInstance.playerLives = 3;
+                OnLivesChanged?.Invoke(_playerInstance.playerLives);
                 //RPC_setLifes(_playerInstance.playerID, 3);
                 SceneManager.LoadScene("IntroScene");
                 return;
@@ -315,6 +321,7 @@ public class GO_LevelManager : NetworkBehaviour
             // Instancia PopupManager si no existe
             //RPC_setLifes(_playerInstance.playerID, (short)totalLives);
             _playerInstance.playerLives = totalLives;
+            OnLivesChanged?.Invoke(_playerInstance.playerLives);
             _currentLevel = Level.L_GO_Level1;
             Debug.Log(_playerInstance.playerLives);
             if (GO_PopUpManager.Instance == null && popupManagerPrefab != null)

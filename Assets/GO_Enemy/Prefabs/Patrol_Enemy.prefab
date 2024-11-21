@@ -119,7 +119,7 @@ MonoBehaviour:
   colorState: {r: 1, g: 0, b: 0, a: 1}
   persecutionDuration: 6
   attackDistance: 1
-  attackCooldown: 1
+  attackCooldown: 3
 --- !u!114 &8317483310122354829
 MonoBehaviour:
   m_ObjectHideFlags: 0

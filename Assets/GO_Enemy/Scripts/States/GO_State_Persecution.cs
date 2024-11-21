@@ -46,15 +46,27 @@ public class GO_State_Persecution : GO_State
         Transform playerTransform;
         if (enemy.visionController.SeeThePlayer(out playerTransform))
         {
-            enemy.navMeshController.followObjective = playerTransform;
-            enemy.navMeshController.UpdateDestinationPoint();
-            
-            timeSincePlayerLost = 0f;
-            
-            float distance = Vector3.Distance(enemy.transform.position, playerTransform.position);
-            if (distance <= attackDistance)
+            GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
+            if (player != null)
             {
-                AttemptAttack();
+                if (player.CurrentPlayerState == PlayerState.Duel)
+                {
+                    // El jugador está en duelo, la IA lo ignora
+                    return;
+                }
+
+                player.ChangePlayerState(PlayerState.Persecution);
+
+                enemy.navMeshController.followObjective = playerTransform;
+                enemy.navMeshController.UpdateDestinationPoint();
+
+                timeSincePlayerLost = 0f;
+
+                float distance = Vector3.Distance(enemy.transform.position, playerTransform.position);
+                if (distance <= attackDistance)
+                {
+                    AttemptAttack();
+                }
             }
         }
         else
@@ -65,6 +77,12 @@ public class GO_State_Persecution : GO_State
             
             if (timeSincePlayerLost >= persecutionDuration)
             {
+                GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
+                if (player != null && player.CurrentPlayerState == PlayerState.Persecution)
+                {
+                    player.ChangePlayerState(PlayerState.Normal);
+                }
+                
                 stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
                 return;
             }
@@ -96,10 +114,14 @@ public class GO_State_Persecution : GO_State
             GO_LevelManager.instance.perderUnaVida();
             Debug.Log($"IA atacó al jugador");
 
-            // Cambiar al estado de patrullaje después de atacar
             GO_State_Patrol patrolState = GetComponent<GO_State_Patrol>();
             if (patrolState != null)
             {
+                GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
+                if (player != null && player.CurrentPlayerState == PlayerState.Persecution)
+                {
+                    player.ChangePlayerState(PlayerState.Normal);
+                }
                 stateMachine.ActivateState(patrolState);
             }
             else
