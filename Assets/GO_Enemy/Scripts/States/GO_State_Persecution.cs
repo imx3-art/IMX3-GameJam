@@ -150,6 +150,7 @@ public class GO_State_Persecution : GO_State
             yield return new WaitForSeconds(2.0f);
             if (isPlayerLocal)
             {
+                GO_LoadScene.Instance.ShowLoadingScreen();
                 GO_LevelManager.instance.perderUnaVida();
                 Debug.Log($"IA atacó al jugador");
             }

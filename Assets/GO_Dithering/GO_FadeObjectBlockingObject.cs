@@ -38,6 +38,11 @@ public class GO_FadeObjectBlockingObject : MonoBehaviour
     {
         while (true)
         {
+            if (Camera == null)
+            {
+                Camera = GO_MainCamera.MainCamera;
+            }
+            
             int hits = Physics.RaycastNonAlloc(
                 Camera.transform.position,
                 (Target.transform.position + TargetPositionOffset - Camera.transform.position).normalized,
