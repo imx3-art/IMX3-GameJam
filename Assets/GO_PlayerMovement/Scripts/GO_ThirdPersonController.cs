@@ -184,11 +184,12 @@ namespace StarterAssets
 
         private void Move()
         {
-            _weight = Mathf.Lerp(_weight, _input.stealth ? 1 : 0 , Time.deltaTime * 5);
-            _animator.SetLayerWeight(0, 1 - _weight);
+            _weight = Mathf.Lerp(_weight, _input.stealth ? 1 : 0, Time.deltaTime * 5);
             _animator.SetLayerWeight(1, _weight);
+            _animator.SetLayerWeight(0, 1 - _weight);
+        
+             
             float targetSpeed = _input.stealth ? StealthSpeed : _input.sprint ? (GO_PlayerNetworkManager.localPlayer.isDrag == 0 ? SprintSpeed : MoveSpeed) : MoveSpeed;
-
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 

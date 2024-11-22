@@ -11,15 +11,17 @@ public class GO_PlayerActions : MonoBehaviour
     [SerializeField] private GO_PlayerNetworkManager otherPlayerNetworkManager;
     [SerializeField] private GO_PlayerNetworkManager otherPlayerNetworkManagerTMP;
     [SerializeField] private float timeMaxMiniGame = 5;
-    [SerializeField] private bool endMiniGameCount = false;
 
     [SerializeField] private GameObject leftArmPlayer;
     [SerializeField] private GameObject rightArmPlayer;
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private GO_InputsPlayer _inputPlayer;
 
+    private bool _endMiniGameCount = false;
+
     private Transform _rightHandRigg;
-    private Transform _armInRightHand;
+    private Transform _armTMP;
+    private Transform _armInRightHand; //brazo Extra
     private bool _gameEnd;
 
     private float _localPlayerRate = -1;
@@ -41,7 +43,7 @@ public class GO_PlayerActions : MonoBehaviour
     void Update()
     {
         
-        if (_inputPlayer.drag && ReadyForMiniGame())
+        if (_inputPlayer.drag && ReadyForMiniGame() > 0)
         {
             if (otherPlayerNetworkManager)
             {
@@ -63,7 +65,7 @@ public class GO_PlayerActions : MonoBehaviour
                 if (otherPlayerNetworkManager == null)
                 {
                     otherPlayerNetworkManager = hitInfo.collider.gameObject.GetComponentInParent<GO_PlayerNetworkManager>();
-                    if(!otherPlayerNetworkManager.actionPlayer.ReadyForMiniGame())
+                    if(otherPlayerNetworkManager.actionPlayer.ReadyForMiniGame() == 0)
                     {
                         otherPlayerNetworkManager = null;
                         return;
@@ -93,17 +95,21 @@ public class GO_PlayerActions : MonoBehaviour
             _target = null;
             otherPlayerNetworkManager = null;
         }
-        else if(_armInRightHand)
+        else if (_inputPlayer.grabDropItem)
         {
-            _armInRightHand.position = _rightHandRigg.position;//, rightHand.rotation);
-            _armInRightHand.rotation = _rightHandRigg.rotation;
+            Debug.Log("RECOGIENO O TIRANDO");
+            _inputPlayer.grabDropItem = false;
+            if (!SetExtraArm(true))
+            {
+                BindUpArm();
+            }
         }
     }
-
+       
     
     private void MiniGameDrag()
     {
-        if(_inputPlayer.pull && !endMiniGameCount)
+        if(_inputPlayer.pull && !_endMiniGameCount)
         {
             _inputPlayer.pull = false;
             hudMinigame.SetPullCount(GO_PlayerNetworkManager.localPlayer.pullMiniGame);
@@ -111,17 +117,17 @@ public class GO_PlayerActions : MonoBehaviour
 
         hudMinigame.SetPullCount(otherPlayerNetworkManager.pullMiniGame, false);
         
-        if (GO_PlayerNetworkManager.localPlayer.pullMiniGame >= maxPull && !endMiniGameCount)
+        if (GO_PlayerNetworkManager.localPlayer.pullMiniGame >= maxPull && !_endMiniGameCount)
         {
-            endMiniGameCount = true;        
+            _endMiniGameCount = true;        
             Debug.Log("*-*-*-GANADOR LOCAL " + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + GO_PlayerNetworkManager.localPlayer.pullMiniGame);
         }
-        else if(otherPlayerNetworkManager.pullMiniGame >= maxPull && !endMiniGameCount)
+        else if(otherPlayerNetworkManager.pullMiniGame >= maxPull && !_endMiniGameCount)
         {
-            endMiniGameCount = true;
+            _endMiniGameCount = true;
             Debug.Log("*-*-*-GANADOR RIVAL" + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + otherPlayerNetworkManager.pullMiniGame);
         }        
-        else if(endMiniGameCount && !_gameEnd)
+        else if(_endMiniGameCount && !_gameEnd)
         {
             _gameEnd = true;
             EndMiniGame();
@@ -129,7 +135,7 @@ public class GO_PlayerActions : MonoBehaviour
             Debug.Log("*-*-*-JUEGO FINALIZADO " + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + GO_PlayerNetworkManager.localPlayer.pullMiniGame + " vs " + otherPlayerNetworkManager.pullMiniGame);
         }
 
-        if (!endMiniGameCount)
+        if (!_endMiniGameCount)
         {
             ShowTimeRemain();
         }
@@ -182,17 +188,20 @@ public class GO_PlayerActions : MonoBehaviour
     public void ShowTimeRemain()
     {
         GO_PlayerNetworkManager.localPlayer.timeMinigame += Time.deltaTime;
-        endMiniGameCount = GO_PlayerNetworkManager.localPlayer.timeMinigame >= timeMaxMiniGame;
+        _endMiniGameCount = GO_PlayerNetworkManager.localPlayer.timeMinigame >= timeMaxMiniGame;
         hudMinigame.SetRemainTime(GO_PlayerNetworkManager.localPlayer.timeMinigame / timeMaxMiniGame);
     }    
     public void ResetMinigame(bool _canvas = true)
     {
         hudMinigame.ResetPullCount();
         hudMinigame.SetRemainTime(0);
-        GO_PlayerNetworkManager.localPlayer.timeMinigame = 0;
-        endMiniGameCount = false;
+        SetExtraArm(true);
+
+        _endMiniGameCount = false;
         _gameEnd = false;
+        GO_PlayerNetworkManager.localPlayer.timeMinigame = 0;
         GO_PlayerNetworkManager.localPlayer.pullMiniGame = 0;
+        
         if (_canvas)
         {
             ActiveCanvas(true);
@@ -225,24 +234,43 @@ public class GO_PlayerActions : MonoBehaviour
     }
     private void LateUpdate()
     {
-        hudMinigame.transform.LookAt(GO_MainCamera.MainCamera.transform);   
+        hudMinigame.transform.LookAt(GO_MainCamera.MainCamera.transform);
+        if (_armInRightHand)
+        {
+            _armInRightHand.position = _rightHandRigg.position;//, rightHand.rotation);
+            _armInRightHand.rotation = _rightHandRigg.rotation;
+        }
     }
     public void DropArm(bool _State)
     {
-        if(rightArmPlayer.activeSelf)
+        if((rightArmPlayer.activeSelf && !_State) || (!rightArmPlayer.activeSelf && _State) )
         {
             rightArmPlayer.SetActive(_State);
             return;
         }
-        if(leftArmPlayer.activeSelf)
+        if((leftArmPlayer.activeSelf && !_State) || (!leftArmPlayer.activeSelf && _State))
         {
             leftArmPlayer.SetActive(_State);
             return;
         }
     }
-    private bool ReadyForMiniGame()
+
+    public bool SetExtraArm(bool _drop = false)
     {
-        return leftArmPlayer.activeSelf || rightArmPlayer.activeSelf;
+        if(_armInRightHand)
+        {
+            if(_drop)
+            {
+                _armInRightHand = null;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private int ReadyForMiniGame()
+    {
+        return (leftArmPlayer.activeSelf ? 1 : 0) + (rightArmPlayer.activeSelf ? 1 : 0);
     }
 
     
@@ -254,15 +282,42 @@ public class GO_PlayerActions : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("DETECTO ITEM: " + other.name + " - " + other.gameObject.layer);
+
         if(other.gameObject.layer == 8)
         {
-            other.GetComponent<GO_NetworkObject>().ChangeAuthority();
-            _armInRightHand = other.transform;
+            _armTMP = other.transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("ALEJO ITEM: " + other.name + " - " + other.gameObject.layer);
+
+        if(other.gameObject.layer == 8 && _armTMP == other.transform)
+        {
+            _armTMP = null;
         }
     }
 
     private void BindUpArm()
     {
-        
+        if (!_armTMP)
+        {
+            return;
+        }
+        Debug.Log("AGARRO ITEM: " + _armTMP.name);
+        _armTMP.GetComponent<GO_NetworkObject>().ChangeAuthority();
+        if (ReadyForMiniGame() == 2)
+        {
+            _armInRightHand = _armTMP;
+        }
+        else
+        {
+            //DropArm(true);
+            GO_LevelManager.instance.Despawned(_armTMP.GetComponent<Fusion.NetworkObject>());
+            GO_PlayerNetworkManager.localPlayer.RPC_addNewArm();
+
+        }
     }
 }

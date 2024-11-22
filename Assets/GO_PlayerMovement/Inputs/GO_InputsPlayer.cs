@@ -14,6 +14,7 @@ namespace StarterAssets
         public bool drag;
         public bool pull;
         public bool interact;
+        public bool grabDropItem;
         public static bool IsPause = false;
 
         public event System.Action onInteract;
@@ -39,7 +40,10 @@ namespace StarterAssets
         {
             PullInput(value.isPressed);
         }
-
+        public void OnGrabDropItem(InputValue value)
+        {
+            GrabDropItemInput(value.isPressed);
+        }
         public void OnGrab(InputValue value)
         {
             GrabInput(value.isPressed);
@@ -67,6 +71,12 @@ namespace StarterAssets
                 GO_PlayerNetworkManager.localPlayer.pullMiniGame++;
             }
 
+        }
+         public void GrabDropItemInput(bool newStealthState)
+        {
+            
+            grabDropItem = newStealthState;
+            
         }
 
         public void DragInput(bool newDragthState)

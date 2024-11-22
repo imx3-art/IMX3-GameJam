@@ -78,6 +78,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "GrabDropItem",
+                    "type": "Value",
+                    "id": "db91ffe3-2321-4b30-a4fa-f695464435a6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "4d14126d-42fb-4cf3-b435-2edc94fb9674",
@@ -316,6 +325,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "26b1086a-673e-4ac6-a237-50255dd588e1",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "GrabDropItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

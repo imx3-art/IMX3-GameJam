@@ -183,6 +183,12 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
 
     }
 
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_addNewArm()
+    {
+        actionPlayer.DropArm(true);
+    }
+
     public void DropArm()
     {
         Debug.Log("LOSE ARM");

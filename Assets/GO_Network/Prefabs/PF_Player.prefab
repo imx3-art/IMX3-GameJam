@@ -134,6 +134,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2376559194615770311, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a45d524abd264fd41a424f814a7176ad, type: 2}
+    - target: {fileID: 2376559194615770311, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
       propertyPath: m_UpdateMode
       value: 1
       objectReference: {fileID: 0}
@@ -211,6 +216,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PF_PlayerArmature
+      objectReference: {fileID: 0}
+    - target: {fileID: 6025776479445603127, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: TotalWords
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6025776479445603127, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: StateHashes.Array.size
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7773092177965768475, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}

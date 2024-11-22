@@ -85,6 +85,10 @@ public class GO_LevelManager : NetworkBehaviour
         }
     }
 
+    public void Despawned(NetworkObject _object)
+    {
+        Runner.Despawn(_object);
+    }
     private IEnumerator Start()
     {
 

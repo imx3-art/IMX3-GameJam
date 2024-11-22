@@ -8,7 +8,7 @@ public class GO_HudMiniGame : MonoBehaviour
     [SerializeField] private Image leftPlayer;
     [SerializeField] private Image rightPlayer;
     [SerializeField] private Image remainTimeIMG;
-    private float dificult = .4f;
+    private float dificult = .55f;
     int lastLeft;
     int lastRight;
     float inc = .1f;

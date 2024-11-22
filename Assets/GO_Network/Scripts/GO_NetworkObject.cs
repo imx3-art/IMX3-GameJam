@@ -89,15 +89,11 @@ public class GO_NetworkObject : NetworkBehaviour
 
             }
         }
-
-
     }
 
     public void ChangeAuthority()
     {
-
             networkObject.RequestStateAuthority();
-
     }
 
 
