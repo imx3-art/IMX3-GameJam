@@ -1,3 +1,4 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,6 +7,7 @@ using UnityEngine;
 public class GO_UIManager : MonoBehaviour
 {
     public static GO_UIManager Instance;
+    private GO_InputsPlayer _InputsPlayer;
 
     [Header("Panels")]
     public GameObject codePanel; // Panel de la puerta.
@@ -14,11 +16,14 @@ public class GO_UIManager : MonoBehaviour
     [Header("Text Elements")]
     public TMP_Text bookText; // Texto para mostrar el número del librito.
     public TMP_Text inputField; // Campo de texto para ingresar el código.
-
+    
     [Header("UI Colors")]
     public Color defaultColor = Color.gray; // Color para los números.
     public Color deleteColor = Color.red;  // Color del botón de borrar.
     public Color submitColor = Color.green; // Color del botón de enviar.
+
+    [Header("Door To Animate")]
+    [SerializeField] private GameObject door;
 
     private string userInput = "";
 

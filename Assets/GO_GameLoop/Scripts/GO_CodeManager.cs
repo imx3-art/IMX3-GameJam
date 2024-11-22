@@ -1,12 +1,13 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GO_CodeManager : MonoBehaviour
+public class GO_CodeManager : NetworkBehaviour
 {
     public static GO_CodeManager Instance; // Singleton para acceso global.
 
-    private string generatedCode; // Código aleatorio generado.
+    [Networked] private string generatedCode { get => default; set { } } // Código aleatorio generado.
     public Transform[] bookSpawns; // Lugares donde aparecerán los libros.
     public GameObject bookPrefab; // Prefab del librito.
 
