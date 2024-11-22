@@ -41,6 +41,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public GO_PlayerNetworkManager otherPlayerTarget;
     public GO_PlayerActions actionPlayer;
     public PlayerState CurrentPlayerState;
+
+    public event Action<PlayerState> OnPlayerStateChanged; 
     
     public override void Spawned()
     {
@@ -50,6 +52,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         {
             GetComponentInChildren<PlayerInput>().enabled = true;
             GetComponentInChildren<GO_PlayerActions>().enabled = true;
+            GetComponent<GO_FadeObjectBlockingObject>().enabled = true;
             localPlayer = this;
             isLocalPlayer = true;
             playerTransform.gameObject.transform.localPosition = Vector3.zero;
@@ -133,6 +136,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public void ChangePlayerState(PlayerState newState)
     {
         CurrentPlayerState = newState;
+        OnPlayerStateChanged?.Invoke(CurrentPlayerState);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
