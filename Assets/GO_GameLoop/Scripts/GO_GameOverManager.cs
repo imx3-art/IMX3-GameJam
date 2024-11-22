@@ -20,6 +20,7 @@ public class GO_GameOverManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
     }
     public GameObject popupPanel; // Arrastra aqu� el panel del popup desde el inspector
 
@@ -29,6 +30,9 @@ public class GO_GameOverManager : MonoBehaviour
         Inputs.SetCursorState(false);
         popupPanel.SetActive(true);
         GO_InputsPlayer.IsPause = true;
+        
+        Debug.Log("Cerrar loading screen");
+        GO_LoadScene.Instance.HideLoadingScreen();
     }
     // M�todo para ocultar el popup canvas
     public void HidePopup()

@@ -25,6 +25,8 @@ public class GO_PlayerUIManager : MonoBehaviour
     
     private float previousStamina;
     private Coroutine hideStaminaPanelCoroutine;
+    
+    private PlayerState currentPlayerState;
 
     private IEnumerator Start()
     {
@@ -112,24 +114,31 @@ public class GO_PlayerUIManager : MonoBehaviour
     private void UpdateStaminaUI(float currentStamina)
     {
         float normalizedStamina = Mathf.InverseLerp(controller.MinStamina, controller.MaxStamina, currentStamina);
-
         staminaBar.fillAmount = normalizedStamina;
 
-        if (currentStamina != previousStamina)
+        if (currentPlayerState == PlayerState.Persecution)
         {
             if (!staminaPanel.activeSelf)
             {
                 staminaPanel.SetActive(true);
             }
-
-            if (hideStaminaPanelCoroutine != null)
+        }
+        else
+        {
+            if (currentStamina >= controller.MaxStamina)
             {
-                StopCoroutine(hideStaminaPanelCoroutine);
+                if (staminaPanel.activeSelf)
+                {
+                    staminaPanel.SetActive(false);
+                }
             }
-
-            hideStaminaPanelCoroutine = StartCoroutine(HideStaminaPanelAfterDelay());
-
-            previousStamina = currentStamina;
+            else
+            {
+                if (!staminaPanel.activeSelf)
+                {
+                    staminaPanel.SetActive(true);
+                }
+            }
         }
     }
 
@@ -142,9 +151,31 @@ public class GO_PlayerUIManager : MonoBehaviour
     
     private void OnPlayerStateChanged(PlayerState newState)
     {
-        if (newState == PlayerState.Persecution)
+        currentPlayerState = newState;
+
+        if (currentPlayerState == PlayerState.Persecution)
         {
-            staminaPanel.gameObject.SetActive(true);
+            if (!staminaPanel.activeSelf)
+            {
+                staminaPanel.SetActive(true);
+            }
+        }
+        else
+        {
+            if (controller.Stamina >= controller.MaxStamina)
+            {
+                if (staminaPanel.activeSelf)
+                {
+                    staminaPanel.SetActive(false);
+                }
+            }
+            else
+            {
+                if (!staminaPanel.activeSelf)
+                {
+                    staminaPanel.SetActive(true);
+                }
+            }
         }
     }
 }

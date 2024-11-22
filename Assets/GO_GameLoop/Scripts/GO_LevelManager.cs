@@ -323,19 +323,37 @@ public class GO_LevelManager : NetworkBehaviour
         }
         else
         {
+            if (GO_GameOverManager.Instance == null && popupManagerPrefab != null)
+            {
+                Instantiate(popupManagerPrefab);
+
+                StartCoroutine(WaitForPopupManagerAndShowPopup());
+            }
+            else
+            {
+                GO_GameOverManager.Instance.ShowPopup();
+            }
+            
             // Instancia PopupManager si no existe
             //RPC_setLifes(_playerInstance.playerID, (short)totalLives);
             _playerInstance.playerLives = totalLives;
             OnLivesChanged?.Invoke(_playerInstance.playerLives);
             _currentLevel = Level.L_GO_Level1;
             Debug.Log(_playerInstance.playerLives);
-            if (GO_PopUpManager.Instance == null && popupManagerPrefab != null)
-            {
-                Instantiate(popupManagerPrefab);
-            }
-            GO_PopUpManager.Instance.ShowPopup();
+            
         }
     }
+    
+    private IEnumerator WaitForPopupManagerAndShowPopup()
+    {
+        while (GO_GameOverManager.Instance == null)
+        {
+            yield return null; 
+        }
+
+        GO_GameOverManager.Instance.ShowPopup();
+    }
+    
     [ContextMenu("RESET LEVEL")]
     public void LoadLevelAsync()
     {

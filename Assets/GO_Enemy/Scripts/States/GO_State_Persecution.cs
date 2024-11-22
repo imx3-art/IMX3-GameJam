@@ -147,10 +147,13 @@ public class GO_State_Persecution : GO_State
             currentTarget = null;
             player.ChangePlayerState(PlayerState.Ghost);
             //animacion de muerte
+            if (isPlayerLocal && GO_LevelManager.instance._playerInstance.playerLives > 0)
+            {
+                GO_LoadScene.Instance.ShowLoadingScreen();
+            }
             yield return new WaitForSeconds(2.0f);
             if (isPlayerLocal)
             {
-                GO_LoadScene.Instance.ShowLoadingScreen();
                 GO_LevelManager.instance.perderUnaVida();
                 Debug.Log($"IA atacó al jugador");
             }
