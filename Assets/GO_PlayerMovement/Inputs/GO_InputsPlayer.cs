@@ -12,7 +12,11 @@ namespace StarterAssets
         public bool stealth;
         public bool Grab;
         public bool drag;
+        public bool pull;
+        public bool interact;
         public static bool IsPause = false;
+
+        public event System.Action onInteract;
 
 #if ENABLE_INPUT_SYSTEM
         public new void OnMove(InputValue value)
@@ -31,23 +35,50 @@ namespace StarterAssets
         {
             DragInput(value.isPressed);
         }
+        public void OnPull(InputValue value)
+        {
+            PullInput(value.isPressed);
+        }
 
         public void OnGrab(InputValue value)
         {
             GrabInput(value.isPressed);
         }
+        public void OnInteract(InputValue value)
+        {
+            ToggleInteract();
+        }
 #endif
+        private void ToggleInteract()
+        {
+            interact = !interact; // Invierte el estado actual.
+            Debug.Log($"Interactuar está ahora: {interact}");
+            onInteract?.Invoke(); // Dispara el evento de interacción.
+        }
         public void StealthInput(bool newStealthState)
         {
             stealth = newStealthState;
+        }
+        public void PullInput(bool newStealthState)
+        {
+            pull = newStealthState;
+            if (GO_PlayerNetworkManager.localPlayer.isDrag > 0)
+            {
+                GO_PlayerNetworkManager.localPlayer.pullMiniGame++;
+            }
+
         }
 
         public void DragInput(bool newDragthState)
         {
             Debug.Log("***EL Drag esta: " + drag);
-            if(drag) 
+            if (!newDragthState)
             {
-                GO_PlayerNetworkManager.localPlayer.EnddragMode(true);
+                return;
+            }
+
+            if (drag) 
+            {
                 move = Vector2.zero;
             }
             drag = newDragthState;
@@ -61,9 +92,10 @@ namespace StarterAssets
 
         public new void MoveInput(Vector2 newMoveDirection)
         {
-            if (GO_PlayerNetworkManager.localPlayer.isDrag == 1)
+            if (GO_PlayerNetworkManager.localPlayer.isDrag > 0)
             {
                 GO_PlayerNetworkManager.localPlayer.movePlayerNetwork = newMoveDirection;
+                move = Vector2.zero;
             }
             else
             {
@@ -77,25 +109,6 @@ namespace StarterAssets
         {
             look.x = IsPause ? Vector2.zero.x : newLookDirection.x;
             look.y = IsPause ? Vector2.zero.y : newLookDirection.y;
-        }
-        Vector2 moveTMP;
-        private void Update()
-        {
-            if (GO_PlayerNetworkManager.localPlayer.isDrag == 1)
-            {
-                Debug.Log("****Revisando vector: " + GO_PlayerNetworkManager.localPlayer.movePlayerNetwork);
-                if (GO_PlayerNetworkManager.localPlayer.otherPlayerTarget != null)
-                {
-                    Vector2 newMoveDirection = GO_PlayerNetworkManager.localPlayer.movePlayerNetwork + GO_PlayerNetworkManager.localPlayer.otherPlayerTarget.movePlayerNetwork;
-                    moveTMP = Vector2.Lerp(moveTMP, newMoveDirection, Time.deltaTime );
-                    move.x = IsPause ? Vector2.zero.x : moveTMP.x / 2;
-                    move.y = IsPause ? Vector2.zero.y : moveTMP.y / 2;
-                }                
-            }
-            else if(moveTMP != Vector2.zero)
-            {
-                move = moveTMP = Vector2.zero;
-            }
         }
         public void SetCursorState(bool newState)
         {

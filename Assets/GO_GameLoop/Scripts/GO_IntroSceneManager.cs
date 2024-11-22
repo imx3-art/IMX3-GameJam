@@ -17,7 +17,7 @@ public class GO_IntroSceneManager : MonoBehaviour
 
     private IEnumerator LoadGameScene()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("L_GO_Level1");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("L_GO_Level0");
 
         while (!asyncLoad.isDone)
         {
