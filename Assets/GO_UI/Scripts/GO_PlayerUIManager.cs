@@ -13,7 +13,8 @@ public class GO_PlayerUIManager : MonoBehaviour
     public Sprite fullLifeSprite; // Sprite para una vida completa
     public Sprite emptyLifeSprite; // Sprite para una vida vacía
 
-    [Header("Stamina UI")]
+    [Header("Stamina UI")] 
+    public GameObject staminaPanel;
     public Image staminaBar; // La imagen de la barra de stamina
 
     private GO_PlayerNetworkManager playerNetworkManager;
@@ -21,6 +22,9 @@ public class GO_PlayerUIManager : MonoBehaviour
 
     private int totalLives = 0;
     private List<Image> heartImages = new List<Image>();
+    
+    private float previousStamina;
+    private Coroutine hideStaminaPanelCoroutine;
 
     private IEnumerator Start()
     {
@@ -33,11 +37,16 @@ public class GO_PlayerUIManager : MonoBehaviour
                 
                 if (GO_PlayerNetworkManager.localPlayer != null)
                 {
+                    
                     playerNetworkManager = GO_PlayerNetworkManager.localPlayer;
                     controller = GO_PlayerNetworkManager.localPlayer.playerTransform.GetComponent<GO_ThirdPersonController>();
 
                     GO_LevelManager.instance.OnLivesChanged += UpdateLivesUI;
                     controller.OnStaminaChanged += UpdateStaminaUI;
+                    previousStamina = controller.Stamina;
+
+                    
+                    playerNetworkManager.OnPlayerStateChanged += OnPlayerStateChanged;
                     
                     
                     totalLives = GO_LevelManager.instance.totalLives; 
@@ -77,6 +86,11 @@ public class GO_PlayerUIManager : MonoBehaviour
         {
             controller.OnStaminaChanged -= UpdateStaminaUI;
         }
+        
+        if (playerNetworkManager != null)
+        {
+            playerNetworkManager.OnPlayerStateChanged -= OnPlayerStateChanged;
+        }
     }
 
     private void UpdateLivesUI(float currentLives)
@@ -97,10 +111,40 @@ public class GO_PlayerUIManager : MonoBehaviour
 
     private void UpdateStaminaUI(float currentStamina)
     {
-        // Normalizar la stamina actual entre 0 y 1
         float normalizedStamina = Mathf.InverseLerp(controller.MinStamina, controller.MaxStamina, currentStamina);
 
-        // Actualizar el valor de llenado de la imagen
         staminaBar.fillAmount = normalizedStamina;
+
+        if (currentStamina != previousStamina)
+        {
+            if (!staminaPanel.activeSelf)
+            {
+                staminaPanel.SetActive(true);
+            }
+
+            if (hideStaminaPanelCoroutine != null)
+            {
+                StopCoroutine(hideStaminaPanelCoroutine);
+            }
+
+            hideStaminaPanelCoroutine = StartCoroutine(HideStaminaPanelAfterDelay());
+
+            previousStamina = currentStamina;
+        }
+    }
+
+    private IEnumerator HideStaminaPanelAfterDelay()
+    {
+        yield return new WaitForSeconds(1f); 
+        staminaPanel.SetActive(false);
+        hideStaminaPanelCoroutine = null;
+    }
+    
+    private void OnPlayerStateChanged(PlayerState newState)
+    {
+        if (newState == PlayerState.Persecution)
+        {
+            staminaPanel.gameObject.SetActive(true);
+        }
     }
 }

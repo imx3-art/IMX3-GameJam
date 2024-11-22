@@ -121,6 +121,7 @@ MonoBehaviour:
     type: 3}
   fullLifeSprite: {fileID: 987251434, guid: 1780915a5b945c5498cc513791e8748d, type: 3}
   emptyLifeSprite: {fileID: -131577669, guid: 1780915a5b945c5498cc513791e8748d, type: 3}
+  staminaPanel: {fileID: 5767830132413463320}
   staminaBar: {fileID: 6418070870858290996}
   controller: {fileID: 0}
 --- !u!1 &4117420444068626486
@@ -215,7 +216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8774282177739164930
 RectTransform:
   m_ObjectHideFlags: 0
