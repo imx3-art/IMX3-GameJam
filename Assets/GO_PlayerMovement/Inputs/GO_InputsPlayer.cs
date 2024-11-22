@@ -16,6 +16,7 @@ namespace StarterAssets
         public bool interact;
         public bool grabDropItem;
         public static bool IsPause = false;
+        public bool nextLevel;
 
         public event System.Action onInteract;
 
@@ -52,12 +53,17 @@ namespace StarterAssets
         {
             ToggleInteract();
         }
+
+        public void OnNextLevel(InputValue value)
+        {
+            NextLevelInput(value.isPressed);
+        }
 #endif
         private void ToggleInteract()
         {
             interact = !interact; // Invierte el estado actual.
-            Debug.Log($"Interactuar está ahora: {interact}");
-            onInteract?.Invoke(); // Dispara el evento de interacción.
+            Debug.Log($"Interactuar estï¿½ ahora: {interact}");
+            onInteract?.Invoke(); // Dispara el evento de interacciï¿½n.
         }
         public void StealthInput(bool newStealthState)
         {
@@ -122,6 +128,11 @@ namespace StarterAssets
         public void SetCursorState(bool newState)
         {
             Cursor.lockState = (cursorLocked = newState) ? CursorLockMode.Locked : CursorLockMode.None;
+        }
+        
+        public void NextLevelInput(bool newState)
+        {
+            GO_LevelManager.instance.HandlePlayerEnterArea();
         }
     }
 }

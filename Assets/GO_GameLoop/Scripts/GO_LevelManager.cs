@@ -152,7 +152,7 @@ public class GO_LevelManager : NetworkBehaviour
         GO_AreaTrigger.OnPlayerEnterArea -= HandlePlayerEnterArea;
     }
 
-    private void HandlePlayerEnterArea()
+    public void HandlePlayerEnterArea()
     {
         if (!isChangingScene)
         {
