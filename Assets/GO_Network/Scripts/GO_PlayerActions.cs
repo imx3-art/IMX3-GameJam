@@ -1,7 +1,6 @@
 using StarterAssets;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GO_PlayerActions : MonoBehaviour
 {
@@ -11,38 +10,44 @@ public class GO_PlayerActions : MonoBehaviour
     [SerializeField] private GO_HudMiniGame hudMinigame;
     [SerializeField] private GO_PlayerNetworkManager otherPlayerNetworkManager;
     [SerializeField] private GO_PlayerNetworkManager otherPlayerNetworkManagerTMP;
-    //[SerializeField] private float timeCurrentMiniGameCount = 0;
     [SerializeField] private float timeMaxMiniGame = 5;
     [SerializeField] private bool endMiniGameCount = false;
 
     [SerializeField] private GameObject leftArmPlayer;
     [SerializeField] private GameObject rightArmPlayer;
+    [SerializeField] private LayerMask layerMask;
+    [SerializeField] private GO_InputsPlayer _inputPlayer;
 
-    private Transform rightHandRigg;
-    private Transform armInRightHand;
+    private Transform _rightHandRigg;
+    private Transform _armInRightHand;
+    private bool _gameEnd;
 
-    private float localPlayerRate = -1;
-    private float otherPlayerRate = -1;
+    private float _localPlayerRate = -1;
+    private float _otherPlayerRate = -1;
 
-    public LayerMask layerMask;
-    GO_InputsPlayer inputPlayer;
+    private Transform _target; // El objetivo al que quieres dirigir las manos
+    private Animator _animator; // El componente Animator del personaje
+
+    private float _fov;
 
     private void Start()
     {
-        inputPlayer = GetComponent<GO_InputsPlayer>();
-        animator = GetComponent<Animator>();
-        rightHandRigg = animator.GetBoneTransform(HumanBodyBones.RightHand);
+        _inputPlayer = GetComponent<GO_InputsPlayer>();
+        _animator = GetComponent<Animator>();
+        _rightHandRigg = _animator.GetBoneTransform(HumanBodyBones.RightHand);
+        _fov = GO_MainCamera.MainCamera.fieldOfView;
     }
 
     void Update()
     {
-
-        if (inputPlayer.drag && ReadyForMiniGame())
+        
+        if (_inputPlayer.drag && ReadyForMiniGame())
         {
             if (otherPlayerNetworkManager)
             {
                 MiniGameDrag();
-                if(GO_PlayerNetworkManager.localPlayer.isDrag == 1)
+                ShakeCamera();
+                if (GO_PlayerNetworkManager.localPlayer.isDrag == 1)
                 {
                     return;
                 }
@@ -57,24 +62,27 @@ public class GO_PlayerActions : MonoBehaviour
 
                 if (otherPlayerNetworkManager == null)
                 {
-                    ResetMinigame();
-                    target = hitInfo.collider.transform;
                     otherPlayerNetworkManager = hitInfo.collider.gameObject.GetComponentInParent<GO_PlayerNetworkManager>();
+                    if(!otherPlayerNetworkManager.actionPlayer.ReadyForMiniGame())
+                    {
+                        otherPlayerNetworkManager = null;
+                        return;
+                    }
+                    ResetMinigame();
+                    _target = hitInfo.collider.transform;
                     GO_PlayerNetworkManager.localPlayer.otherPlayerTarget = otherPlayerNetworkManager;
                     GO_PlayerNetworkManager.localPlayer.StartdragMode(true);
                 }
             }
             else
             {
-                target = null;
+                _target = null;
                 otherPlayerNetworkManager = null;
-                inputPlayer.drag = false;
+                _inputPlayer.drag = false;
             }
         }
         else if(GO_PlayerNetworkManager.localPlayer.isDrag == 2) //Control del otro player
         {
-            //timeCurrentMiniGameCount += Time.deltaTime;
-            GO_PlayerNetworkManager.localPlayer.timeMinigame += Time.deltaTime;
             hudMinigame.SetPullCount(GO_PlayerNetworkManager.localPlayer.pullMiniGame);
             hudMinigame.SetPullCount(GO_PlayerNetworkManager.localPlayer.otherPlayerTarget.pullMiniGame, false);
             ActiveCanvas(true);
@@ -82,56 +90,50 @@ public class GO_PlayerActions : MonoBehaviour
         }
         else if(otherPlayerNetworkManager)
         {
-            target = null;
+            _target = null;
             otherPlayerNetworkManager = null;
         }
-        else if(armInRightHand)
+        else if(_armInRightHand)
         {
-            armInRightHand.position = rightHandRigg.position;//, rightHand.rotation);
-            armInRightHand.rotation = rightHandRigg.rotation;
+            _armInRightHand.position = _rightHandRigg.position;//, rightHand.rotation);
+            _armInRightHand.rotation = _rightHandRigg.rotation;
         }
     }
 
-    private bool gameEnd;
-    private float inc = .1f;
+    
     private void MiniGameDrag()
     {
-        if(inputPlayer.pull && !endMiniGameCount)
+        if(_inputPlayer.pull && !endMiniGameCount)
         {
-            inputPlayer.pull = false;
+            _inputPlayer.pull = false;
             hudMinigame.SetPullCount(GO_PlayerNetworkManager.localPlayer.pullMiniGame);
         }
 
         hudMinigame.SetPullCount(otherPlayerNetworkManager.pullMiniGame, false);
-
-
+        
         if (GO_PlayerNetworkManager.localPlayer.pullMiniGame >= maxPull && !endMiniGameCount)
         {
-            endMiniGameCount = true;
-            //ShowResult();
-            
+            endMiniGameCount = true;        
             Debug.Log("*-*-*-GANADOR LOCAL " + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + GO_PlayerNetworkManager.localPlayer.pullMiniGame);
         }
         else if(otherPlayerNetworkManager.pullMiniGame >= maxPull && !endMiniGameCount)
         {
             endMiniGameCount = true;
-            //ShowResult();
             Debug.Log("*-*-*-GANADOR RIVAL" + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + otherPlayerNetworkManager.pullMiniGame);
-        }
-        
-        else if(endMiniGameCount && !gameEnd)
+        }        
+        else if(endMiniGameCount && !_gameEnd)
         {
-            gameEnd = true;
+            _gameEnd = true;
             EndMiniGame();
             ShowResult();
             Debug.Log("*-*-*-JUEGO FINALIZADO " + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + GO_PlayerNetworkManager.localPlayer.pullMiniGame + " vs " + otherPlayerNetworkManager.pullMiniGame);
         }
+
         if (!endMiniGameCount)
         {
             ShowTimeRemain();
         }
     }
-
     private void ShowResult()
     {
         otherPlayerNetworkManagerTMP = otherPlayerNetworkManager;
@@ -139,14 +141,14 @@ public class GO_PlayerActions : MonoBehaviour
     }
     private IEnumerator WaitResult()
     {
-        localPlayerRate = GO_PlayerNetworkManager.localPlayer.pullMiniGame / GO_PlayerNetworkManager.localPlayer.timeMinigame;
+        _localPlayerRate = GO_PlayerNetworkManager.localPlayer.pullMiniGame / GO_PlayerNetworkManager.localPlayer.timeMinigame;
 
         yield return new WaitWhile(() => otherPlayerNetworkManagerTMP.isDrag > 0);
 
-        otherPlayerRate = otherPlayerNetworkManagerTMP.pullMiniGame / otherPlayerNetworkManagerTMP.timeMinigame;
+        _otherPlayerRate = otherPlayerNetworkManagerTMP.pullMiniGame / otherPlayerNetworkManagerTMP.timeMinigame;
                 
-        Debug.Log("+++ RESULTADO " + localPlayerRate + " OTHER: " + otherPlayerRate);
-        if(localPlayerRate < otherPlayerRate)
+        Debug.Log("+++ RESULTADO " + _localPlayerRate + " OTHER: " + _otherPlayerRate);
+        if(_localPlayerRate < _otherPlayerRate)
         {
             Debug.Log("+++ GANO ENEMIGO ");
             GO_PlayerNetworkManager.localPlayer.RPC_setWinnerMiniGame(otherPlayerNetworkManagerTMP.playerID, GO_PlayerNetworkManager.localPlayer.playerID);
@@ -161,7 +163,7 @@ public class GO_PlayerActions : MonoBehaviour
 
     public void SpawnArm()
     {
-        armInRightHand = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, rightHandRigg.position, rightHandRigg.rotation).transform;
+        _armInRightHand = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, _rightHandRigg.position, _rightHandRigg.rotation).transform;
     }
 
     private void EndMiniGame()
@@ -169,7 +171,8 @@ public class GO_PlayerActions : MonoBehaviour
         GO_PlayerNetworkManager.localPlayer.EnddragMode(true);
         ActiveCanvas(false);
         GO_PlayerNetworkManager.localPlayer.pullMiniGame = 0;
-        inputPlayer.drag = false;
+        _inputPlayer.drag = false;
+        ShakeCamera(true);
     }
 
     public void ActiveCanvas(bool _state)
@@ -181,45 +184,42 @@ public class GO_PlayerActions : MonoBehaviour
         GO_PlayerNetworkManager.localPlayer.timeMinigame += Time.deltaTime;
         endMiniGameCount = GO_PlayerNetworkManager.localPlayer.timeMinigame >= timeMaxMiniGame;
         hudMinigame.SetRemainTime(GO_PlayerNetworkManager.localPlayer.timeMinigame / timeMaxMiniGame);
-
-    }
-
-    
-    private void ResetMinigame()
+    }    
+    public void ResetMinigame(bool _canvas = true)
     {
         hudMinigame.ResetPullCount();
         hudMinigame.SetRemainTime(0);
         GO_PlayerNetworkManager.localPlayer.timeMinigame = 0;
         endMiniGameCount = false;
-        gameEnd = false;
+        _gameEnd = false;
         GO_PlayerNetworkManager.localPlayer.pullMiniGame = 0;
-        ActiveCanvas(true);
-
+        if (_canvas)
+        {
+            ActiveCanvas(true);
+        }
     }
 
-    public Transform target; // El objetivo al que quieres dirigir las manos
-    public Animator animator; // El componente Animator del personaje
     private void OnAnimatorIK()
     {
-        if (target != null)
+        if (_target != null)
         {
             //Debug.Log("IK..." + animator + " - " + target);
 
-            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
+            _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
             //animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
-            animator.SetIKPosition(AvatarIKGoal.RightHand, target.position);
+            _animator.SetIKPosition(AvatarIKGoal.RightHand, _target.position);
             //animator.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.LookRotation(target.position - transform.position));
             
-            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
             //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-            animator.SetIKPosition(AvatarIKGoal.LeftHand, target.position);
+            _animator.SetIKPosition(AvatarIKGoal.LeftHand, _target.position);
             //animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.LookRotation(target.position - transform.position));
         }
         else
         {
-            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
+            _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
             //animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
-            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
+            _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0);
             //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0);
         }
     }
@@ -227,7 +227,6 @@ public class GO_PlayerActions : MonoBehaviour
     {
         hudMinigame.transform.LookAt(GO_MainCamera.MainCamera.transform);   
     }
-
     public void DropArm(bool _State)
     {
         if(rightArmPlayer.activeSelf)
@@ -241,9 +240,29 @@ public class GO_PlayerActions : MonoBehaviour
             return;
         }
     }
-
     private bool ReadyForMiniGame()
     {
         return leftArmPlayer.activeSelf || rightArmPlayer.activeSelf;
+    }
+
+    
+    public void ShakeCamera(bool _value = false)
+    {
+        GO_MainCamera.cinemachineBrain.enabled = _value;
+        GO_MainCamera.MainCamera.fieldOfView = Mathf.Lerp(GO_MainCamera.MainCamera.fieldOfView, Random.Range(_fov * .7f, _fov * 1.3f), Time.deltaTime * 4);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.layer == 8)
+        {
+            other.GetComponent<GO_NetworkObject>().ChangeAuthority();
+            _armInRightHand = other.transform;
+        }
+    }
+
+    private void BindUpArm()
+    {
+        
     }
 }

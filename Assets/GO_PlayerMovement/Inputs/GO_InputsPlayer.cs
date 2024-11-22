@@ -62,7 +62,7 @@ namespace StarterAssets
         public void PullInput(bool newStealthState)
         {
             pull = newStealthState;
-            if (GO_PlayerNetworkManager.localPlayer.isDrag > 0)
+            if (GO_PlayerNetworkManager.localPlayer.isDrag > 0 && newStealthState)
             {
                 GO_PlayerNetworkManager.localPlayer.pullMiniGame++;
             }
@@ -71,7 +71,6 @@ namespace StarterAssets
 
         public void DragInput(bool newDragthState)
         {
-            Debug.Log("***EL Drag esta: " + drag);
             if (!newDragthState)
             {
                 return;

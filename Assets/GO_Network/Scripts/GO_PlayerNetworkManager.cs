@@ -39,7 +39,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public static List<GO_PlayerNetworkManager> PlayersList = new List<GO_PlayerNetworkManager>();
     public static GO_PlayerNetworkManager localPlayer;
     public GO_PlayerNetworkManager otherPlayerTarget;
-    private GO_PlayerActions actionPlayer;
+    public GO_PlayerActions actionPlayer;
     public PlayerState CurrentPlayerState;
     
     public override void Spawned()
@@ -147,6 +147,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
                 otherPlayerTargetTMP.isDrag = 2;
                 otherPlayerTargetTMP.pullMiniGame = 0;
                 otherPlayerTargetTMP.timeMinigame = 0;
+                otherPlayerTargetTMP.actionPlayer.ResetMinigame(false);
                 //otherPlayerTargetTMP.StartdragMode();
             }
             else
