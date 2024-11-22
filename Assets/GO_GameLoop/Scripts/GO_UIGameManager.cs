@@ -7,7 +7,6 @@ using UnityEngine;
 public class GO_UIManager : MonoBehaviour
 {
     public static GO_UIManager Instance;
-    private GO_InputsPlayer _InputsPlayer;
 
     [Header("Panels")]
     public GameObject codePanel; // Panel de la puerta.
@@ -96,7 +95,8 @@ public class GO_UIManager : MonoBehaviour
         if (GO_CodeManager.Instance.ValidateCode(userInput))
         {
             Debug.Log("¡Código correcto! Abriendo la puerta...");
-            
+            Destroy(door);
+            GO_InputsPlayer.IsPause = false;
             HideCodePanel();
             // Implementa la lógica para abrir la puerta.
         }
