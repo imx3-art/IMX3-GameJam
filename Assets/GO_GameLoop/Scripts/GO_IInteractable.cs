@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public abstract class GO_IInteractable : MonoBehaviour
+public interface GO_IInteractable
 {
-    public abstract void Interact();
+    void Interact(); // Método que se llama al interactuar.
+    GameObject GetVisualHint(); // Nuevo método para obtener la ayuda visual.
 }

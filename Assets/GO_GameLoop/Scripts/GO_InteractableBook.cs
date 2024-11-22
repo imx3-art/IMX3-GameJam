@@ -1,17 +1,25 @@
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
-public class GO_InteractableBook : GO_IInteractable
+public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
 {
-    public string number; // Número asociado al libro.
+    [SerializeField] private string TextLore;
+    [SerializeField] private GameObject visualHint;
+
+    private string number; // Número del libro.
+    private int positionInCode; // Posición del número en el código.
+    private Color positionColor; // Color asociado a esta posición.
 
     // Método para asignar el número al libro desde el CodeManager.
-    public void SetNumber(string newNumber)
+    public void SetNumber(string newNumber, int position, Color color)
     {
         number = newNumber;
+        positionInCode = position;
+        positionColor = color;
     }
 
     private GO_InputsPlayer inputsPlayer;
@@ -27,15 +35,14 @@ public class GO_InteractableBook : GO_IInteractable
             }
         }
     }
-    public override void Interact()
+    public void Interact()
     {
         EnsureInputsPlayer();
         if (inputsPlayer.interact)
         {
-            Debug.Log($"Interacción con el libro iniciada. Número: {number}");
             GO_InputsPlayer.IsPause = true;
             inputsPlayer.SetCursorState(false);
-            GO_UIManager.Instance.ShowBookNumber(number);
+            GO_UIManager.Instance.ShowBookNumber(number, positionColor, TextLore);
         }else
         {
             GO_UIManager.Instance.HideBookPanel();
@@ -43,5 +50,10 @@ public class GO_InteractableBook : GO_IInteractable
             inputsPlayer.SetCursorState(true);
         }
             
+    }
+
+    public GameObject GetVisualHint()
+    {
+        return visualHint;
     }
 }

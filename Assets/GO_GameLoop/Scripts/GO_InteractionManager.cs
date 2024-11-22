@@ -6,6 +6,7 @@ public class GO_InteractionManager : MonoBehaviour
     public static GO_InteractionManager Instance;
     private GO_InputsPlayer inputsPlayer; // Referencia al sistema de inputs.
     private GO_IInteractable currentInteractable;
+    private GameObject currentVisualHint; // Referencia al objeto visual de ayuda.
 
     private void Start()
     {
@@ -41,7 +42,6 @@ public class GO_InteractionManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("ENTRASTE A UN AREA DE INTERACCIÓN");
         // Verifica si el objeto tiene un área de interacción y es interactuable.
         if (other.CompareTag("InteractionArea")) // Asegúrate de usar este tag para las áreas de interacción.
         {
@@ -49,14 +49,15 @@ public class GO_InteractionManager : MonoBehaviour
             if (interactable != null)
             {
                 currentInteractable = interactable;
-                Debug.Log($"Objeto interactuable detectado: {other.name}");
+
+                // Mostrar la ayuda visual
+                ShowVisualHint(interactable);
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("SALISTE DE UN AREA DE INTERACCIÓN");
         // Si el jugador sale del área de interacción, limpia la referencia.
         if (other.CompareTag("InteractionArea") && currentInteractable != null)
         {
@@ -64,8 +65,30 @@ public class GO_InteractionManager : MonoBehaviour
             if (interactable == currentInteractable)
             {
                 currentInteractable = null;
-                Debug.Log($"Saliste del área de interacción: {other.name}");
+
+                // Ocultar la ayuda visual
+                HideVisualHint();
             }
+        }
+    }
+
+    private void ShowVisualHint(GO_IInteractable interactable)
+    {
+        // Si el interactable tiene una ayuda visual asociada, actívala.
+        currentVisualHint = interactable.GetVisualHint(); // Método en el interactuable.
+        if (currentVisualHint != null)
+        {
+            currentVisualHint.SetActive(true);
+        }
+    }
+
+    private void HideVisualHint()
+    {
+        // Oculta la ayuda visual actual si existe.
+        if (currentVisualHint != null)
+        {
+            currentVisualHint.SetActive(false);
+            currentVisualHint = null;
         }
     }
 }

@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GO_InteractableDoor : GO_IInteractable
+public class GO_InteractableDoor :MonoBehaviour, GO_IInteractable
 {
     private GO_InputsPlayer inputsPlayer;
+    [SerializeField] private GameObject visualHint;
 
     private void EnsureInputsPlayer()
     {
@@ -19,12 +20,11 @@ public class GO_InteractableDoor : GO_IInteractable
             }
         }
     }
-    public override void Interact()
+    public void Interact()
     {
         EnsureInputsPlayer();
         if (inputsPlayer.interact)
         {
-            Debug.Log("Interacción con la puerta iniciada. Mostrando panel de código.");
             GO_InputsPlayer.IsPause = true;
             inputsPlayer.SetCursorState(false);
             GO_UIManager.Instance.ShowCodePanel();
@@ -36,5 +36,10 @@ public class GO_InteractableDoor : GO_IInteractable
             inputsPlayer.SetCursorState(true);
         }
     }
+    public GameObject GetVisualHint()
+    {
+        return visualHint;
+    }
+
 }
 

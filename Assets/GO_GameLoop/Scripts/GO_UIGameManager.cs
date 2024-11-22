@@ -15,7 +15,9 @@ public class GO_UIManager : MonoBehaviour
     [Header("Text Elements")]
     public TMP_Text bookText; // Texto para mostrar el número del librito.
     public TMP_Text inputField; // Campo de texto para ingresar el código.
-    
+
+    [SerializeField] private TMP_Text LoreText; // Texto que se mostrará en el libro.
+
     [Header("UI Colors")]
     public Color defaultColor = Color.gray; // Color para los números.
     public Color deleteColor = Color.red;  // Color del botón de borrar.
@@ -37,6 +39,7 @@ public class GO_UIManager : MonoBehaviour
     // Muestra el panel para ingresar el código de la puerta.
     public void ShowCodePanel()
     {
+        inputField.text = GO_CodeManager.displayedCode;
         codePanel.SetActive(true);
     }
 
@@ -48,9 +51,11 @@ public class GO_UIManager : MonoBehaviour
     }
 
     // Muestra el número del librito en el panel.
-    public void ShowBookNumber(string number)
+    public void ShowBookNumber(string number, Color positionColor, string textLore)
     {
-        bookText.text = $"Número: {number}";
+        LoreText.text = textLore;
+        bookText.text = number.ToString();
+        bookText.color = positionColor;
         bookPanel.SetActive(true);
     }
 
@@ -63,7 +68,6 @@ public class GO_UIManager : MonoBehaviour
     public void SetCodeField(string codePart)
     {
         inputField.text = codePart;
-        Debug.Log($"Código restante en el panel: {codePart}");
     }
 
     // Añade un número al campo de texto desde la UI.
