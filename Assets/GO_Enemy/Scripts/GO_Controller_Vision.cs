@@ -149,14 +149,17 @@ public class GO_Controller_Vision : MonoBehaviour
 
                 Vector3 directionToArm = (currentArmTransform.position + _enemy.offset) - eyes.position;
 
-                Vector3 directionToArmNormalized = directionToArm.normalized;
+                // Proyectar los vectores en el plano horizontal (ignorar Y)
+                Vector3 directionToArmFlat = new Vector3(directionToArm.x, 0, directionToArm.z).normalized;
+                Vector3 eyesForwardFlat = new Vector3(eyes.forward.x, 0, eyes.forward.z).normalized;
 
-                float angleToArm = Vector3.Angle(eyes.forward, directionToArmNormalized);
+                // Calcular el ángulo entre la dirección frontal y la dirección al brazo en el plano horizontal
+                float angleToArm = Vector3.Angle(eyesForwardFlat, directionToArmFlat);
 
                 if (angleToArm < _enemy.visionAngle / 2f)
                 {
                     RaycastHit hitInfo;
-                    if (Physics.Raycast(eyes.position, directionToArmNormalized, out hitInfo, _enemy.visionRange, visionLayerMask))
+                    if (Physics.Raycast(eyes.position, directionToArmFlat, out hitInfo, _enemy.visionRange, visionLayerMask))
                     {
                         if (hitInfo.collider.CompareTag("Arm"))
                         {
