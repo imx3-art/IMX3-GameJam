@@ -28,8 +28,18 @@ public class GO_CodeManager : NetworkBehaviour
     public void GenerateCode()
     {
         // Genera un código de 4 dígitos como string.
-        generatedCode = Random.Range(1000, 9999).ToString();
-        DistributeCode();
+        if(generatedCode == null || generatedCode == string.Empty)
+        {
+            generatedCode = Random.Range(1000, 9999).ToString();
+            Debug.Log("CODIGO GENERADO: " + generatedCode);
+            DistributeCode();
+        }
+        else
+        {   
+            generatedCode = generatedCode;
+            Debug.Log("CODIGO EXISTENTE" + generatedCode);
+            DistributeCode();
+        }
     }
 
     public void DistributeCode()
