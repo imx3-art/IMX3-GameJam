@@ -76,9 +76,6 @@ public class GO_CodeManager : NetworkBehaviour
 
         // Convertimos la lista de caracteres en una cadena para mostrar en el input
         displayedCode = new string(inputCode.ToArray());
-
-        // Actualizamos el inputField con el código que tiene _ donde faltan números
-        GO_UIManager.Instance.SetCodeField(displayedCode);
     }
 
 

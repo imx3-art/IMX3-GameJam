@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class GO_InteractableDoor :MonoBehaviour, GO_IInteractable
+public class GO_InteractablFinalDoor :MonoBehaviour, GO_IInteractable
 {
     private GO_InputsPlayer inputsPlayer;
     [SerializeField] private GameObject visualHint;

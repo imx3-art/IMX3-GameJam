@@ -1,6 +1,5 @@
 using StarterAssets;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -30,7 +29,7 @@ public class GO_UIManager : MonoBehaviour
     public float doorMoveDistance = 2f; // Distancia que las puertas deben moverse.
     public float doorMoveSpeed = 2f; // Velocidad de apertura.
 
-    private string userInput = "";
+    private char[] userInput; // Array para manejar el input del usuario.
 
     private void Awake()
     {
@@ -43,6 +42,9 @@ public class GO_UIManager : MonoBehaviour
     // Muestra el panel para ingresar el código de la puerta.
     public void ShowCodePanel()
     {
+        // Inicializar el array del input con los valores mostrados en displayedCode.
+        userInput = GO_CodeManager.displayedCode.ToCharArray();
+        UpdateInputField();
         inputField.text = GO_CodeManager.displayedCode;
         codePanel.SetActive(true);
     }
@@ -54,7 +56,6 @@ public class GO_UIManager : MonoBehaviour
         ClearInput();
     }
 
-    // Muestra el número del librito en el panel.
     public void ShowBookNumber(string number, Color positionColor, string textLore)
     {
         LoreText.text = textLore;
@@ -69,38 +70,47 @@ public class GO_UIManager : MonoBehaviour
         bookPanel.SetActive(false);
     }
 
-    public void SetCodeField(string codePart)
-    {
-        inputField.text = codePart;
-    }
-
     // Añade un número al campo de texto desde la UI.
     public void AddNumberToInput(string number)
     {
-        if (userInput.Length < 4) // Límite de 4 dígitos.
+        for (int i = 0; i < userInput.Length; i++)
         {
-            userInput += number;
-            UpdateInputField();
+            // Encuentra la primera posición vacía ('_') y reemplázala con el número.
+            if (userInput[i] == '_')
+            {
+                userInput[i] = number[0];
+                UpdateInputField();
+                return;
+            }
         }
     }
 
     // Limpia el campo de texto.
     public void ClearInput()
     {
-        userInput = "";
+        // Resetea las posiciones que no tienen número predefinido a '_'.
+        for (int i = 0; i < userInput.Length; i++)
+        {
+            if (GO_CodeManager.displayedCode[i] == '_')
+            {
+                userInput[i] = '_';
+            }
+        }
         UpdateInputField();
     }
 
     // Valida el código ingresado.
     public void SubmitCode()
     {
-        if (userInput.Length != 4)
+        string finalInput = new string(userInput);
+
+        if (finalInput.Contains("_"))
         {
-            Debug.Log("Debe ingresar un código de 4 dígitos.");
+            Debug.Log("Debe completar el código antes de enviarlo.");
             return;
         }
 
-        if (GO_CodeManager.Instance.ValidateCode(userInput))
+        if (GO_CodeManager.Instance.ValidateCode(finalInput))
         {
             Debug.Log("¡Código correcto! Abriendo la puerta...");
             GO_InputsPlayer.IsPause = false;
@@ -145,10 +155,10 @@ public class GO_UIManager : MonoBehaviour
     // Actualiza el campo de entrada visualmente.
     private void UpdateInputField()
     {
-        inputField.text = userInput;
+        inputField.text = new string(userInput);
 
         // Cambia el color del texto dependiendo de la longitud ingresada.
-        if (userInput.Length == 4)
+        if (!new string(userInput).Contains("_"))
         {
             inputField.color = submitColor; // Verde cuando está listo para enviar.
         }

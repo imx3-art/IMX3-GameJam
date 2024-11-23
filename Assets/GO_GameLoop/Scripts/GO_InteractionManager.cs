@@ -7,6 +7,7 @@ public class GO_InteractionManager : MonoBehaviour
     private GO_InputsPlayer inputsPlayer; // Referencia al sistema de inputs.
     private GO_IInteractable currentInteractable;
     private GameObject currentVisualHint; // Referencia al objeto visual de ayuda.
+    private GO_PlayerNetworkManager playerNetworkManager;
 
     private void Start()
     {
@@ -49,9 +50,12 @@ public class GO_InteractionManager : MonoBehaviour
             if (interactable != null)
             {
                 currentInteractable = interactable;
-
                 // Mostrar la ayuda visual
                 ShowVisualHint(interactable);
+            }else
+            {
+                GO_InteractableAutomaticDoor Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
+                Currentdoor.ToggleDoor();
             }
         }
     }
@@ -59,16 +63,29 @@ public class GO_InteractionManager : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         // Si el jugador sale del área de interacción, limpia la referencia.
-        if (other.CompareTag("InteractionArea") && currentInteractable != null)
+        if (other.CompareTag("InteractionArea"))
         {
-            GO_IInteractable interactable = other.GetComponentInParent<GO_IInteractable>();
-            if (interactable == currentInteractable)
+            if (currentInteractable != null)
             {
-                currentInteractable = null;
+                GO_IInteractable interactable = other.GetComponentInParent<GO_IInteractable>();
+                if (interactable == currentInteractable)
+                {
+                    currentInteractable = null;
 
-                // Ocultar la ayuda visual
-                HideVisualHint();
+                    // Ocultar la ayuda visual
+                    HideVisualHint();
+                }
             }
+            else
+            {
+                GO_InteractableAutomaticDoor Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
+                if(Currentdoor != null)
+                {
+                    Currentdoor.ToggleDoor();
+                }
+                
+            }
+            Debug.Log("SALIENDO DEL AREA");          
         }
     }
 
