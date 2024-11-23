@@ -42,11 +42,13 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
         {
             GO_InputsPlayer.IsPause = true;
             inputsPlayer.SetCursorState(false);
+            visualHint.SetActive(false);
             GO_UIManager.Instance.ShowBookNumber(number, positionColor, TextLore);
         }else
         {
             GO_UIManager.Instance.HideBookPanel();
             GO_InputsPlayer.IsPause = false;
+            visualHint.SetActive(true);
             inputsPlayer.SetCursorState(true);
         }
             

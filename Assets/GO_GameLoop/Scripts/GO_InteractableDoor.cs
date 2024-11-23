@@ -27,12 +27,14 @@ public class GO_InteractableDoor :MonoBehaviour, GO_IInteractable
         {
             GO_InputsPlayer.IsPause = true;
             inputsPlayer.SetCursorState(false);
+            visualHint.SetActive(false);
             GO_UIManager.Instance.ShowCodePanel();
         }
         else
         {
             GO_UIManager.Instance.HideCodePanel();
             GO_InputsPlayer.IsPause = false;
+            visualHint.SetActive(true);
             inputsPlayer.SetCursorState(true);
         }
     }

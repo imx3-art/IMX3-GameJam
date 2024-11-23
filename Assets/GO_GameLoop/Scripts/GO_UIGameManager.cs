@@ -23,8 +23,12 @@ public class GO_UIManager : MonoBehaviour
     public Color deleteColor = Color.red;  // Color del botón de borrar.
     public Color submitColor = Color.green; // Color del botón de enviar.
 
-    [Header("Door To Animate")]
-    [SerializeField] private GameObject door;
+    [Header("Door Animation")]
+    [SerializeField] private GameObject doorLeft;
+    [SerializeField] private GameObject doorRight;
+
+    public float doorMoveDistance = 2f; // Distancia que las puertas deben moverse.
+    public float doorMoveSpeed = 2f; // Velocidad de apertura.
 
     private string userInput = "";
 
@@ -99,15 +103,43 @@ public class GO_UIManager : MonoBehaviour
         if (GO_CodeManager.Instance.ValidateCode(userInput))
         {
             Debug.Log("¡Código correcto! Abriendo la puerta...");
-            Destroy(door);
             GO_InputsPlayer.IsPause = false;
             HideCodePanel();
-            // Implementa la lógica para abrir la puerta.
+
+            StartCoroutine(OpenDoor());
         }
         else
         {
             Debug.Log("Código incorrecto.");
         }
+    }
+
+    private IEnumerator OpenDoor()
+    {
+        Vector3 leftStartPosition = doorLeft.transform.position;
+        Vector3 rightStartPosition = doorRight.transform.position;
+
+        // Calcula las posiciones finales.
+        Vector3 leftEndPosition = leftStartPosition + Vector3.left * doorMoveDistance;
+        Vector3 rightEndPosition = rightStartPosition + Vector3.right * doorMoveDistance;
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < doorMoveDistance / doorMoveSpeed)
+        {
+            // Mueve las puertas hacia sus posiciones finales.
+            doorLeft.transform.position = Vector3.Lerp(leftStartPosition, leftEndPosition, elapsedTime * doorMoveSpeed / doorMoveDistance);
+            doorRight.transform.position = Vector3.Lerp(rightStartPosition, rightEndPosition, elapsedTime * doorMoveSpeed / doorMoveDistance);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Asegúrate de que las puertas terminen exactamente en sus posiciones finales.
+        doorLeft.transform.position = leftEndPosition;
+        doorRight.transform.position = rightEndPosition;
+
+        Debug.Log("¡Puerta abierta!");
     }
 
     // Actualiza el campo de entrada visualmente.
