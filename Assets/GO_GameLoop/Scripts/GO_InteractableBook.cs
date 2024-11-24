@@ -23,6 +23,7 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
     }
 
     private GO_InputsPlayer inputsPlayer;
+    private GO_PlayerUIManager uiplayer;
 
     private void EnsureInputsPlayer()
     {
@@ -30,6 +31,14 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
         {
             inputsPlayer = FindObjectOfType<GO_InputsPlayer>();
             if (inputsPlayer == null)
+            {
+                Debug.LogError("No se encontró GO_InputsPlayer. Asegúrate de que el jugador esté en la escena.");
+            }
+        }
+        if (uiplayer == null)
+        {
+            uiplayer = FindObjectOfType<GO_PlayerUIManager>();
+            if (uiplayer == null)
             {
                 Debug.LogError("No se encontró GO_InputsPlayer. Asegúrate de que el jugador esté en la escena.");
             }
@@ -44,6 +53,8 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
             inputsPlayer.SetCursorState(false);
             visualHint.SetActive(false);
             GO_UIManager.Instance.ShowBookNumber(number, positionColor, TextLore);
+            uiplayer.AddBookNumber(number, positionColor);
+            
         }else
         {
             GO_UIManager.Instance.HideBookPanel();

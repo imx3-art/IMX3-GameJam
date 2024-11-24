@@ -2,6 +2,7 @@ using StarterAssets;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GO_UIManager : MonoBehaviour
 {
@@ -37,6 +38,11 @@ public class GO_UIManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        
     }
 
     // Muestra el panel para ingresar el código de la puerta.
@@ -167,4 +173,5 @@ public class GO_UIManager : MonoBehaviour
             inputField.color = defaultColor; // Gris mientras se escribe.
         }
     }
+
 }
