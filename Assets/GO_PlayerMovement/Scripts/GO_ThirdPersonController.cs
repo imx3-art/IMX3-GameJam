@@ -344,7 +344,8 @@ namespace StarterAssets
                 if (FootstepAudioClips.Length > 0)
                 {
                     var index = Random.Range(0, FootstepAudioClips.Length);
-                    AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                    //AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
+                    GO_AudioManager.Instance.PlayGameSoundDynamic(FootstepAudioClips[index], transform.position);
                 }
             }
         }
@@ -497,7 +498,12 @@ namespace StarterAssets
             }
         }
 
-
+        public void RegenerateAllStamina()
+        {
+            Stamina = MaxStamina;
+            RestoreSpeed();
+            OnStaminaChanged?.Invoke(Stamina);
+        }
         private void RegenerateStamina()
         {
             if (Stamina < MaxStamina)

@@ -259,7 +259,7 @@ public class GO_LevelManager : NetworkBehaviour
             Debug.Log($"Jugador Recibio ataque, vidas restantes"+_playerInstance.playerLives);
             OnLivesChanged?.Invoke(_playerInstance.playerLives);
             GO_ThirdPersonController control = _playerInstance.GetComponentInChildren<GO_ThirdPersonController>();
-            control.Stamina = control.MaxStamina;
+            control.RegenerateAllStamina();
             //RPC_setLifes(_playerInstance.playerID, -1);
             ResetPlayerPosition();
         }
