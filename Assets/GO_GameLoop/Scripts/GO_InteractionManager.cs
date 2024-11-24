@@ -63,6 +63,7 @@ public class GO_InteractionManager : MonoBehaviour
             {
                 GO_InteractableAutomaticDoor Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
                 Currentdoor.OpenAutomaticDoor();
+                
             }
         }
     }
@@ -86,11 +87,7 @@ public class GO_InteractionManager : MonoBehaviour
             else
             {
                 GO_InteractableAutomaticDoor Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
-                if(Currentdoor != null)
-                {
-                    Currentdoor.CloseAutomaticDoor();
-                }
-                
+                Currentdoor.CloseAutomaticDoor(); 
             }
             Debug.Log("SALIENDO DEL AREA");          
         }
