@@ -40,20 +40,6 @@ public class GO_InteractableAutomaticDoor : MonoBehaviour
         }
     }
 
-    public void ToggleDoor()
-    {
-        if (isMoving) return; // No permitir múltiples movimientos simultáneos.
-
-        if (isOpen)
-        {
-            CloseAutomaticDoor();
-        }
-        else
-        {
-            OpenAutomaticDoor();
-        }
-    }
-
     public void OpenAutomaticDoor()
     {
         if (!isOpen && !isMoving)

@@ -11,6 +11,10 @@ public class GO_InteractionManager : MonoBehaviour
 
     private void Start()
     {
+        if (GO_PlayerNetworkManager.localPlayer != null)
+        {
+            playerNetworkManager = GO_PlayerNetworkManager.localPlayer;
+        }
         // Busca el componente GO_InputsPlayer dentro del Player.
         inputsPlayer = GetComponentInParent<GO_InputsPlayer>();
         if (inputsPlayer == null)
@@ -49,13 +53,16 @@ public class GO_InteractionManager : MonoBehaviour
             GO_IInteractable interactable = other.GetComponentInParent<GO_IInteractable>();
             if (interactable != null)
             {
-                currentInteractable = interactable;
-                // Mostrar la ayuda visual
-                ShowVisualHint(interactable);
+                if (gameObject.GetComponentInParent<GO_PlayerNetworkManager>().isLocalPlayer)
+                {
+                    currentInteractable = interactable;
+                    // Mostrar la ayuda visual
+                    ShowVisualHint(interactable);
+                }
             }else
             {
                 GO_InteractableAutomaticDoor Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
-                Currentdoor.ToggleDoor();
+                Currentdoor.OpenAutomaticDoor();
             }
         }
     }
@@ -81,7 +88,7 @@ public class GO_InteractionManager : MonoBehaviour
                 GO_InteractableAutomaticDoor Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
                 if(Currentdoor != null)
                 {
-                    Currentdoor.ToggleDoor();
+                    Currentdoor.CloseAutomaticDoor();
                 }
                 
             }
