@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using StarterAssets;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -257,6 +258,8 @@ public class GO_LevelManager : NetworkBehaviour
             _playerInstance.playerLives--;
             Debug.Log($"Jugador Recibio ataque, vidas restantes"+_playerInstance.playerLives);
             OnLivesChanged?.Invoke(_playerInstance.playerLives);
+            GO_ThirdPersonController control = _playerInstance.GetComponentInChildren<GO_ThirdPersonController>();
+            control.Stamina = control.MaxStamina;
             //RPC_setLifes(_playerInstance.playerID, -1);
             ResetPlayerPosition();
         }

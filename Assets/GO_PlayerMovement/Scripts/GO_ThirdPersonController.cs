@@ -479,25 +479,24 @@ namespace StarterAssets
             if (_input.sprint && Stamina > MinStamina)
             {
                 staminaTimer += Time.deltaTime;
+
                 if (staminaTimer >= 1f)
                 {
-                    staminaTimer = 0f;
+                    staminaTimer -= 1f; 
                     Stamina -= StaminaDecreaseRate;
-                    Stamina = Mathf.Max(Stamina, MinStamina);
+                    Stamina = Mathf.Max(Stamina, MinStamina); 
                     OnStaminaChanged?.Invoke(Stamina);
-                    Debug.Log("Consumiendo stamina"+Stamina);
+                    Debug.Log("Consumiendo stamina: " + Stamina);
+
+                 
                     if (Stamina <= MinStamina)
                     {
-                        ReduceSpeed(0.2f); // Reducir la velocidad en un 80%
+                        ReduceSpeed(0.2f); 
                     }
                 }
             }
-            else
-            {
-                // Si no está sprintando, resetear el temporizador
-                staminaTimer = 0f;
-            }
         }
+
 
         private void RegenerateStamina()
         {
