@@ -212,6 +212,21 @@ PrefabInstance:
       propertyPath: _virtualCamera
       value: 
       objectReference: {fileID: 864961167180621693}
+    - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: FootstepAudioClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: FootstepAudioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 5c62fb99d82a55d40ae733f08117993d, type: 3}
+    - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: FootstepAudioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: e597143b0ccabf54aa0d8e51464778b6, type: 3}
     - target: {fileID: 5966910880951827594, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: m_Name
