@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Fusion;
 using StarterAssets;
+using TMPro;
 
 public class GO_PlayerUIManager : MonoBehaviour
 {
+    public static GO_PlayerUIManager instance;
+
     [Header("Vidas UI")]
     public Transform livesPanel; // Panel donde se agregarán las imágenes de las vidas
     public GameObject lifePrefab; // Prefab de la vida (debe ser un GameObject con un componente Image)
@@ -16,6 +19,10 @@ public class GO_PlayerUIManager : MonoBehaviour
     [Header("Stamina UI")] 
     public GameObject staminaPanel;
     public Image staminaBar; // La imagen de la barra de stamina
+
+    [Header("Secret Code")]
+    [SerializeField] private Transform bookNumbersContainer; // Contenedor en el HUD
+    [SerializeField] private GameObject bookNumberPrefab; // Prefab del número del libro
 
     private GO_PlayerNetworkManager playerNetworkManager;
     public GO_ThirdPersonController controller;
@@ -178,4 +185,38 @@ public class GO_PlayerUIManager : MonoBehaviour
             }
         }
     }
+
+    public void AddBookNumber(string number, Color color)
+    {
+        // Verificar si el número ya existe en el HUD
+        foreach (Transform child in bookNumbersContainer)
+        {
+            // Acceder al texto directamente usando GetChild
+            TextMeshProUGUI existingNumberText = child.GetChild(1).GetComponent<TextMeshProUGUI>(); // Asumiendo que el texto es el segundo hijo
+            if (existingNumberText != null && existingNumberText.text == number)
+            {
+                Debug.Log($"El número {number} ya está en el HUD. No se instanciará de nuevo.");
+                return; // Salir del método si el número ya existe
+            }
+        }
+
+        // Instanciar el prefab
+        GameObject newBookNumber = Instantiate(bookNumberPrefab, bookNumbersContainer);
+
+        // Configurar el fondo y el texto
+        Transform backgroundTransform = newBookNumber.transform.GetChild(0); // Primer hijo: fondo
+        Transform textTransform = newBookNumber.transform.GetChild(1);      // Segundo hijo: texto
+
+        Image background = backgroundTransform.GetComponent<Image>();
+        TextMeshProUGUI numberText = textTransform.GetComponent<TextMeshProUGUI>();
+
+        background.color = color;
+        numberText.text = number;
+
+        // Organizar manualmente hacia la derecha
+        int childCount = bookNumbersContainer.childCount;
+        float spacing = 120f; // Espaciado entre elementos
+        newBookNumber.transform.localPosition = new Vector3(spacing * (childCount - 1), 0, 0);
+    }
+
 }
