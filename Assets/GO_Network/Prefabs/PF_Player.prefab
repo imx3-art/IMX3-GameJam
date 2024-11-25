@@ -347,12 +347,17 @@ PrefabInstance:
     - target: {fileID: 3915357843216037327, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_Lens.FieldOfView
-      value: 10
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3915357843216037327, guid: 103f36292552534449cf6c273892f3b9,
+        type: 3}
+      propertyPath: m_Lens.FarClipPlane
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3915357843216037327, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
       propertyPath: m_Lens.NearClipPlane
-      value: 0.01
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3915357843216037327, guid: 103f36292552534449cf6c273892f3b9,
         type: 3}
