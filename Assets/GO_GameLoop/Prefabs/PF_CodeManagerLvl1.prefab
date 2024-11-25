@@ -169,6 +169,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "Brains Taste\u2014Uh, Work\u2014Better in Pairs Here\u2019s the thing:
+        you\u2019re not the only one I\u2019ve freed. There are others like you out
+        there\u2014so when you bump into another zombie, maybe team up. Two brains
+        are better than one, right? Teamwork can open doors\u2014literally. Some
+        secret paths need two zombies to succeed. But let\u2019s be honest: not all
+        zombies are heroes\u2026 "
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -264,6 +274,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "Some Zombies might trip you to save themselves. Others? Well, they
+        might rip your arm off and toss it as a decoy. Yep, your limbs are basically
+        zombie currency now. Don\u2019t act surprised\u2014it\u2019s not personal.
+        It\u2019s survival.\"So, here\u2019s the pro tip: Trust sparingly. Rip decisively.
+        And when in doubt, run faster than the zombie whose arm is being used as
+        bait."
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -358,6 +378,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "Nice to Meat You! Zombies are bred, farmed, and sold faster than canned
+        tuna. And humans? They\u2019re chowing down on Zombie Patties like it\u2019s
+        the fountain of youth, ignoring how the sausage gets made. The good news:
+        Zombie Heaven is real, and it\u2019s somewhere near the mountains\u2014because,
+        of course, it is. Keep heading north, find my secret codes. Freedom\u2019s
+        closer than you think\u2026 assuming you don\u2019t get turned into a snack
+        on the way."
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
