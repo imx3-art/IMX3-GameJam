@@ -70,6 +70,11 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         //GetComponentInChildren<Rigidbody>().isKinematic = !isLocalPlayer;
         //(controller = GetComponentInChildren<GO_ThirdPersonController>()).enabled = isLocalPlayer;
 
+        if (isLocalPlayer)
+        {
+            OnPlayerStateChanged += HandlePlayerStateChanged;
+        }
+        
     }
     private IEnumerator Start()
     {
@@ -85,6 +90,14 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     {
         PlayersList.Remove(this);
 
+    }
+    
+    private void OnDestroy()
+    {
+        if (isLocalPlayer)
+        {
+            OnPlayerStateChanged -= HandlePlayerStateChanged;
+        }
     }
 
     public void TeleportPlayer(Vector3 _pos, Quaternion _rot)
@@ -203,5 +216,21 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     {
         actionPlayer.SpawnArm();
 
+    }
+    
+    private void HandlePlayerStateChanged(PlayerState newState)
+    {
+        switch (newState)
+        {
+            case PlayerState.Normal:
+                GO_AudioManager.Instance.PlayAmbientSound("NormalStateSound");
+                break;
+            case PlayerState.Persecution:
+                GO_AudioManager.Instance.PlayAmbientSound("PersecutionStateSound");
+                break;
+            default:
+                GO_AudioManager.Instance.StopAmbientSound();
+                break;
+        }
     }
 }

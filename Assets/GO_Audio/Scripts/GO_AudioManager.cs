@@ -10,6 +10,9 @@ public class GO_AudioManager : MonoBehaviour
     
     public GO_Sound[] uiSounds;
     public GO_Sound[] gameSounds;
+    public GO_Sound[] ambientSounds;
+
+    private AudioSource ambientSource;
     
     public float minDistance = 1.0f;
     public float maxDistance = 20.0f;
@@ -42,6 +45,38 @@ public class GO_AudioManager : MonoBehaviour
             s.source.clip = s.clip;
             s.source.loop = s.loop;
             s.source.volume = s.volume;
+        }
+        
+        ambientSource = gameObject.AddComponent<AudioSource>();
+        ambientSource.loop = true;
+        ambientSource.volume = masterVolume;
+    }
+    
+    public void PlayAmbientSound(string name)
+    {
+        GO_Sound s = Array.Find(ambientSounds, sound => sound.name == name);
+        if (s != null)
+        {
+            if (ambientSource.clip == s.clip && ambientSource.isPlaying)
+            {
+                return;
+            }
+            ambientSource.Stop();
+            ambientSource.volume = s.volume;
+            ambientSource.clip = s.clip;
+            ambientSource.Play();
+        }
+        else
+        {
+            Debug.LogWarning("Sonido ambiental no encontrado: " + name);
+        }
+    }
+
+    public void StopAmbientSound()
+    {
+        if (ambientSource.isPlaying)
+        {
+            ambientSource.Stop();
         }
     }
 
