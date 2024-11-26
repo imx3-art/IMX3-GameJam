@@ -161,6 +161,7 @@ namespace StarterAssets
             GroundedCheck();
             Move();
             AdjustCameraFraming();
+            HandleStaminaAndSpeed();
 
             if (_input.Grab)
             {
@@ -171,23 +172,23 @@ namespace StarterAssets
                 releaseObject();
             }
             
-            if (_input.cameraVision)
+            if (GO_PlayerNetworkManager.localPlayer.CurrentPlayerState != PlayerState.Persecution)
             {
-                GO_InputsPlayer.IsPause = true;
-                HandleCameraDistance(cameraVisionDistance);
-                HandleCameraRotation();
-            }
-            else
-            {
-                if (GO_PlayerNetworkManager.localPlayer.CurrentPlayerState == PlayerState.Persecution)
+                if (_input.cameraVision)
                 {
-                    return;
+                    GO_InputsPlayer.IsPause = true;
+                    HandleCameraDistance(cameraVisionDistance);
+                    HandleCameraRotation();
                 }
-                GO_InputsPlayer.IsPause = false;
-                HandleCameraDistance(normalCameraDistance);
+                else
+                {
+                    GO_InputsPlayer.IsPause = false;
+                    HandleCameraDistance(normalCameraDistance);
+                }
             }
             
-            HandleStaminaAndSpeed();
+            
+            
         }
 
         private void LateUpdate()
@@ -487,6 +488,7 @@ namespace StarterAssets
         
         private void HandleStaminaAndSpeed()
         {
+            Debug.Log("handle stamina");
             if (GO_PlayerNetworkManager.localPlayer == null)
                 return;
 
