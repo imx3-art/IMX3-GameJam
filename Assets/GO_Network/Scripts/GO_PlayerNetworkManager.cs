@@ -227,6 +227,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
                 break;
             case PlayerState.Persecution:
                 GO_AudioManager.Instance.PlayAmbientSound("PersecutionStateSound");
+                controller.HandleCameraDistance(controller.persecutionCameraDistance);
                 break;
             default:
                 GO_AudioManager.Instance.StopAmbientSound();
