@@ -72,16 +72,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerName: Player Name String
+  _idColor: -1
   _playerLives: 0
   _playerID: 0
   _currentLevel_ID: 0
-  _movePlayerNetwork: {x: 0, y: 0}
   _isDrag: 0
   _pullMiniGame: 0
   _timeMinigame: 0
   cameraTargetFollow: {fileID: 6419920899746987804}
   canvasUIPlayer: {fileID: 6797291922913000451, guid: 5dcfd2f22ed2e004f8596fb3ff715b6f,
     type: 3}
+  colorPlayer: {fileID: 2339982077564267757}
   playerTransform: {fileID: 8556223988473314288}
   isLocalPlayer: 0
   otherPlayerTarget: {fileID: 0}
@@ -259,6 +260,12 @@ PrefabInstance:
 --- !u!4 &2025334845166633983 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 675859116194896352, guid: 3801d110c0f0f9244a347a16572a82c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1547634112643291679}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2339982077564267757 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3819901632726890226, guid: 3801d110c0f0f9244a347a16572a82c1,
     type: 3}
   m_PrefabInstance: {fileID: 1547634112643291679}
   m_PrefabAsset: {fileID: 0}

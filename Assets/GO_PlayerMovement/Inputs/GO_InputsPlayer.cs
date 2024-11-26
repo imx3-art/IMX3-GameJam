@@ -109,12 +109,12 @@ namespace StarterAssets
         {
             if (GO_PlayerNetworkManager.localPlayer.isDrag > 0)
             {
-                GO_PlayerNetworkManager.localPlayer.movePlayerNetwork = newMoveDirection;
+                //GO_PlayerNetworkManager.localPlayer.movePlayerNetwork = newMoveDirection;
                 move = Vector2.zero;
             }
             else
             {
-                GO_PlayerNetworkManager.localPlayer.movePlayerNetwork = Vector2.zero;
+                //GO_PlayerNetworkManager.localPlayer.movePlayerNetwork = Vector2.zero;
                 move.x = IsPause ? Vector2.zero.x : newMoveDirection.x;
                 move.y = IsPause ? Vector2.zero.y : newMoveDirection.y;
             }

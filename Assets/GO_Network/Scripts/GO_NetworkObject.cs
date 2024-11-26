@@ -96,6 +96,21 @@ public class GO_NetworkObject : NetworkBehaviour
             networkObject.RequestStateAuthority();
     }
 
+    public void Despawned()
+    {
+        ChangeAuthority();
+        StartCoroutine(DespawnedCoroutine());
+    }
+
+    private IEnumerator DespawnedCoroutine()
+    {
+        yield return new WaitWhile(() => networkObject.StateAuthority != Runner.LocalPlayer);
+        GO_LevelManager.instance.Despawned(Object);
+
+    }
+
+
+
 
 }
 

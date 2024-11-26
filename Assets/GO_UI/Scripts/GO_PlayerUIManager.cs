@@ -24,6 +24,11 @@ public class GO_PlayerUIManager : MonoBehaviour
     [SerializeField] private Transform bookNumbersContainer; // Contenedor en el HUD
     [SerializeField] private GameObject bookNumberPrefab; // Prefab del número del libro
 
+    [Header("Session Info")]
+    [SerializeField] private TextMeshProUGUI sessionPlayersCount; 
+
+
+
     private GO_PlayerNetworkManager playerNetworkManager;
     public GO_ThirdPersonController controller;
 
@@ -56,8 +61,8 @@ public class GO_PlayerUIManager : MonoBehaviour
 
                     
                     playerNetworkManager.OnPlayerStateChanged += OnPlayerStateChanged;
-                    
-                    
+                    GO_RunnerManager.Instance.OnEventTriggeredPlayerChange += ChangePlayerNumber;
+
                     totalLives = GO_LevelManager.instance.totalLives; 
                     Debug.Log("vidas actuales"+totalLives);
                     
@@ -81,6 +86,7 @@ public class GO_PlayerUIManager : MonoBehaviour
                 
             }
         }
+        ChangePlayerNumber();
     }
 
     private void OnDestroy()
@@ -99,6 +105,10 @@ public class GO_PlayerUIManager : MonoBehaviour
         if (playerNetworkManager != null)
         {
             playerNetworkManager.OnPlayerStateChanged -= OnPlayerStateChanged;
+        }
+        if (GO_RunnerManager.Instance != null)
+        {
+            GO_RunnerManager.Instance.OnEventTriggeredPlayerChange -= ChangePlayerNumber;
         }
     }
 
@@ -184,6 +194,10 @@ public class GO_PlayerUIManager : MonoBehaviour
                 }
             }
         }
+    }
+    private void ChangePlayerNumber()
+    {
+        sessionPlayersCount.text = GO_RunnerManager.Instance._runner.SessionInfo.PlayerCount + "/6";
     }
 
     public void AddBookNumber(string number, Color color)

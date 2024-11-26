@@ -453,6 +453,7 @@ MonoBehaviour:
   bookNumbersContainer: {fileID: 5140338789914489147}
   bookNumberPrefab: {fileID: 7388512226356730781, guid: 94c873d0188451848b925e52f5cc0311,
     type: 3}
+  sessionPlayersCount: {fileID: 878292534067231787}
   controller: {fileID: 0}
 --- !u!1 &4117420444068626486
 GameObject:

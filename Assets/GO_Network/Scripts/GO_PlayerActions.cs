@@ -21,7 +21,7 @@ public class GO_PlayerActions : MonoBehaviour
 
     private Transform _rightHandRigg;
     private Transform _armTMP;
-    private Transform _armInRightHand; //brazo Extra
+    private Transform _armExtraInRightHand; //brazo Extra
     private bool _gameEnd;
 
     private float _localPlayerRate = -1;
@@ -81,6 +81,7 @@ public class GO_PlayerActions : MonoBehaviour
                 _target = null;
                 otherPlayerNetworkManager = null;
                 _inputPlayer.drag = false;
+                DropArm(false, true);
             }
         }
         else if(GO_PlayerNetworkManager.localPlayer.isDrag == 2) //Control del otro player
@@ -103,9 +104,12 @@ public class GO_PlayerActions : MonoBehaviour
             {
                 BindUpArm();
             }
+            else
+            {
+                Debug.Log("Ya tengo un brazo en la mano " + _armExtraInRightHand);
+            }
         }
-    }
-       
+    }     
     
     private void MiniGameDrag()
     {
@@ -167,9 +171,14 @@ public class GO_PlayerActions : MonoBehaviour
 
     }
 
-    public void SpawnArm()
+    public void SpawnArm(bool _spawAndDrag = true)
     {
-        _armInRightHand = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, _rightHandRigg.position, _rightHandRigg.rotation).transform;
+        var armTMP = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, _rightHandRigg.position, _rightHandRigg.rotation).transform;
+
+        if (_spawAndDrag) 
+        {
+            _armExtraInRightHand = armTMP;
+        }
     }
 
     private void EndMiniGame()
@@ -235,33 +244,47 @@ public class GO_PlayerActions : MonoBehaviour
     private void LateUpdate()
     {
         hudMinigame.transform.LookAt(GO_MainCamera.MainCamera.transform);
-        if (_armInRightHand)
+        if (_armExtraInRightHand)
         {
-            _armInRightHand.position = _rightHandRigg.position;//, rightHand.rotation);
-            _armInRightHand.rotation = _rightHandRigg.rotation;
+            _armExtraInRightHand.position = _rightHandRigg.position;//, rightHand.rotation);
+            _armExtraInRightHand.rotation = _rightHandRigg.rotation;
         }
     }
-    public void DropArm(bool _State)
+    public void DropArm(bool _State, bool _self = false)
     {
+        if( _self && _armExtraInRightHand) 
+        {
+        _armExtraInRightHand = null;
+        return;
+        }
+
         if((rightArmPlayer.activeSelf && !_State) || (!rightArmPlayer.activeSelf && _State) )
         {
             rightArmPlayer.SetActive(_State);
+            if(_self ) 
+            { 
+            SpawnArm(false);    
+            }
             return;
         }
         if((leftArmPlayer.activeSelf && !_State) || (!leftArmPlayer.activeSelf && _State))
         {
             leftArmPlayer.SetActive(_State);
+            if (_self)
+            {
+                SpawnArm(false);
+            }
             return;
         }
     }
 
     public bool SetExtraArm(bool _drop = false)
     {
-        if(_armInRightHand)
+        if(_armExtraInRightHand)
         {
             if(_drop)
             {
-                _armInRightHand = null;
+                _armExtraInRightHand = null;
             }
             return true;
         }
@@ -272,11 +295,10 @@ public class GO_PlayerActions : MonoBehaviour
     {
         return (leftArmPlayer.activeSelf ? 1 : 0) + (rightArmPlayer.activeSelf ? 1 : 0);
     }
-
-    
+        
     public void ShakeCamera(bool _value = false)
     {
-        GO_MainCamera.cinemachineBrain.enabled = _value;
+        GO_MainCamera.cinemachineBrain.enabled = _value || _gameEnd;
         GO_MainCamera.MainCamera.fieldOfView = Mathf.Lerp(GO_MainCamera.MainCamera.fieldOfView, Random.Range(_fov * .7f, _fov * 1.3f), Time.deltaTime * 4);
     }
 
@@ -308,16 +330,16 @@ public class GO_PlayerActions : MonoBehaviour
         }
         Debug.Log("AGARRO ITEM: " + _armTMP.name);
         _armTMP.GetComponent<GO_NetworkObject>().ChangeAuthority();
+
         if (ReadyForMiniGame() == 2)
         {
-            _armInRightHand = _armTMP;
+            _armExtraInRightHand = _armTMP;
         }
         else
         {
-            //DropArm(true);
-            GO_LevelManager.instance.Despawned(_armTMP.GetComponent<Fusion.NetworkObject>());
+            _armTMP.GetComponent<GO_NetworkObject>().Despawned();
             GO_PlayerNetworkManager.localPlayer.RPC_addNewArm();
-
         }
+        _armTMP = null;
     }
 }

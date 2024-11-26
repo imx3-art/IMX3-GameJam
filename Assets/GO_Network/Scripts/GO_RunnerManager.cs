@@ -33,8 +33,10 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     
     [SerializeField] private GO_SpawnPoint spawnPoint;
 
-    private NetworkRunner _runner;
+    public NetworkRunner _runner;
     private string _nameSession;
+
+    public event Action OnEventTriggeredPlayerChange;
     public static string _customNameSession;
     public static GO_RunnerManager Instance;
 
@@ -86,18 +88,6 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
        
-        /*
-        await Task.Delay(10000);
-
-        NetworkLoadSceneParameters parameters = new NetworkLoadSceneParameters()
-        {
-          //  LoadSceneMode = LoadSceneMode.Single,  // Carga en modo Single (reemplaza la escena actual)
-                                                   // Puedes agregar otras configuraciones aquí si lo deseas
-        };
-
-        SceneRef sceneRef = SceneRef.FromPath("New Scene");
-        NetworkSceneAsyncOp sceneLoadOperation = _runner.SceneManager.LoadScene(sceneRef, parameters);*/
-        
     }
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
@@ -112,19 +102,22 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-
-        //throw new NotImplementedException();
+        if (OnEventTriggeredPlayerChange != null)
+        {
+            OnEventTriggeredPlayerChange.Invoke();
+        }        
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log(runner.IsSharedModeMasterClient);
         GO_LevelManager.instance.CheckPlayerInCurrentLevel(player);
-        //GO_PlayerNetworkManager.PlayersList.Remove(runner.GetPlayerObject(player).GetComponent<GO_PlayerNetworkManager>());
-
-        //throw new NotImplementedException();
+        if (OnEventTriggeredPlayerChange != null)
+        {
+            OnEventTriggeredPlayerChange.Invoke();
+        }
     }
-
+   
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         //throw new NotImplementedException();
@@ -168,9 +161,6 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
             {
                 runner.Spawn(gameManager);
             }
-
-          
-
         }
     }
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)

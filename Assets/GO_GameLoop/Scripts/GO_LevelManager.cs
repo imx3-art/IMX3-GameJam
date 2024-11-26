@@ -29,7 +29,7 @@ public class GO_LevelManager : NetworkBehaviour
     public List<NetworkObject> networkObjectsSpawned = new List<NetworkObject>();
     public bool isReady;
     public short id;
-    public static GO_LevelManager instance;
+    public static GO_LevelManager instance = null;
     public GameObject popupManagerPrefab;
     public GO_NetworkObject armPlayer;
     public PlayerRef CurrentPlayerRefChangeScene;//Player que es dueño del objeto, pero esta dejando la escena
@@ -45,6 +45,8 @@ public class GO_LevelManager : NetworkBehaviour
     private GameObject _playerPrefab;
 
     [SerializeField] private Level _currentLevel;
+    
+    public Color[] playerColors;
 
     private Transform _spawnPoint;
     private Transform _endPoint;

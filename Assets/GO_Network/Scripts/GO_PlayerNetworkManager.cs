@@ -22,17 +22,17 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     private GO_ThirdPersonController controller;
 
     [Networked] public string playerName { get; set; }
+    [Networked] public short idColor { get; set; } = -1;
     [Networked] public float playerLives { get; set; }
     [Networked] public short playerID { get; set; }
     [Networked] public short currentLevel_ID { get; set; }
-    [Networked] public Vector2 movePlayerNetwork { get; set; }
     [Networked] public short isDrag { get; set; }
     [Networked] public short pullMiniGame { get; set; }
     [Networked] public float timeMinigame { get; set; }
     [SerializeField] private GameObject cameraTargetFollow;
 
-    [SerializeField]
-    private GO_PlayerUIManager canvasUIPlayer;
+    [SerializeField] private GO_PlayerUIManager canvasUIPlayer;
+    [SerializeField] private Renderer colorPlayer;
 
     public NetworkTransform playerTransform;
     public bool isLocalPlayer;
@@ -46,7 +46,6 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     
     public override void Spawned()
     {
-        PlayersList.Add(this);
         DontDestroyOnLoad(gameObject);
         if (Object.HasStateAuthority)
         {
@@ -59,6 +58,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             playerID = (short)Random.Range(1000, 9999);
             CurrentPlayerState = PlayerState.Normal;
             Instantiate(canvasUIPlayer.gameObject, transform);
+            
         }
         else
         {
@@ -67,14 +67,55 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         actionPlayer = GetComponentInChildren<GO_PlayerActions>();
         cameraTargetFollow.SetActive(isLocalPlayer);
 
-        //GetComponentInChildren<Rigidbody>().isKinematic = !isLocalPlayer;
-        //(controller = GetComponentInChildren<GO_ThirdPersonController>()).enabled = isLocalPlayer;
-
         if (isLocalPlayer)
         {
             OnPlayerStateChanged += HandlePlayerStateChanged;
         }
-        
+        PlayersList.Add(this);
+        GetColorPlayer();
+    }
+    public void GetColorPlayer()
+    {
+        if (PlayersList.Count != Runner.SessionInfo.PlayerCount ||
+            !GO_LevelManager.instance)
+        {
+            Invoke("GetColorPlayer", 1);
+            return;
+        }
+        if (Object.HasStateAuthority)
+        {
+            for (int i = 0; i < GO_LevelManager.instance.playerColors.Length; i++)
+            {
+                bool isUse = false;
+                Debug.Log("Ccomparo : " + i);
+
+                for (int j = 0; j < PlayersList.Count; j++)
+                {
+                    Debug.Log("Ccomparo player : " + PlayersList[j].idColor);
+                    if (PlayersList[j].idColor == i)
+                    {
+                        isUse = true;
+                        break;
+                    }
+                }
+                if (!isUse)
+                {
+                    idColor = (short) i;
+                    break;
+                }
+            }
+        }
+        SetColorPlayer();
+    }
+
+    private void SetColorPlayer()
+    {
+        if (idColor < 0)
+        {
+            Invoke("SetColorPlayer", 1);
+            return;
+        }
+        colorPlayer.material.color = GO_LevelManager.instance.playerColors[idColor];
     }
     private IEnumerator Start()
     {
@@ -84,7 +125,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         {
         yield return null;
         }
-        GO_LevelManager.instance.CheckPlayerInNewLevel();
+        GO_LevelManager.instance.CheckPlayerInNewLevel();        
     }
     private void OnDisable()
     {
@@ -137,6 +178,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public void EnddragMode(bool _RPC = false)
     {
         isDrag = 0;
+        GO_MainCamera.cinemachineBrain.enabled = true;
 
         if (_RPC && otherPlayerTarget != null)
         {
