@@ -223,7 +223,6 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         ChangePlayerState((PlayerState)state);
     }
 
-
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
     public void RPC_setWinnerMiniGame(short _playerWinID, short _playerLoseID)
     {

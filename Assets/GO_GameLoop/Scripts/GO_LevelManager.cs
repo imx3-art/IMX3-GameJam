@@ -42,6 +42,7 @@ public class GO_LevelManager : NetworkBehaviour
 
     //private GameObject _playerInstance;
     public GO_PlayerNetworkManager _playerInstance;
+
     private GameObject _playerPrefab;
 
     [SerializeField] private Level _currentLevel;
@@ -419,9 +420,10 @@ public class GO_LevelManager : NetworkBehaviour
     public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot, string _codeName = null )
     {
         Debug.Log("MANDO SPAWN " + objectsSpawned.Count);
+        //if (_codeName == null || !objectsSpawned.Contains(_codeName))
         if (_codeName == null || !objectsSpawned.Contains(_codeName))
         {
-            //Debug.Log("MANDO SPAWN un player " + objectsSpawned[0]);
+            Debug.Log("MANDO SPAWN un player " + _codeName);
 
 
             var NetworkObject = Runner.Spawn(prefabNetworkObjects, _pos, _rot);
@@ -436,24 +438,50 @@ public class GO_LevelManager : NetworkBehaviour
         }
         return null;
     }
+
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_GetPoolSpawnObject()
     {
-        RPC_SendPoolSpawnObject(objectsSpawned.ToArray());        
+        int chunkSize = 18;
+        if(objectsSpawned.Count < chunkSize)
+        {
+            RPC_SendPoolSpawnObject(objectsSpawned.ToArray(), 2);        
+            return;
+        }
+        int totalChunks = Mathf.CeilToInt(objectsSpawned.Count / (float)chunkSize);
+        List< List<string> > listListTMP = new List< List<string> >();
+
+
+        for (int i = 0; i < totalChunks; i++)
+        {
+            List<string> chunk = objectsSpawned.GetRange(i * chunkSize, Mathf.Min(chunkSize, objectsSpawned.Count - i * chunkSize));
+            listListTMP.Add( chunk );                       
+        }
+
+        for (int i = 0; i < listListTMP.Count; i++)
+        {
+            RPC_SendPoolSpawnObject(listListTMP[i].ToArray(), (short)(i == listListTMP.Count - 1 ? 2 : ( i == 0 ? 0 : 1 ))); //SendChunk(chunk);
+        }
+       // RPC_SendPoolSpawnObject(objectsSpawned.ToArray());        
     } 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_GetPoolSpawnNetWorkObject()
     {
         RPC_SendPoolSpawnObject(networkObjectsSpawned.ToArray());        
     }
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_SendPoolSpawnObject(string[] _listSpawnedObject)
+    public void RPC_SendPoolSpawnObject(string[] _listSpawnedObject, short _poss)
     {
-        if (objectsSpawned.Count == 0 && !Object.HasStateAuthority)
+        Debug.Log("RECIBI ESTO: " + objectsSpawned.Count + " - " + _listSpawnedObject.Length);
+
+        if (/*(objectsSpawned.Count == 0 && _poss == 0) && */ !isReady && !Object.HasStateAuthority)
         {
-            objectsSpawned = _listSpawnedObject.ToList<string>();
+            //objectsSpawned = _listSpawnedObject.ToList<string>();
+            objectsSpawned.AddRange(_listSpawnedObject.ToList<string>());
+            isReady = _poss == 2;
         }
-        isReady = true;
+
     }
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_SendPoolSpawnObject(NetworkObject[] _listSpawnedObject)
@@ -462,8 +490,11 @@ public class GO_LevelManager : NetworkBehaviour
         {
             networkObjectsSpawned = _listSpawnedObject.ToList<NetworkObject>();
         }
-        isReady = true;
+        //isReady = true;
+        Debug.Log("RECIBI ESTO OBJETO: " + _listSpawnedObject.Length);
+
     }
+
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_SetPoolSpawnObject(string _nameObjectSpawned)
     {

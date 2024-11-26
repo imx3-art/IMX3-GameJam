@@ -16,7 +16,7 @@ public class GO_PlayerUIManager : MonoBehaviour
     public Sprite fullLifeSprite; // Sprite para una vida completa
     public Sprite emptyLifeSprite; // Sprite para una vida vacía
 
-    [Header("Stamina UI")] 
+    [Header("Stamina UI")]
     public GameObject staminaPanel;
     public Image staminaBar; // La imagen de la barra de stamina
 
@@ -25,7 +25,9 @@ public class GO_PlayerUIManager : MonoBehaviour
     [SerializeField] private GameObject bookNumberPrefab; // Prefab del número del libro
 
     [Header("Session Info")]
-    [SerializeField] private TextMeshProUGUI sessionPlayersCount; 
+    [SerializeField] private TextMeshProUGUI sessionPlayersCount;
+    [SerializeField] private TextMeshProUGUI popUpSharedCodeSessionName;
+    [SerializeField] GameObject popUpSharedCode;
 
 
 
@@ -34,10 +36,10 @@ public class GO_PlayerUIManager : MonoBehaviour
 
     private int totalLives = 0;
     private List<Image> heartImages = new List<Image>();
-    
+
     private float previousStamina;
     private Coroutine hideStaminaPanelCoroutine;
-    
+
     private PlayerState currentPlayerState;
 
     private IEnumerator Start()
@@ -45,13 +47,13 @@ public class GO_PlayerUIManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(0.1f);
-            if(GO_LevelManager.instance != null &&
+            if (GO_LevelManager.instance != null &&
                GO_LevelManager.instance.isReady)
             {
-                
+
                 if (GO_PlayerNetworkManager.localPlayer != null)
                 {
-                    
+
                     playerNetworkManager = GO_PlayerNetworkManager.localPlayer;
                     controller = GO_PlayerNetworkManager.localPlayer.playerTransform.GetComponent<GO_ThirdPersonController>();
 
@@ -59,18 +61,18 @@ public class GO_PlayerUIManager : MonoBehaviour
                     controller.OnStaminaChanged += UpdateStaminaUI;
                     previousStamina = controller.Stamina;
 
-                    
+
                     playerNetworkManager.OnPlayerStateChanged += OnPlayerStateChanged;
                     GO_RunnerManager.Instance.OnEventTriggeredPlayerChange += ChangePlayerNumber;
 
-                    totalLives = GO_LevelManager.instance.totalLives; 
-                    Debug.Log("vidas actuales"+totalLives);
-                    
+                    totalLives = GO_LevelManager.instance.totalLives;
+                    Debug.Log("vidas actuales" + totalLives);
+
                     for (int i = 0; i < totalLives; i++)
                     {
                         GameObject lifeImage = Instantiate(lifePrefab, livesPanel);
                         Image heartImage = lifeImage.GetComponent<Image>();
-                        heartImage.sprite = fullLifeSprite; 
+                        heartImage.sprite = fullLifeSprite;
                         heartImages.Add(heartImage);
                     }
 
@@ -83,7 +85,7 @@ public class GO_PlayerUIManager : MonoBehaviour
                 {
                     Debug.LogError("Local player no está asignado en GO_PlayerNetworkManager.");
                 }
-                
+
             }
         }
         ChangePlayerNumber();
@@ -101,7 +103,7 @@ public class GO_PlayerUIManager : MonoBehaviour
         {
             controller.OnStaminaChanged -= UpdateStaminaUI;
         }
-        
+
         if (playerNetworkManager != null)
         {
             playerNetworkManager.OnPlayerStateChanged -= OnPlayerStateChanged;
@@ -127,7 +129,11 @@ public class GO_PlayerUIManager : MonoBehaviour
         }
     }
 
-
+    public void ShowCodeSession()
+    {
+        popUpSharedCodeSessionName.text = GO_RunnerManager.Instance._runner.SessionInfo.Name;
+        popUpSharedCode.SetActive(!popUpSharedCode.activeSelf);
+    }
     private void UpdateStaminaUI(float currentStamina)
     {
         float normalizedStamina = Mathf.InverseLerp(controller.MinStamina, controller.MaxStamina, currentStamina);
@@ -161,11 +167,11 @@ public class GO_PlayerUIManager : MonoBehaviour
 
     private IEnumerator HideStaminaPanelAfterDelay()
     {
-        yield return new WaitForSeconds(1f); 
+        yield return new WaitForSeconds(1f);
         staminaPanel.SetActive(false);
         hideStaminaPanelCoroutine = null;
     }
-    
+
     private void OnPlayerStateChanged(PlayerState newState)
     {
         currentPlayerState = newState;
@@ -234,6 +240,7 @@ public class GO_PlayerUIManager : MonoBehaviour
         newBookNumber.transform.localPosition = new Vector3(spacing * (childCount - 2), 0, 0);
     }
 
+
     public void RemoveBooksNumber()
     {
         foreach (Transform child in bookNumbersContainer)
@@ -242,5 +249,6 @@ public class GO_PlayerUIManager : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+
 
 }

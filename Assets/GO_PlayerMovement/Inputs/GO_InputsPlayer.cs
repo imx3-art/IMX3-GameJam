@@ -15,6 +15,7 @@ namespace StarterAssets
         public bool pull;
         public bool interact;
         public bool grabDropItem;
+        public bool shared;
         public static bool IsPause = false;
         public bool nextLevel;
         public bool cameraVision;
@@ -33,6 +34,10 @@ namespace StarterAssets
         public void OnStealth(InputValue value)
         {
             StealthInput(value.isPressed);
+        }
+        public void OnShare(InputValue value)
+        {
+            ShareInput(value.isPressed);
         }
         public void OnDrag(InputValue value)
         {
@@ -90,6 +95,12 @@ namespace StarterAssets
         {
             
             grabDropItem = newStealthState;
+            
+        }
+        public void ShareInput(bool newStealthState)
+        {
+            
+            shared = newStealthState;
             
         }
 
