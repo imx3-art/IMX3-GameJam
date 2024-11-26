@@ -8,6 +8,7 @@ public class GO_InteractionManager : MonoBehaviour
     private GO_IInteractable currentInteractable;
     private GameObject currentVisualHint; // Referencia al objeto visual de ayuda.
     private GO_PlayerNetworkManager playerNetworkManager;
+    private GO_InteractableAutomaticDoor Currentdoor;
 
     private void Start()
     {
@@ -86,8 +87,11 @@ public class GO_InteractionManager : MonoBehaviour
             }
             else
             {
-                GO_InteractableAutomaticDoor Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
-                Currentdoor.CloseAutomaticDoor(); 
+                Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
+                if (Currentdoor != null)
+                {
+                    Currentdoor.CloseAutomaticDoor();
+                }
             }
             Debug.Log("SALIENDO DEL AREA");          
         }

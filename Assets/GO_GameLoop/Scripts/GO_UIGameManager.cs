@@ -31,6 +31,7 @@ public class GO_UIManager : MonoBehaviour
     public float doorMoveSpeed = 2f; // Velocidad de apertura.
 
     private char[] userInput; // Array para manejar el input del usuario.
+    private GO_PlayerUIManager uiplayer;
 
 
     private void Awake()
@@ -130,8 +131,9 @@ public class GO_UIManager : MonoBehaviour
         {
             Debug.Log("¡Código correcto! Abriendo la puerta...");
             GO_InputsPlayer.IsPause = false;
+            uiplayer = FindObjectOfType<GO_PlayerUIManager>();
             HideCodePanel();
-
+            uiplayer.RemoveBooksNumber();
             StartCoroutine(OpenDoor());
         }
         else

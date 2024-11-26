@@ -36,7 +36,7 @@ public class GO_CodeManager : NetworkBehaviour
         // Genera un código de 4 dígitos para el nivel actual si no está definido.
         if (string.IsNullOrEmpty(generatedCodes[levelIndex]))
         {
-            generatedCodes.Set(levelIndex, /*Random.Range(1000, 9999)*/ "6666");
+            generatedCodes.Set(levelIndex, Random.Range(1000, 9999).ToString());
             Debug.Log($"Código nuevo para el nivel {levelIndex}: {generatedCodes[levelIndex]}");
         }
         else

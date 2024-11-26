@@ -234,4 +234,13 @@ public class GO_PlayerUIManager : MonoBehaviour
         newBookNumber.transform.localPosition = new Vector3(spacing * (childCount - 2), 0, 0);
     }
 
+    public void RemoveBooksNumber()
+    {
+        foreach (Transform child in bookNumbersContainer)
+        {
+            // Destruye el objeto hijo
+            Destroy(child.gameObject);
+        }
+    }
+
 }
