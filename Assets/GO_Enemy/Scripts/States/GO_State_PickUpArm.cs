@@ -66,7 +66,7 @@ public class GO_State_PickUpArm : GO_State
             yield break;
         }
 
-        Destroy(armTransform.gameObject);
+        armTransform.GetComponent<GO_NetworkObject>().Despawned();
         armTransform = null;
         enemy.hasArm = true;
 

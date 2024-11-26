@@ -133,7 +133,6 @@ public class GO_Controller_Vision : MonoBehaviour
     {
         armTransform = null;
 
-        // Si el enemigo ya tiene un brazo, no buscará otro.
         if (_enemy.hasArm)
         {
             return false;
@@ -147,24 +146,26 @@ public class GO_Controller_Vision : MonoBehaviour
             {
                 Transform currentArmTransform = collider.transform;
 
-                Vector3 directionToArm = (currentArmTransform.position + _enemy.offset) - eyes.position;
+                Vector3 directionToArm = currentArmTransform.position - eyes.position;
 
-                // Proyectar los vectores en el plano horizontal (ignorar Y)
-                Vector3 directionToArmFlat = new Vector3(directionToArm.x, 0, directionToArm.z).normalized;
-                Vector3 eyesForwardFlat = new Vector3(eyes.forward.x, 0, eyes.forward.z).normalized;
-
-                // Calcular el ángulo entre la dirección frontal y la dirección al brazo en el plano horizontal
-                float angleToArm = Vector3.Angle(eyesForwardFlat, directionToArmFlat);
+                float angleToArm = Vector3.Angle(eyes.forward, directionToArm);
 
                 if (angleToArm < _enemy.visionAngle / 2f)
                 {
                     RaycastHit hitInfo;
-                    if (Physics.Raycast(eyes.position, directionToArmFlat, out hitInfo, _enemy.visionRange, visionLayerMask))
+                    if (Physics.Raycast(eyes.position, directionToArm.normalized, out hitInfo, _enemy.visionRange, visionLayerMask))
                     {
                         if (hitInfo.collider.CompareTag("Arm"))
                         {
                             armTransform = currentArmTransform;
+
+                            Debug.DrawLine(eyes.position, currentArmTransform.position, Color.green, 1.0f);
+
                             return true;
+                        }
+                        else
+                        {
+                            Debug.DrawLine(eyes.position, hitInfo.point, Color.red, 1.0f);
                         }
                     }
                 }
