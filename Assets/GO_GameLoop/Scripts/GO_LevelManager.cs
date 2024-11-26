@@ -269,6 +269,9 @@ public class GO_LevelManager : NetworkBehaviour
     }
     private void ChangeScene()
     {
+        _playerInstance.playerLives = totalLives;
+        OnLivesChanged?.Invoke(_playerInstance.playerLives);
+        
         switch (_currentLevel)
         {
             case Level.L_GO_Level0:
