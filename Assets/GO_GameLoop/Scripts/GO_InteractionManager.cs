@@ -63,8 +63,10 @@ public class GO_InteractionManager : MonoBehaviour
             }else
             {
                 GO_InteractableAutomaticDoor Currentdoor = other.GetComponentInParent<GO_InteractableAutomaticDoor>();
-                Currentdoor.OpenAutomaticDoor();
-                
+                if (Currentdoor != null)
+                {
+                    Currentdoor.OpenAutomaticDoor();
+                }              
             }
         }
     }
