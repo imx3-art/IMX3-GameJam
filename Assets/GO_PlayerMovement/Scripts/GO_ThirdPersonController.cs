@@ -119,12 +119,27 @@ namespace StarterAssets
         
         public event Action<float> OnStaminaChanged;
         
+        [Header("Camera Distance Settings")]
+        [SerializeField] private float cameraVisionDistance = 60f; // Distancia cuando se oprime espacio
+        [SerializeField] private float normalCameraDistance = 40f;
+        public float persecutionCameraDistance = 50f;// Distancia normal de la cámara
+        [SerializeField] private float cameraTransitionSpeed = 5f;   // Velocidad de transición de la cámara
+
+        [Header("Camera Rotation Settings")]
+        [SerializeField] private float rotationSpeed = 100f; // Velocidad de rotación de la cámara
+        private float yaw = 0f; // Rotación acumulada en Y
+        private float initialYOffset;
+
+       
+
+        
 
         private void Awake()
         {
             //_mainCamera = Camera.main.gameObject; ALBERT
             _mainCamera = GO_MainCamera.MainCamera.gameObject;
             _framingTransposer = _virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+            
             originalMoveSpeed = SprintSpeed;
         }
 
@@ -154,6 +169,22 @@ namespace StarterAssets
             else
             {
                 releaseObject();
+            }
+            
+            if (_input.cameraVision)
+            {
+                GO_InputsPlayer.IsPause = true;
+                HandleCameraDistance(cameraVisionDistance);
+                HandleCameraRotation();
+            }
+            else
+            {
+                if (GO_PlayerNetworkManager.localPlayer.CurrentPlayerState == PlayerState.Persecution)
+                {
+                    return;
+                }
+                GO_InputsPlayer.IsPause = false;
+                HandleCameraDistance(normalCameraDistance);
             }
             
             HandleStaminaAndSpeed();
@@ -548,5 +579,25 @@ namespace StarterAssets
                 IsSpeedReduced = false;
             }
         }
+        
+        public void HandleCameraDistance(float targetDistance)
+        {
+            _framingTransposer.m_CameraDistance = targetDistance;
+        }
+
+        private void HandleCameraRotation()
+        {
+            float mouseX = _input.look.x;
+
+            yaw += mouseX * rotationSpeed * Time.deltaTime;
+
+            if (_virtualCamera != null)
+            {
+                Vector3 currentRotation = _virtualCamera.transform.eulerAngles;
+                _virtualCamera.transform.eulerAngles = new Vector3(currentRotation.x, yaw, currentRotation.z);
+            }
+        }
+
+        
     }
 }

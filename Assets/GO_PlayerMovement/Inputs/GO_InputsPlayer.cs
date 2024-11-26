@@ -17,6 +17,7 @@ namespace StarterAssets
         public bool grabDropItem;
         public static bool IsPause = false;
         public bool nextLevel;
+        public bool cameraVision;
 
         public event System.Action onInteract;
 
@@ -58,6 +59,13 @@ namespace StarterAssets
         {
             NextLevelInput(value.isPressed);
         }
+        
+        public void OnCameraVision(InputValue value) 
+        {
+            CameraVisionInput(value.isPressed);
+        }
+
+        
 #endif
         private void ToggleInteract()
         {
@@ -122,7 +130,9 @@ namespace StarterAssets
 
         public new void LookInput(Vector2 newLookDirection)
         {
-            look.x = IsPause ? Vector2.zero.x : newLookDirection.x;
+            //look.x = IsPause ? Vector2.zero.x : newLookDirection.x;
+            //look.y = IsPause ? Vector2.zero.y : newLookDirection.y;
+            look.x = newLookDirection.x;
             look.y = IsPause ? Vector2.zero.y : newLookDirection.y;
         }
         public void SetCursorState(bool newState)
@@ -133,6 +143,11 @@ namespace StarterAssets
         public void NextLevelInput(bool newState)
         {
             GO_LevelManager.instance.HandlePlayerEnterArea();
+        }
+        
+        public void CameraVisionInput(bool newCameraVisionState) 
+        {
+            cameraVision = newCameraVisionState;
         }
     }
 }
