@@ -32,6 +32,7 @@ public class GO_UIManager : MonoBehaviour
 
     private char[] userInput; // Array para manejar el input del usuario.
 
+
     private void Awake()
     {
         if (Instance == null)
@@ -116,7 +117,16 @@ public class GO_UIManager : MonoBehaviour
             return;
         }
 
-        if (GO_CodeManager.Instance.ValidateCode(finalInput))
+        // Encuentra el `GO_CodeManager` correspondiente.
+        GO_CodeManager codeManager = FindObjectOfType<GO_CodeManager>(); // Encuentra el manager en la escena actual.
+
+        if (codeManager == null)
+        {
+            Debug.LogError("No se encontró un GO_CodeManager en esta escena.");
+            return;
+        }
+
+        if (codeManager.ValidateCode(finalInput))
         {
             Debug.Log("¡Código correcto! Abriendo la puerta...");
             GO_InputsPlayer.IsPause = false;
@@ -130,8 +140,10 @@ public class GO_UIManager : MonoBehaviour
         }
     }
 
+
     private IEnumerator OpenDoor()
     {
+        Debug.Log("Abriendo puerta");
         Vector3 leftStartPosition = doorLeft.transform.position;
         Vector3 rightStartPosition = doorRight.transform.position;
 

@@ -193,9 +193,10 @@ public class GO_PlayerUIManager : MonoBehaviour
         {
             // Acceder al texto directamente usando GetChild
             TextMeshProUGUI existingNumberText = child.GetChild(1).GetComponent<TextMeshProUGUI>(); // Asumiendo que el texto es el segundo hijo
-            if (existingNumberText != null && existingNumberText.text == number)
+            Color ColorFromExistinNumber = child.GetChild(0).GetComponent<Image>().color;
+            if (existingNumberText != null && existingNumberText.text == number && color == ColorFromExistinNumber)
             {
-                Debug.Log($"El número {number} ya está en el HUD. No se instanciará de nuevo.");
+                Debug.Log($"El número {number} con color {ColorFromExistinNumber} ya está en el HUD. No se instanciará de nuevo.");
                 return; // Salir del método si el número ya existe
             }
         }
@@ -216,7 +217,7 @@ public class GO_PlayerUIManager : MonoBehaviour
         // Organizar manualmente hacia la derecha
         int childCount = bookNumbersContainer.childCount;
         float spacing = 120f; // Espaciado entre elementos
-        newBookNumber.transform.localPosition = new Vector3(spacing * (childCount - 1), 0, 0);
+        newBookNumber.transform.localPosition = new Vector3(spacing * (childCount - 2), 0, 0);
     }
 
 }

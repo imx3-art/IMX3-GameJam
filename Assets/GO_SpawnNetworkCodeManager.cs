@@ -1,0 +1,79 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class SpawnCodeManager : MonoBehaviour
+{
+    [SerializeField] private GameObject[] codeManagerPrefabs; // Prefabs de CodeManager específicos para cada nivel.
+    private GO_LevelManager _levelManager;
+    private static GameObject currentCodeManager; // Referencia al CodeManager actual para evitar duplicados.
+
+    private void Start()
+    {
+        StartCoroutine(WaitForLevelManagerAndSpawn());
+    }
+
+    private IEnumerator WaitForLevelManagerAndSpawn()
+    {
+        if (currentCodeManager == null) 
+        {
+            while (GO_LevelManager.instance == null)
+            {
+                yield return null; // Espera un frame.
+            }
+            while (GO_LevelManager.instance.isReady == false)
+            {
+                yield return null; // Espera un frame.
+            }
+            // Asigna la referencia del LevelManager.
+            _levelManager = GO_LevelManager.instance;
+
+            // Una vez disponible, procede con el spawn.
+            SpawnOrKeepCodeManager();
+        }
+
+        this.gameObject.SetActive(true);
+    }
+
+    public void SpawnOrKeepCodeManager()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        // Verifica que el índice esté dentro del rango del array de prefabs.
+        if (currentSceneIndex >= codeManagerPrefabs.Length)
+        {
+            Debug.LogError("No hay un CodeManager configurado para este nivel.");
+            return;
+        }
+
+        // Construye un nombre único para identificar el CodeManager de este nivel.
+        string codeManagerName = $"CodeManager_Level_{currentSceneIndex}";
+
+        // Verifica si ya existe un CodeManager global.
+        if (currentCodeManager != null && currentCodeManager.name == codeManagerName)
+        {
+            Debug.Log($"El CodeManager para el nivel {currentSceneIndex} ya existe y es persistente.");
+            return;
+        }
+
+        // Si hay un CodeManager existente pero no pertenece a esta escena, lo destruimos.
+        if (currentCodeManager != null && currentCodeManager.name != codeManagerName)
+        {
+            Debug.Log($"Destruyendo CodeManager anterior: {currentCodeManager.name}");
+            Destroy(currentCodeManager);
+        }
+        if(currentCodeManager == null)
+        {
+            _levelManager.SpawnObjects(
+            codeManagerPrefabs[currentSceneIndex - 1],
+            Vector3.zero,
+            Quaternion.identity, 
+            name
+        );
+        }
+        // Instancia el CodeManager para este nivel.
+       
+        Debug.Log("APARECIO UN PLAYER SE CORRIO ESTO 4");
+        Debug.Log($"CodeManager para el nivel {currentSceneIndex} instanciado y marcado como persistente.");       
+    }
+}

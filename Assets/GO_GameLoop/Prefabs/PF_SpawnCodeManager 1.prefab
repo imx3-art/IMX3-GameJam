@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2502120955029661581}
   - component: {fileID: 8756839918797841881}
   m_Layer: 0
-  m_Name: PF_SpawnCodeManager
+  m_Name: PF_SpawnCodeManager 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   codeManagerPrefabs:
+  - {fileID: 2340203780797604135, guid: 8856399f87cfeac4ea00b1f934bc5b1e, type: 3}
   - {fileID: 2340203780797604135, guid: 29c08de8fca55f1409ae67407650562c, type: 3}
   - {fileID: 2340203780797604135, guid: dc2da33d7a10a984484f71c0a209c260, type: 3}
-  - {fileID: 2340203780797604135, guid: 8856399f87cfeac4ea00b1f934bc5b1e, type: 3}
-  - {fileID: 2340203780797604135, guid: 8856399f87cfeac4ea00b1f934bc5b1e, type: 3}
+  - {fileID: 2340203780797604135, guid: dc2da33d7a10a984484f71c0a209c260, type: 3}

@@ -5,91 +5,121 @@ using UnityEngine;
 
 public class GO_CodeManager : NetworkBehaviour
 {
-    public static GO_CodeManager Instance; // Singleton para acceso global.
-
-    [Networked] private string generatedCode { get => default; set { } } // Código aleatorio generado.
+    [Networked, Capacity(10)] public NetworkArray<string> generatedCodes { get; }
     public List<GameObject> predefinedBooks; // Lista de libros predefinidos en la escena.
     [SerializeField] private List<Color> positionColors;
     public static string displayedCode;
 
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
-
     private void Start()
     {
-        GenerateCode();
+        int currentLevelIndex = GetCurrentLevelIndex();
+
+        // Solo el nodo con autoridad genera el código si aún no está definido.
+        if (Object.HasStateAuthority && string.IsNullOrEmpty(generatedCodes[currentLevelIndex]))
+        {
+            GenerateCode(currentLevelIndex);
+        }
+
+        // Asegurarse de distribuir el código actual.
+        StartCoroutine(WaitAndDistributeCode(currentLevelIndex));
     }
 
-    public void GenerateCode()
+    private int GetCurrentLevelIndex()
     {
-        // Genera un código de 4 dígitos como string.
-        if(generatedCode == null || generatedCode == string.Empty)
+        // Aquí puedes implementar cómo obtener el índice del nivel actual.
+        // Por simplicidad, asumimos que los niveles están indexados desde 0.
+        return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+    }
+
+    public void GenerateCode(int levelIndex)
+    {
+        // Genera un código de 4 dígitos para el nivel actual si no está definido.
+        if (string.IsNullOrEmpty(generatedCodes[levelIndex]))
         {
-            generatedCode = Random.Range(1000, 9999).ToString();
-            DistributeCode();
+            generatedCodes.Set(levelIndex, /*Random.Range(1000, 9999)*/ "6666");
+            Debug.Log($"Código nuevo para el nivel {levelIndex}: {generatedCodes[levelIndex]}");
         }
         else
-        {   
-            generatedCode = generatedCode;
-            DistributeCode();
+        {
+            Debug.Log($"Código existente para el nivel {levelIndex}: {generatedCodes[levelIndex]}");
         }
     }
 
-    public void DistributeCode()
+    private IEnumerator WaitAndDistributeCode(int levelIndex)
     {
-        // Generamos el código completo de 4 dígitos
-        char[] codeDigits = generatedCode.ToCharArray();
+        // Espera a que el código del nivel actual esté sincronizado en todos los nodos.
+        while (string.IsNullOrEmpty(generatedCodes[levelIndex]))
+        {
+            yield return null; // Espera un frame.
+        }
 
-        // Creamos una lista para representar el código que se mostrará en el input (con _ donde están los libros)
+        DistributeCode(levelIndex);
+    }
+
+    public void DistributeCode(int levelIndex)
+    {
+        // Obtén el código del nivel actual.
+        string code = generatedCodes[levelIndex];
+
+        if (string.IsNullOrEmpty(code))
+        {
+            Debug.LogWarning($"El código para el nivel {levelIndex} no está definido.");
+            return;
+        }
+
+        // Genera los dígitos del código como una lista de caracteres.
+        char[] codeDigits = code.ToCharArray();
+
+        // Crea la lista para el input, reemplazando con '_' donde están los libros.
         List<char> inputCode = new List<char>(codeDigits);
 
-        // Lista de índices asignados a los libros
+        // Lista de índices asignados a los libros.
         List<int> assignedIndexes = new List<int>();
 
-        // Asignamos los números de los libros a las posiciones correspondientes
+        // Asigna los números a los libros.
         for (int i = 0; i < predefinedBooks.Count; i++)
         {
             if (i < codeDigits.Length && predefinedBooks[i] != null)
             {
-                predefinedBooks[i].SetActive(true); // Activamos el libro si está desactivado
+                predefinedBooks[i].SetActive(true); // Activa el libro si está desactivado.
 
                 GO_InteractableBook bookScript = predefinedBooks[i].GetComponent<GO_InteractableBook>();
                 if (bookScript != null)
                 {
-                    // Asigna el número del libro basado en la posición del código
                     bookScript.SetNumber(codeDigits[i].ToString(), i, positionColors[i]);
-                    assignedIndexes.Add(i); // Guardamos el índice asignado
+                    assignedIndexes.Add(i); // Guarda el índice asignado.
                 }
                 else
                 {
-                    Debug.LogError($"El libro {predefinedBooks[i].name} no tiene asignado un script GO_InteractableBook.");
+                    Debug.LogError($"El libro {predefinedBooks[i].name} no tiene un script GO_InteractableBook.");
                 }
             }
         }
 
-        // Generar el código visible para el input
+        // Genera el código visible para el input.
         for (int i = 0; i < inputCode.Count; i++)
         {
-            // Si el índice está asignado a un libro, reemplazamos con '_'
             if (assignedIndexes.Contains(i))
             {
                 inputCode[i] = '_';
             }
         }
 
-        // Convertimos la lista de caracteres en una cadena para mostrar en el input
+        // Convierte la lista de caracteres en una cadena para mostrar.
         displayedCode = new string(inputCode.ToArray());
+        Debug.Log($"Código distribuido para el nivel {levelIndex}: {displayedCode}");
     }
-
 
     public bool ValidateCode(string userInput)
     {
-        // Valida si el código ingresado por el usuario coincide con el generado.
-        return userInput == generatedCode;
+        // Obtén el índice del nivel actual.
+        int currentLevelIndex = GetCurrentLevelIndex();
+        Debug.Log("CONTRASAEÑA" + generatedCodes[currentLevelIndex]);
+        Debug.Log("CURRENT LEVEL" + currentLevelIndex);
+        Debug.Log("USERINPUT" + userInput);
+        // Valida si el código ingresado coincide con el generado para el nivel actual.
+        bool isOk = userInput.Trim() == generatedCodes[currentLevelIndex].ToString().Trim();
+        Debug.Log(isOk);
+        return isOk;
     }
 }
