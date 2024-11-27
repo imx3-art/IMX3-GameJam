@@ -150,6 +150,7 @@ public class GO_State_PickUpArm : GO_State
         Transform playerTransform;
         if (enemy.visionController.SeeThePlayer(out playerTransform))
         {
+            patrollingEnemy.PlaySoundAlert();
             stateMachine.ActivateState(patrollingEnemy.persecutionState);
         }
         else

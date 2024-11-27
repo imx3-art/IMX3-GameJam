@@ -38,6 +38,7 @@ public class GO_State_Patrol : GO_State
             {
                 // Cambiar al estado de persecución si el jugador no está en duelo
                 enemy.navMeshController.followObjective = playerTransform;
+                patrollingEnemy.PlaySoundAlert();
                 stateMachine.ActivateState(patrollingEnemy.persecutionState);
                 return;
             }

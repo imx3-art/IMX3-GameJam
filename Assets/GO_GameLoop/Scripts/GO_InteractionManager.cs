@@ -20,11 +20,11 @@ public class GO_InteractionManager : MonoBehaviour
         inputsPlayer = GetComponentInParent<GO_InputsPlayer>();
         if (inputsPlayer == null)
         {
-            Debug.LogError("No se encontró GO_InputsPlayer en el jugador. Asegúrate de que esté configurado.");
+            Debug.LogError("No se encontrÃ³ GO_InputsPlayer en el jugador. AsegÃºrate de que estÃ© configurado.");
             return;
         }
 
-        // Suscribirse al evento de interacción.
+        // Suscribirse al evento de interacciÃ³n.
         inputsPlayer.onInteract += HandleInteract;
     }
 
@@ -39,7 +39,7 @@ public class GO_InteractionManager : MonoBehaviour
 
     private void HandleInteract()
     {
-        // Solo ejecuta la interacción si hay algo con lo que interactuar.
+        // Solo ejecuta la interacciÃ³n si hay algo con lo que interactuar.
         if (currentInteractable != null)
         {
             currentInteractable.Interact();
@@ -48,8 +48,8 @@ public class GO_InteractionManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Verifica si el objeto tiene un área de interacción y es interactuable.
-        if (other.CompareTag("InteractionArea")) // Asegúrate de usar este tag para las áreas de interacción.
+        // Verifica si el objeto tiene un Ã¡rea de interacciÃ³n y es interactuable.
+        if (other.CompareTag("InteractionArea")) // AsegÃºrate de usar este tag para las Ã¡reas de interacciÃ³n.
         {
             GO_IInteractable interactable = other.GetComponentInParent<GO_IInteractable>();
             if (interactable != null)
@@ -73,7 +73,7 @@ public class GO_InteractionManager : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        // Si el jugador sale del área de interacción, limpia la referencia.
+        // Si el jugador sale del Ã¡rea de interacciÃ³n, limpia la referencia.
         if (other.CompareTag("InteractionArea"))
         {
             if (currentInteractable != null)
@@ -101,8 +101,8 @@ public class GO_InteractionManager : MonoBehaviour
 
     private void ShowVisualHint(GO_IInteractable interactable)
     {
-        // Si el interactable tiene una ayuda visual asociada, actívala.
-        currentVisualHint = interactable.GetVisualHint(); // Método en el interactuable.
+        // Si el interactable tiene una ayuda visual asociada, actÃ­vala.
+        currentVisualHint = interactable.GetVisualHint(); // MÃ©todo en el interactuable.
         if (currentVisualHint != null)
         {
             currentVisualHint.SetActive(true);

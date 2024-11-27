@@ -255,6 +255,11 @@ MonoBehaviour:
   maxOffsetY: 0.2
   smoothTime: 3
   grabDistance: 1
+  cameraVisionDistance: 60
+  normalCameraDistance: 40
+  persecutionCameraDistance: 50
+  cameraTransitionSpeed: 5
+  rotationSpeed: 100
 --- !u!114 &7257542392921084583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,7 +285,9 @@ MonoBehaviour:
   pull: 0
   interact: 0
   grabDropItem: 0
+  shared: 0
   nextLevel: 0
+  cameraVision: 0
 --- !u!114 &8263603786362908439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,7 +461,7 @@ MonoBehaviour:
   TotalWords: 4
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 0000000084ca1cc0f9c6230b1c6a54339e2518b671a7e1076b36dbedb1afdc305a6c54cd3459a8af6603d7867eafb469
+  StateHashes: 0000000084ca1cc0f9c6230b1c6a54339e2518b671a7e1076b36dbedb1afdc305a6c54cd3459a8af6603d7862b1a167c794069557eafb469
   TriggerHashes: 00000000
 --- !u!54 &5659773718839666751
 Rigidbody:

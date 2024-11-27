@@ -10,11 +10,11 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
     [SerializeField] private string TextLore;
     [SerializeField] private GameObject visualHint;
 
-    private string number; // Número del libro.
-    private int positionInCode; // Posición del número en el código.
-    private Color positionColor; // Color asociado a esta posición.
+    private string number; // Nï¿½mero del libro.
+    private int positionInCode; // Posiciï¿½n del nï¿½mero en el cï¿½digo.
+    private Color positionColor; // Color asociado a esta posiciï¿½n.
 
-    // Método para asignar el número al libro desde el CodeManager.
+    // Mï¿½todo para asignar el nï¿½mero al libro desde el CodeManager.
     public void SetNumber(string newNumber, int position, Color color)
     {
         number = newNumber;
@@ -32,7 +32,7 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
             inputsPlayer = FindObjectOfType<GO_InputsPlayer>();
             if (inputsPlayer == null)
             {
-                Debug.LogError("No se encontró GO_InputsPlayer. Asegúrate de que el jugador esté en la escena.");
+                Debug.LogError("No se encontrï¿½ GO_InputsPlayer. Asegï¿½rate de que el jugador estï¿½ en la escena.");
             }
         }
         if (uiplayer == null)
@@ -40,7 +40,7 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
             uiplayer = FindObjectOfType<GO_PlayerUIManager>();
             if (uiplayer == null)
             {
-                Debug.LogError("No se encontró GO_InputsPlayer. Asegúrate de que el jugador esté en la escena.");
+                Debug.LogError("No se encontrï¿½ GO_InputsPlayer. Asegï¿½rate de que el jugador estï¿½ en la escena.");
             }
         }
     }
@@ -52,11 +52,13 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
             GO_InputsPlayer.IsPause = true;
             inputsPlayer.SetCursorState(false);
             visualHint.SetActive(false);
+            playInteractSound();
             GO_UIManager.Instance.ShowBookNumber(number, positionColor, TextLore);
             uiplayer.AddBookNumber(number, positionColor);
             
         }else
         {
+            playInteractSound();
             GO_UIManager.Instance.HideBookPanel();
             GO_InputsPlayer.IsPause = false;
             visualHint.SetActive(true);
@@ -68,5 +70,13 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
     public GameObject GetVisualHint()
     {
         return visualHint;
+    }
+    
+    public void playInteractSound()
+    {
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayUISound("GO_Interacts_Sound");
+        }
     }
 }

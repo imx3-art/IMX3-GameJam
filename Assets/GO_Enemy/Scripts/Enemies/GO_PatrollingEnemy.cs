@@ -69,6 +69,14 @@ public class GO_PatrollingEnemy : GO_Enemy
         Debug.Log("waypoints inicializados");
         initializedWaypoints = true;
     }
+
+    public void PlaySoundAlert()
+    {
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayUISound("GO_Human_Warning");
+        }
+    }
     
     
 }

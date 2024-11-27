@@ -13,15 +13,15 @@ public class GO_UIManager : MonoBehaviour
     public GameObject bookPanel; // Panel de los libritos.
 
     [Header("Text Elements")]
-    public TMP_Text bookText; // Texto para mostrar el número del librito.
-    public TMP_Text inputField; // Campo de texto para ingresar el código.
+    public TMP_Text bookText; // Texto para mostrar el nÃºmero del librito.
+    public TMP_Text inputField; // Campo de texto para ingresar el cÃ³digo.
 
-    [SerializeField] private TMP_Text LoreText; // Texto que se mostrará en el libro.
+    [SerializeField] private TMP_Text LoreText; // Texto que se mostrarÃ¡ en el libro.
 
     [Header("UI Colors")]
-    public Color defaultColor = Color.gray; // Color para los números.
-    public Color deleteColor = Color.red;  // Color del botón de borrar.
-    public Color submitColor = Color.green; // Color del botón de enviar.
+    public Color defaultColor = Color.gray; // Color para los nÃºmeros.
+    public Color deleteColor = Color.red;  // Color del botÃ³n de borrar.
+    public Color submitColor = Color.green; // Color del botÃ³n de enviar.
 
     [Header("Door Animation")]
     [SerializeField] private GameObject doorLeft;
@@ -47,7 +47,7 @@ public class GO_UIManager : MonoBehaviour
         
     }
 
-    // Muestra el panel para ingresar el código de la puerta.
+    // Muestra el panel para ingresar el cÃ³digo de la puerta.
     public void ShowCodePanel()
     {
         // Inicializar el array del input con los valores mostrados en displayedCode.
@@ -72,20 +72,24 @@ public class GO_UIManager : MonoBehaviour
         bookPanel.SetActive(true);
     }
 
-    // Oculta el panel de información del librito.
+    // Oculta el panel de informaciÃ³n del librito.
     public void HideBookPanel()
     {
         bookPanel.SetActive(false);
     }
 
-    // Añade un número al campo de texto desde la UI.
+    // AÃ±ade un nÃºmero al campo de texto desde la UI.
     public void AddNumberToInput(string number)
     {
         for (int i = 0; i < userInput.Length; i++)
         {
-            // Encuentra la primera posición vacía ('_') y reemplázala con el número.
+            // Encuentra la primera posiciÃ³n vacÃ­a ('_') y reemplÃ¡zala con el nÃºmero.
             if (userInput[i] == '_')
             {
+                if (GO_AudioManager.Instance != null)
+                {
+                    GO_AudioManager.Instance.PlayUISound("GO_Numbers_Panel");
+                }
                 userInput[i] = number[0];
                 UpdateInputField();
                 return;
@@ -96,7 +100,7 @@ public class GO_UIManager : MonoBehaviour
     // Limpia el campo de texto.
     public void ClearInput()
     {
-        // Resetea las posiciones que no tienen número predefinido a '_'.
+        // Resetea las posiciones que no tienen nÃºmero predefinido a '_'.
         for (int i = 0; i < userInput.Length; i++)
         {
             if (GO_CodeManager.displayedCode[i] == '_')
@@ -104,17 +108,21 @@ public class GO_UIManager : MonoBehaviour
                 userInput[i] = '_';
             }
         }
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayUISound("GO_Clean_Password");
+        }
         UpdateInputField();
     }
 
-    // Valida el código ingresado.
+    // Valida el cÃ³digo ingresado.
     public void SubmitCode()
     {
         string finalInput = new string(userInput);
 
         if (finalInput.Contains("_"))
         {
-            Debug.Log("Debe completar el código antes de enviarlo.");
+            Debug.Log("Debe completar el cÃ³digo antes de enviarlo.");
             return;
         }
 
@@ -123,13 +131,17 @@ public class GO_UIManager : MonoBehaviour
 
         if (codeManager == null)
         {
-            Debug.LogError("No se encontró un GO_CodeManager en esta escena.");
+            Debug.LogError("No se encontrÃ³ un GO_CodeManager en esta escena.");
             return;
         }
 
         if (codeManager.ValidateCode(finalInput))
         {
-            Debug.Log("¡Código correcto! Abriendo la puerta...");
+            if (GO_AudioManager.Instance != null)
+            {
+                GO_AudioManager.Instance.PlayUISound("GO_Correct_Password");
+            }
+            Debug.Log("Â¡CÃ³digo correcto! Abriendo la puerta...");
             GO_InputsPlayer.IsPause = false;
             uiplayer = FindObjectOfType<GO_PlayerUIManager>();
             HideCodePanel();
@@ -138,7 +150,11 @@ public class GO_UIManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Código incorrecto.");
+            if (GO_AudioManager.Instance != null)
+            {
+                GO_AudioManager.Instance.PlayUISound("GO_Wrong_Password");
+            }
+            Debug.Log("CÃ³digo incorrecto.");
         }
     }
 
@@ -146,6 +162,11 @@ public class GO_UIManager : MonoBehaviour
     private IEnumerator OpenDoor()
     {
         Debug.Log("Abriendo puerta");
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayUISound("GO_Open_Door_Lab");
+        }
+        
         Vector3 leftStartPosition = doorLeft.transform.position;
         Vector3 rightStartPosition = doorRight.transform.position;
 
@@ -165,11 +186,11 @@ public class GO_UIManager : MonoBehaviour
             yield return null;
         }
 
-        // Asegúrate de que las puertas terminen exactamente en sus posiciones finales.
+        // AsegÃºrate de que las puertas terminen exactamente en sus posiciones finales.
         doorLeft.transform.position = leftEndPosition;
         doorRight.transform.position = rightEndPosition;
 
-        Debug.Log("¡Puerta abierta!");
+        Debug.Log("Â¡Puerta abierta!");
     }
 
     // Actualiza el campo de entrada visualmente.
@@ -180,7 +201,7 @@ public class GO_UIManager : MonoBehaviour
         // Cambia el color del texto dependiendo de la longitud ingresada.
         if (!new string(userInput).Contains("_"))
         {
-            inputField.color = submitColor; // Verde cuando está listo para enviar.
+            inputField.color = submitColor; // Verde cuando estÃ¡ listo para enviar.
         }
         else
         {

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2361859797500415551}
   - component: {fileID: 1016971375230835620}
   m_Layer: 0
-  m_Name: NormalStateSound
+  m_Name: GO_Numbers_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd74fb3245af1404bb3fb343c51226d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: NormalStateSound
-  clip: {fileID: 8300000, guid: dacd64f56d26bdb49a06ce92161702de, type: 3}
-  loop: 1
-  volume: 0.03
+  name: GO_Numbers_Panel
+  clip: {fileID: 8300000, guid: 5ced265a2eba60444a1a27c8776fccdf, type: 3}
+  loop: 0
+  volume: 0.077
   source: {fileID: 0}

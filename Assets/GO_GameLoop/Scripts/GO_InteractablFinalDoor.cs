@@ -16,7 +16,7 @@ public class GO_InteractablFinalDoor :MonoBehaviour, GO_IInteractable
             inputsPlayer = FindObjectOfType<GO_InputsPlayer>();
             if (inputsPlayer == null)
             {
-                Debug.LogError("No se encontró GO_InputsPlayer. Asegúrate de que el jugador esté en la escena.");
+                Debug.LogError("No se encontrï¿½ GO_InputsPlayer. Asegï¿½rate de que el jugador estï¿½ en la escena.");
             }
         }
     }
@@ -28,10 +28,12 @@ public class GO_InteractablFinalDoor :MonoBehaviour, GO_IInteractable
             GO_InputsPlayer.IsPause = true;
             inputsPlayer.SetCursorState(false);
             visualHint.SetActive(false);
+            playInteractSound();
             GO_UIManager.Instance.ShowCodePanel();
         }
         else
         {
+            playInteractSound();
             GO_UIManager.Instance.HideCodePanel();
             GO_InputsPlayer.IsPause = false;
             visualHint.SetActive(true);
@@ -41,6 +43,14 @@ public class GO_InteractablFinalDoor :MonoBehaviour, GO_IInteractable
     public GameObject GetVisualHint()
     {
         return visualHint;
+    }
+
+    public void playInteractSound()
+    {
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayUISound("GO_Interacts_Sound");
+        }
     }
 
 }
