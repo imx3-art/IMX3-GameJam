@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Fusion;
 using UnityEngine;
@@ -15,7 +16,18 @@ public class GO_PatrollingEnemy : GO_Enemy
 
     [Networked, Capacity(MaxWaypoints)]
     public NetworkArray<Vector3> WaypointsPositions { get; }
-    
+
+    public GO_State_Patrol patrolState;
+    public GO_State_Persecution persecutionState;
+    public GO_State_PickUpArm pickupState;
+
+
+    private void Awake()
+    {
+        patrolState = GetComponent<GO_State_Patrol>();
+        persecutionState = GetComponent<GO_State_Persecution>();
+        pickupState = GetComponent<GO_State_PickUpArm>();
+    }
 
     protected override void Start()
     {
@@ -27,7 +39,6 @@ public class GO_PatrollingEnemy : GO_Enemy
 
     private IEnumerator ActivatePatrolWhenReady()
     {
-        GO_State_Patrol patrolState = GetComponent<GO_State_Patrol>();
 
         // Esperar hasta que los waypoints estén inicializados
         while (!initializedWaypoints)

@@ -11,10 +11,12 @@ public class GO_State_PickUpArm : GO_State
 
     private Transform armTransform;
     private bool _processStarted = false; 
+    private GO_PatrollingEnemy patrollingEnemy;
 
     protected override void Awake()
     {
         base.Awake();
+        patrollingEnemy = enemy.GetComponent<GO_PatrollingEnemy>();
     }
 
     private void OnEnable()
@@ -136,23 +138,23 @@ public class GO_State_PickUpArm : GO_State
     /// </summary>
     private void SetStateAfterProcess()
     {
+        _processStarted = false; 
         Transform newArmTransform;
         if (enemy.visionController.SeeTheArm(out newArmTransform) && !enemy.hasArm)
         {
-            GO_State_PickUpArm pickUpArmState = GetComponent<GO_State_PickUpArm>();
-            pickUpArmState.SetArmTransform(newArmTransform);
-            stateMachine.ActivateState(pickUpArmState);
+            patrollingEnemy.pickupState.SetArmTransform(newArmTransform);
+            stateMachine.ActivateState(patrollingEnemy.pickupState);
             return;
         }
 
         Transform playerTransform;
         if (enemy.visionController.SeeThePlayer(out playerTransform))
         {
-            stateMachine.ActivateState(GetComponent<GO_State_Persecution>());
+            stateMachine.ActivateState(patrollingEnemy.persecutionState);
         }
         else
         {
-            stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
+            stateMachine.ActivateState(patrollingEnemy.patrolState);
         }
     }
 }

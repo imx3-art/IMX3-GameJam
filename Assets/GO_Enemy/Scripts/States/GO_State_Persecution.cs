@@ -7,14 +7,14 @@ using UnityEngine;
 public class GO_State_Persecution : GO_State
 {
     
-    private float timeSincePlayerLost = 0f; // tiempo desde que el enemigo dejó de ver al jugador
+    private float timeSincePlayerLost = 0f; 
     [SerializeField]
     private float persecutionDuration = 6f;
     
     [SerializeField]
     private float attackDistance = 0.5f;
+    private GO_PatrollingEnemy patrollingEnemy;
 
-    // Tiempo de espera entre ataques para evitar múltiples ataques rápidos
     [SerializeField]
     private float attackCooldown = 1f;
     private bool canAttack = true;
@@ -26,6 +26,7 @@ public class GO_State_Persecution : GO_State
     protected override void Awake()
     {
         base.Awake();
+        patrollingEnemy = enemy.GetComponent<GO_PatrollingEnemy>();
     }
     
     private void OnEnable()
@@ -40,10 +41,18 @@ public class GO_State_Persecution : GO_State
         Transform armTransform;
         if (!enemy.hasArm && enemy.visionController.SeeTheArm(out armTransform))
         {
+            if (currentTarget != null)
+            {
+                GO_PlayerNetworkManager player = currentTarget.GetComponentInParent<GO_PlayerNetworkManager>();
+                if (player != null && player.CurrentPlayerState == PlayerState.Persecution)
+                {
+                    player.ChangePlayerState(PlayerState.Normal);
+                }
+            }
+            
             // Si ve un brazo y no tiene uno, cambiar al estado de recogerlo
-            GO_State_PickUpArm pickUpArmState = GetComponent<GO_State_PickUpArm>();
-            pickUpArmState.SetArmTransform(armTransform);
-            stateMachine.ActivateState(pickUpArmState);
+            patrollingEnemy.pickupState.SetArmTransform(armTransform);
+            stateMachine.ActivateState(patrollingEnemy.pickupState);
             return;
         }
 
@@ -111,7 +120,7 @@ public class GO_State_Persecution : GO_State
 
                 currentTarget = null;
                 enemy.navMeshController.followObjective = null;
-                stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
+                stateMachine.ActivateState(patrollingEnemy.patrolState);
                 return;
             }
 
@@ -123,7 +132,7 @@ public class GO_State_Persecution : GO_State
             else
             {
                 currentTarget = null;
-                stateMachine.ActivateState(GetComponent<GO_State_Patrol>());
+                stateMachine.ActivateState(patrollingEnemy.patrolState);
             }
         }
     }
@@ -158,14 +167,13 @@ public class GO_State_Persecution : GO_State
                 Debug.Log($"IA atacó al jugador");
             }
             
-            GO_State_Patrol patrolState = GetComponent<GO_State_Patrol>();
-            if (patrolState != null)
+            if (patrollingEnemy.patrolState != null)
             {
                 if (player != null && player.CurrentPlayerState == PlayerState.Persecution)
                 {
                     player.ChangePlayerState(PlayerState.Normal);
                 }
-                stateMachine.ActivateState(patrolState);
+                stateMachine.ActivateState(patrollingEnemy.patrolState);
             }
             else
             {

@@ -24,9 +24,8 @@ public class GO_State_Patrol : GO_State
         if (!enemy.hasArm && enemy.visionController.SeeTheArm(out armTransform))
         {
             // Si ve un brazo, cambiar al estado de recogerlo
-            GO_State_PickUpArm pickUpArmState = GetComponent<GO_State_PickUpArm>();
-            pickUpArmState.SetArmTransform(armTransform);
-            stateMachine.ActivateState(pickUpArmState);
+            patrollingEnemy.pickupState.SetArmTransform(armTransform);
+            stateMachine.ActivateState(patrollingEnemy.pickupState);
             return;
         }
 
@@ -39,7 +38,7 @@ public class GO_State_Patrol : GO_State
             {
                 // Cambiar al estado de persecución si el jugador no está en duelo
                 enemy.navMeshController.followObjective = playerTransform;
-                stateMachine.ActivateState(GetComponent<GO_State_Persecution>());
+                stateMachine.ActivateState(patrollingEnemy.persecutionState);
                 return;
             }
         }
