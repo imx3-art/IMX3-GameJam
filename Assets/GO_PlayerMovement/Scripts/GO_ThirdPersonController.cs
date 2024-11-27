@@ -423,12 +423,12 @@ namespace StarterAssets
                         Debug.Log("Agarrando objeto: " + grabbedObjectRb.name);
 
                         // Ajustar parámetros adicionales del joint
-                        joint.breakForce = 500f; // Ajusta según necesidad
-                        joint.breakTorque = 500f; // Ajusta según necesidad
+                        joint.breakForce = 100f; // Ajusta según necesidad
+                        joint.breakTorque = 100f; // Ajusta según necesidad
                         joint.enableCollision = true; // Permitir colisiones entre los cuerpos conectados
                                                       // Obtener los límites del objeto si existen
 
-                        joint.massScale = 1000; //Ajusta la tension
+                        joint.massScale = 10; //Ajusta la tension
                         _grabLimits = hit.collider.GetComponent<GO_GrabLimits>();
 
                     }
@@ -488,7 +488,7 @@ namespace StarterAssets
         
         private void HandleStaminaAndSpeed()
         {
-            Debug.Log("handle stamina");
+            //Debug.Log("handle stamina");
             if (GO_PlayerNetworkManager.localPlayer == null)
                 return;
 
