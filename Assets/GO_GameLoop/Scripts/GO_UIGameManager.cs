@@ -31,6 +31,7 @@ public class GO_UIManager : MonoBehaviour
     public float doorMoveSpeed = 2f; // Velocidad de apertura.
 
     private char[] userInput; // Array para manejar el input del usuario.
+    private float delayBeforeClosing = 1f;
 
 
     private void Awake()
@@ -43,7 +44,7 @@ public class GO_UIManager : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     // Muestra el panel para ingresar el código de la puerta.
@@ -146,7 +147,8 @@ public class GO_UIManager : MonoBehaviour
             Debug.Log("¡Código correcto! Abriendo la puerta...");
             GO_InputsPlayer.IsPause = false;
             HideCodePanel();
-            StartCoroutine(OpenDoor());
+            //StartCoroutine(OpenDoor());
+            GO_LevelManager.instance.RPC_OpenFinalDoor();
         }
         else
         {
@@ -159,18 +161,17 @@ public class GO_UIManager : MonoBehaviour
     }
 
 
-    private IEnumerator OpenDoor()
+    public IEnumerator OpenDoor()
     {
         Debug.Log("Abriendo puerta");
         if (GO_AudioManager.Instance != null)
         {
             GO_AudioManager.Instance.PlayUISound("GO_Open_Door_Lab");
         }
-        
+
         Vector3 leftStartPosition = doorLeft.transform.position;
         Vector3 rightStartPosition = doorRight.transform.position;
 
-        // Calcula las posiciones finales.
         Vector3 leftEndPosition = leftStartPosition + Vector3.left * doorMoveDistance;
         Vector3 rightEndPosition = rightStartPosition + Vector3.right * doorMoveDistance;
 
@@ -178,7 +179,6 @@ public class GO_UIManager : MonoBehaviour
 
         while (elapsedTime < doorMoveDistance / doorMoveSpeed)
         {
-            // Mueve las puertas hacia sus posiciones finales.
             doorLeft.transform.position = Vector3.Lerp(leftStartPosition, leftEndPosition, elapsedTime * doorMoveSpeed / doorMoveDistance);
             doorRight.transform.position = Vector3.Lerp(rightStartPosition, rightEndPosition, elapsedTime * doorMoveSpeed / doorMoveDistance);
 
@@ -186,11 +186,45 @@ public class GO_UIManager : MonoBehaviour
             yield return null;
         }
 
-        // Asegúrate de que las puertas terminen exactamente en sus posiciones finales.
         doorLeft.transform.position = leftEndPosition;
         doorRight.transform.position = rightEndPosition;
 
         Debug.Log("¡Puerta abierta!");
+
+        // Espera antes de cerrar la puerta
+        yield return new WaitForSeconds(delayBeforeClosing);
+
+        // Inicia la corrutina para cerrar la puerta
+        StartCoroutine(CloseDoor(leftStartPosition, rightStartPosition));
+    }
+
+    public IEnumerator CloseDoor(Vector3 leftStartPosition, Vector3 rightStartPosition)
+    {
+        Debug.Log("Cerrando puerta");
+
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayUISound("GO_Close_Door_Lab");
+        }
+
+        Vector3 leftEndPosition = doorLeft.transform.position;
+        Vector3 rightEndPosition = doorRight.transform.position;
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < doorMoveDistance / doorMoveSpeed)
+        {
+            doorLeft.transform.position = Vector3.Lerp(leftEndPosition, leftStartPosition, elapsedTime * doorMoveSpeed / doorMoveDistance);
+            doorRight.transform.position = Vector3.Lerp(rightEndPosition, rightStartPosition, elapsedTime * doorMoveSpeed / doorMoveDistance);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        doorLeft.transform.position = leftStartPosition;
+        doorRight.transform.position = rightStartPosition;
+
+        Debug.Log("¡Puerta cerrada!");
     }
 
     // Actualiza el campo de entrada visualmente.

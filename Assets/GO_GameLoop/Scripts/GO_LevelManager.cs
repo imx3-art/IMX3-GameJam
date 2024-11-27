@@ -525,4 +525,11 @@ public class GO_LevelManager : NetworkBehaviour
 
     }
 
+    [Rpc(RpcSources.All, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_OpenFinalDoor()
+    {
+        StartCoroutine(GO_UIManager.Instance.OpenDoor());
+    }
+
 }
+ 
