@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GO_CooperativeDoor : MonoBehaviour
@@ -11,56 +12,90 @@ public class GO_CooperativeDoor : MonoBehaviour
     [Tooltip("Tiempo de delay antes de cerrar la puerta.")]
     [SerializeField] private float closeDelay = 3f;
 
-    [Header("Tags válidos")]
-    [Tooltip("Tag para identificar jugadores.")]
-    [SerializeField] private string playerTag = "Player";
-    [Tooltip("Tag para identificar objetos agarrables.")]
-    [SerializeField] private string grabbableTag = "Grabbable";
+    [Header("GameObject de la puerta")]
+    [Tooltip("El GameObject de la puerta que se moverá.")]
+    [SerializeField] private GameObject doorObject; // Referencia al GameObject de la puerta a mover
 
     private Vector3 startPosition;
     private Vector3 endPosition;
     private bool isOpen = false;
     private bool isMoving = false;
+    private bool isClosingPending = false; // Bandera para saber si el cierre está pendiente
 
-    private int objectsInArea = 0; // Contador de jugadores y objetos dentro del área
+    [SerializeField] private bool MoveLeftUp;
+    [SerializeField] private bool Horizontal;
+
+    private HashSet<Rigidbody> objectsInArea = new HashSet<Rigidbody>(); // Rastrea los rigidbodies únicos dentro del área
 
     private void Start()
     {
-        startPosition = transform.position;
-        endPosition = startPosition + Vector3.up * doorMoveDistance; // Mueve hacia arriba por defecto
+        // Aseguramos que el objeto puerta esté asignado
+        if (doorObject == null)
+        {
+            doorObject = gameObject; // Si no se asignó, el propio objeto del script será el que se mueva
+        }
+
+        startPosition = doorObject.transform.position;
+
+        if (Horizontal)
+        {
+            endPosition = MoveLeftUp
+                ? startPosition + Vector3.left * doorMoveDistance
+                : startPosition + Vector3.right * doorMoveDistance;
+        }
+        else
+        {
+            endPosition = MoveLeftUp
+                ? startPosition + Vector3.forward * doorMoveDistance
+                : startPosition + Vector3.back * doorMoveDistance;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Verifica si el objeto tiene un tag válido
-        if (other.CompareTag(playerTag) || other.CompareTag(grabbableTag))
+        // Verificamos si el objeto que entra en el área es válido
+        Rigidbody rb = other.attachedRigidbody;
+        if (IsValidObject(other) && rb != null && !objectsInArea.Contains(rb))
         {
-            objectsInArea++;
-            Debug.Log($"Objetos en el área: {objectsInArea}");
+            objectsInArea.Add(rb);
+            Debug.Log($"Objeto agregado: {other.name}. Total en el área: {objectsInArea.Count}");
             CheckDoorState();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // Verifica si el objeto tiene un tag válido
-        if (other.CompareTag(playerTag) || other.CompareTag(grabbableTag))
+        // Verificamos si el objeto que sale es válido y lo eliminamos de la lista
+        Rigidbody rb = other.attachedRigidbody;
+        if (IsValidObject(other) && rb != null && objectsInArea.Contains(rb))
         {
-            objectsInArea = Mathf.Max(0, objectsInArea - 1); // Asegura que no sea negativo
-            Debug.Log($"Objetos en el área: {objectsInArea}");
+            objectsInArea.Remove(rb);
+            Debug.Log($"Objeto removido: {other.name}. Total en el área: {objectsInArea.Count}");
             CheckDoorState();
         }
     }
 
+    private bool IsValidObject(Collider other)
+    {
+        return other.CompareTag("Player") || other.CompareTag("GrabbableObject");
+    }
+
     private void CheckDoorState()
     {
-        if (objectsInArea >= 2 && !isOpen)
+        Debug.Log($"CheckDoorState: Objetos en el área: {objectsInArea.Count}, isOpen: {isOpen}");
+
+        if (objectsInArea.Count >= 2 && !isOpen)
         {
             OpenCooperativeDoor();
         }
-        else if (objectsInArea < 2 && isOpen)
+        else if (objectsInArea.Count < 2 && isOpen)
         {
-            Invoke(nameof(CloseCooperativeDoor), closeDelay);
+            if (!isClosingPending)
+            {
+                isClosingPending = true; // Marca que el cierre está pendiente
+                CancelInvoke(nameof(CloseCooperativeDoor)); // Cancela cierres pendientes
+                Invoke(nameof(CloseCooperativeDoor), closeDelay); // Inicia el cierre después de un retraso
+            }
         }
     }
 
@@ -68,6 +103,7 @@ public class GO_CooperativeDoor : MonoBehaviour
     {
         if (!isOpen && !isMoving)
         {
+            Debug.Log("Abriendo puerta...");
             StartCoroutine(MoveDoor(startPosition, endPosition, true));
         }
     }
@@ -76,6 +112,7 @@ public class GO_CooperativeDoor : MonoBehaviour
     {
         if (isOpen && !isMoving)
         {
+            Debug.Log("Cerrando puerta...");
             StartCoroutine(MoveDoor(endPosition, startPosition, false));
         }
     }
@@ -87,15 +124,20 @@ public class GO_CooperativeDoor : MonoBehaviour
 
         while (elapsedTime < doorMoveDistance / doorMoveSpeed)
         {
-            transform.position = Vector3.Lerp(from, to, elapsedTime * doorMoveSpeed / doorMoveDistance);
+            doorObject.transform.position = Vector3.Lerp(from, to, elapsedTime * doorMoveSpeed / doorMoveDistance);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        transform.position = to;
+        doorObject.transform.position = to;
         isOpen = opening;
         isMoving = false;
 
-        Debug.Log(opening ? "¡Puerta abierta!" : "¡Puerta cerrada!");
+        Debug.Log(opening ? "Puerta abierta" : "Puerta cerrada");
+
+        if (!isOpen) // Si la puerta está cerrada, no está pendiente el cierre
+        {
+            isClosingPending = false;
+        }
     }
 }
