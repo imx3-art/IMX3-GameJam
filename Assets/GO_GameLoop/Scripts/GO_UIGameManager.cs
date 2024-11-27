@@ -31,7 +31,6 @@ public class GO_UIManager : MonoBehaviour
     public float doorMoveSpeed = 2f; // Velocidad de apertura.
 
     private char[] userInput; // Array para manejar el input del usuario.
-    private GO_PlayerUIManager uiplayer;
 
 
     private void Awake()
@@ -100,19 +99,22 @@ public class GO_UIManager : MonoBehaviour
     // Limpia el campo de texto.
     public void ClearInput()
     {
-        // Resetea las posiciones que no tienen número predefinido a '_'.
-        for (int i = 0; i < userInput.Length; i++)
+        if (userInput != null)
         {
-            if (GO_CodeManager.displayedCode[i] == '_')
+            // Resetea las posiciones que no tienen número predefinido a '_'.
+            for (int i = 0; i < userInput.Length; i++)
             {
-                userInput[i] = '_';
+                if (GO_CodeManager.displayedCode[i] == '_')
+                {
+                    userInput[i] = '_';
+                }
             }
+            if (GO_AudioManager.Instance != null)
+            {
+                GO_AudioManager.Instance.PlayUISound("GO_Clean_Password");
+            }
+            UpdateInputField();
         }
-        if (GO_AudioManager.Instance != null)
-        {
-            GO_AudioManager.Instance.PlayUISound("GO_Clean_Password");
-        }
-        UpdateInputField();
     }
 
     // Valida el código ingresado.
@@ -143,9 +145,7 @@ public class GO_UIManager : MonoBehaviour
             }
             Debug.Log("¡Código correcto! Abriendo la puerta...");
             GO_InputsPlayer.IsPause = false;
-            uiplayer = FindObjectOfType<GO_PlayerUIManager>();
             HideCodePanel();
-            uiplayer.RemoveBooksNumber();
             StartCoroutine(OpenDoor());
         }
         else

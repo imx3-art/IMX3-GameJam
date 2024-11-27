@@ -43,6 +43,8 @@ public class GO_LevelManager : NetworkBehaviour
     //private GameObject _playerInstance;
     public GO_PlayerNetworkManager _playerInstance;
 
+    private GO_PlayerUIManager uiplayer;
+
     private GameObject _playerPrefab;
 
     [SerializeField] private Level _currentLevel;
@@ -162,7 +164,8 @@ public class GO_LevelManager : NetworkBehaviour
         {
             //Muestra pantalla de Carga
             GO_LoadScene.Instance.ShowLoadingScreen();
-
+            uiplayer  = _playerInstance.transform.GetChild(2).GetComponent<GO_PlayerUIManager>();
+            uiplayer.RemoveBooksNumber();
             CurrentPlayerRefChangeScene = Runner.LocalPlayer;
 
 

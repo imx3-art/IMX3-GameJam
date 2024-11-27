@@ -118,7 +118,7 @@ public class GO_CodeManager : NetworkBehaviour
         Debug.Log("CURRENT LEVEL" + currentLevelIndex);
         Debug.Log("USERINPUT" + userInput);
         // Valida si el código ingresado coincide con el generado para el nivel actual.
-        bool isOk = userInput.Trim() == generatedCodes[currentLevelIndex].ToString().Trim();
+        bool isOk = userInput == generatedCodes[currentLevelIndex];
         Debug.Log(isOk);
         return isOk;
     }
