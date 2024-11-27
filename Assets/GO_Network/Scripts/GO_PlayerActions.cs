@@ -65,7 +65,7 @@ public class GO_PlayerActions : MonoBehaviour
                 if (otherPlayerNetworkManager == null)
                 {
                     otherPlayerNetworkManager = hitInfo.collider.gameObject.GetComponentInParent<GO_PlayerNetworkManager>();
-                    if(otherPlayerNetworkManager.actionPlayer.ReadyForMiniGame() == 0)
+                    if(otherPlayerNetworkManager.actionPlayer.ReadyForMiniGame() == 0 || otherPlayerNetworkManager.isDrag != 0)
                     {
                         otherPlayerNetworkManager = null;
                         return;
@@ -81,7 +81,7 @@ public class GO_PlayerActions : MonoBehaviour
                 _target = null;
                 otherPlayerNetworkManager = null;
                 _inputPlayer.drag = false;
-                DropArm(false, true);
+                GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);
             }
         }
         else if(GO_PlayerNetworkManager.localPlayer.isDrag == 2) //Control del otro player
@@ -173,11 +173,14 @@ public class GO_PlayerActions : MonoBehaviour
 
     public void SpawnArm(bool _spawAndDrag = true)
     {
-        var armTMP = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, _rightHandRigg.position, _rightHandRigg.rotation).transform;
-
-        if (_spawAndDrag) 
+        if (this == GO_PlayerNetworkManager.localPlayer.actionPlayer)
         {
-            _armExtraInRightHand = armTMP;
+            var armTMP = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, _rightHandRigg.position, _rightHandRigg.rotation).transform;
+
+            if (_spawAndDrag)
+            {
+                _armExtraInRightHand = armTMP;
+            }
         }
     }
 
@@ -277,6 +280,7 @@ public class GO_PlayerActions : MonoBehaviour
             return;
         }
     }
+    
 
     public bool SetExtraArm(bool _drop = false)
     {

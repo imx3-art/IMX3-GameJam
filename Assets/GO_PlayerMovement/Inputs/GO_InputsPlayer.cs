@@ -21,6 +21,8 @@ namespace StarterAssets
         public bool cameraVision;
 
         public event System.Action onInteract;
+        public event System.Action onShowShared;
+
 
 #if ENABLE_INPUT_SYSTEM
         public new void OnMove(InputValue value)
@@ -99,7 +101,7 @@ namespace StarterAssets
         }
         public void ShareInput(bool newStealthState)
         {
-            
+            onShowShared?.Invoke();
             shared = newStealthState;
             
         }

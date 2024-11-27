@@ -35,6 +35,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     [SerializeField] private Renderer colorPlayer;
 
     public NetworkTransform playerTransform;
+    public GO_InputsPlayer inputPlayer;
+
     public bool isLocalPlayer;
     public static List<GO_PlayerNetworkManager> PlayersList = new List<GO_PlayerNetworkManager>();
     public static GO_PlayerNetworkManager localPlayer;
@@ -57,8 +59,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             playerTransform.gameObject.transform.localPosition = Vector3.zero;
             playerID = (short)Random.Range(1000, 9999);
             CurrentPlayerState = PlayerState.Normal;
+            inputPlayer = GetComponentInChildren<GO_InputsPlayer>();
             Instantiate(canvasUIPlayer.gameObject, transform);
-            
         }
         else
         {
@@ -247,6 +249,13 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     {
         actionPlayer.DropArm(true);
     }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_SelfDropArm()
+    {
+        actionPlayer.DropArm(false, true);
+    }
+
 
     public void DropArm()
     {

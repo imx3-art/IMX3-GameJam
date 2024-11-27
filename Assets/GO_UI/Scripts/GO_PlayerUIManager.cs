@@ -59,6 +59,9 @@ public class GO_PlayerUIManager : MonoBehaviour
 
                     GO_LevelManager.instance.OnLivesChanged += UpdateLivesUI;
                     controller.OnStaminaChanged += UpdateStaminaUI;
+                    GO_PlayerNetworkManager.localPlayer.inputPlayer.onShowShared += ShowCodeSession;
+
+
                     previousStamina = controller.Stamina;
 
 
@@ -112,6 +115,8 @@ public class GO_PlayerUIManager : MonoBehaviour
         {
             GO_RunnerManager.Instance.OnEventTriggeredPlayerChange -= ChangePlayerNumber;
         }
+
+        GO_PlayerNetworkManager.localPlayer.inputPlayer.onShowShared -= ShowCodeSession;
     }
 
     private void UpdateLivesUI(float currentLives)
@@ -133,6 +138,7 @@ public class GO_PlayerUIManager : MonoBehaviour
     {
         popUpSharedCodeSessionName.text = GO_RunnerManager.Instance._runner.SessionInfo.Name;
         popUpSharedCode.SetActive(!popUpSharedCode.activeSelf);
+        GO_PlayerNetworkManager.localPlayer.inputPlayer.SetCursorState(!popUpSharedCode.activeSelf);
     }
     private void UpdateStaminaUI(float currentStamina)
     {
