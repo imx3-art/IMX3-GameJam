@@ -115,7 +115,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             Invoke("SetColorPlayer", 1);
             return;
         }
-        colorPlayer.material.color = GO_LevelManager.instance.playerColors[idColor];
+        //colorPlayer.material.color = GO_LevelManager.instance.playerColors[idColor];
+        colorPlayer.material.SetColor("_ReflectionColor", GO_LevelManager.instance.playerColors[idColor]);
     }
     private IEnumerator Start()
     {
