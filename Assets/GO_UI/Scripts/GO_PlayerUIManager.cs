@@ -27,6 +27,7 @@ public class GO_PlayerUIManager : MonoBehaviour
     [Header("Session Info")]
     [SerializeField] private TextMeshProUGUI sessionPlayersCount;
     [SerializeField] private TextMeshProUGUI popUpSharedCodeSessionName;
+    [SerializeField] private TextMeshProUGUI armsCount;
     [SerializeField] GameObject popUpSharedCode;
 
 
@@ -60,6 +61,7 @@ public class GO_PlayerUIManager : MonoBehaviour
                     GO_LevelManager.instance.OnLivesChanged += UpdateLivesUI;
                     controller.OnStaminaChanged += UpdateStaminaUI;
                     GO_PlayerNetworkManager.localPlayer.inputPlayer.onShowShared += ShowCodeSession;
+                    GO_PlayerNetworkManager.localPlayer.actionPlayer.onChangeArms += ShowArms;
 
 
                     previousStamina = controller.Stamina;
@@ -117,6 +119,7 @@ public class GO_PlayerUIManager : MonoBehaviour
         }
 
         GO_PlayerNetworkManager.localPlayer.inputPlayer.onShowShared -= ShowCodeSession;
+        GO_PlayerNetworkManager.localPlayer.actionPlayer.onChangeArms -= ShowArms;
     }
 
     private void UpdateLivesUI(float currentLives)
@@ -139,6 +142,15 @@ public class GO_PlayerUIManager : MonoBehaviour
         popUpSharedCodeSessionName.text = GO_RunnerManager.Instance._runner.SessionInfo.Name;
         popUpSharedCode.SetActive(!popUpSharedCode.activeSelf);
         GO_PlayerNetworkManager.localPlayer.inputPlayer.SetCursorState(!popUpSharedCode.activeSelf);
+    }
+    private void ShowArms()
+    {
+        StartCoroutine(ShowArmsThred());
+    }
+    private IEnumerator ShowArmsThred()
+    {
+        yield return new WaitForSeconds(.5f);
+        armsCount.text = GO_PlayerNetworkManager.localPlayer.actionPlayer.CountArms() + "/3";        
     }
     private void UpdateStaminaUI(float currentStamina)
     {

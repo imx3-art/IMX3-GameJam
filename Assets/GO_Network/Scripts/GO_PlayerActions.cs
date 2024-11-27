@@ -31,6 +31,9 @@ public class GO_PlayerActions : MonoBehaviour
     private Animator _animator; // El componente Animator del personaje
 
     private float _fov;
+    public event System.Action onChangeArms;
+
+
 
     private void Start()
     {
@@ -42,9 +45,11 @@ public class GO_PlayerActions : MonoBehaviour
 
     void Update()
     {
-        
+
         if (_inputPlayer.drag && ReadyForMiniGame() > 0)
         {
+            Debug.Log("STATUS: " + ReadyForMiniGame());
+
             if (otherPlayerNetworkManager)
             {
                 MiniGameDrag();
@@ -54,9 +59,9 @@ public class GO_PlayerActions : MonoBehaviour
                     return;
                 }
             }
-            
+
             Debug.DrawLine(transform.position + transform.up * maxUpDistance, transform.up * maxUpDistance + transform.position + transform.forward, Color.red);
-            
+
             if (Physics.Raycast(transform.position + transform.up * maxUpDistance, transform.forward, out RaycastHit hitInfo, maxDistance, layerMask))
             {
                 Debug.Log("***Objeto detectado: " + hitInfo.collider.gameObject.name);
@@ -65,7 +70,7 @@ public class GO_PlayerActions : MonoBehaviour
                 if (otherPlayerNetworkManager == null)
                 {
                     otherPlayerNetworkManager = hitInfo.collider.gameObject.GetComponentInParent<GO_PlayerNetworkManager>();
-                    if(otherPlayerNetworkManager.actionPlayer.ReadyForMiniGame() == 0 || otherPlayerNetworkManager.isDrag != 0)
+                    if (otherPlayerNetworkManager.actionPlayer.ReadyForMiniGame() == 0 || otherPlayerNetworkManager.isDrag != 0)
                     {
                         otherPlayerNetworkManager = null;
                         return;
@@ -80,18 +85,17 @@ public class GO_PlayerActions : MonoBehaviour
             {
                 _target = null;
                 otherPlayerNetworkManager = null;
-                _inputPlayer.drag = false;
-                GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);
+                //GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);*/
             }
         }
-        else if(GO_PlayerNetworkManager.localPlayer.isDrag == 2) //Control del otro player
+        else if (GO_PlayerNetworkManager.localPlayer.isDrag == 2) //Control del otro player
         {
             hudMinigame.SetPullCount(GO_PlayerNetworkManager.localPlayer.pullMiniGame);
             hudMinigame.SetPullCount(GO_PlayerNetworkManager.localPlayer.otherPlayerTarget.pullMiniGame, false);
             ActiveCanvas(true);
             ShowTimeRemain();
         }
-        else if(otherPlayerNetworkManager)
+        else if (otherPlayerNetworkManager)
         {
             _target = null;
             otherPlayerNetworkManager = null;
@@ -99,17 +103,32 @@ public class GO_PlayerActions : MonoBehaviour
         else if (_inputPlayer.grabDropItem)
         {
             Debug.Log("RECOGIENO O TIRANDO");
+
             _inputPlayer.grabDropItem = false;
-            if (!SetExtraArm(true))
+
+            if(SetExtraArm())//SI tiene brazo extra lo soltamos
             {
+                Debug.Log("+++SOLTANDO EXTRA");
+                SetExtraArm(true);
+
+            }
+            else if(_armTMP) //si hay brazo en el piso 
+            {
+                Debug.Log("+++RECOGIENO ");
                 BindUpArm();
             }
             else
             {
-                Debug.Log("Ya tengo un brazo en la mano " + _armExtraInRightHand);
+                Debug.Log("+++TIRANDO PROPIO");
+                GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);*/
+
             }
+
         }
-    }     
+
+    }
+
+
     
     private void MiniGameDrag()
     {
@@ -255,7 +274,9 @@ public class GO_PlayerActions : MonoBehaviour
     }
     public void DropArm(bool _State, bool _self = false)
     {
-        if( _self && _armExtraInRightHand) 
+        onChangeArms?.Invoke();
+
+        if ( _self && _armExtraInRightHand) 
         {
         _armExtraInRightHand = null;
         return;
@@ -281,7 +302,11 @@ public class GO_PlayerActions : MonoBehaviour
         }
     }
     
-
+    /// <summary>
+    /// True: si tiene un brazo extra
+    /// </summary>
+    /// <param name="_drop"></param>
+    /// <returns></returns>
     public bool SetExtraArm(bool _drop = false)
     {
         if(_armExtraInRightHand)
@@ -295,9 +320,13 @@ public class GO_PlayerActions : MonoBehaviour
         return false;
     }
 
-    private int ReadyForMiniGame()
+    public int ReadyForMiniGame()
     {
         return (leftArmPlayer.activeSelf ? 1 : 0) + (rightArmPlayer.activeSelf ? 1 : 0);
+    }
+    public int CountArms()
+    {
+        return (leftArmPlayer.activeSelf ? 1 : 0) + (rightArmPlayer.activeSelf ? 1 : 0) + (_armExtraInRightHand ? 1 : 0);
     }
         
     public void ShakeCamera(bool _value = false)

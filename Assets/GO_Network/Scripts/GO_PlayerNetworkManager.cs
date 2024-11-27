@@ -229,15 +229,13 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
     public void RPC_setWinnerMiniGame(short _playerWinID, short _playerLoseID)
     {
-        GO_PlayerNetworkManager playerWin= PlayersList.Find(player => player.playerID == _playerWinID);
-        GO_PlayerNetworkManager playerLose= PlayersList.Find(player => player.playerID == _playerLoseID);
+        GO_PlayerNetworkManager playerWin = PlayersList.Find(player => player.playerID == _playerWinID);
+        GO_PlayerNetworkManager playerLose = PlayersList.Find(player => player.playerID == _playerLoseID);
         {
 
-            if (playerWin.Equals(localPlayer))
-            {
-                playerWin.DragArm();
-            }
-                
+           
+            
+            playerWin.DragArm(playerWin);
             playerLose.DropArm();
 
         }
@@ -263,9 +261,19 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         actionPlayer.DropArm(false);
     }
 
-    public void DragArm()
+    public void DragArm(GO_PlayerNetworkManager _playerWin)
     {
-        actionPlayer.SpawnArm();
+        if (actionPlayer.ReadyForMiniGame() < 2)
+        {
+            actionPlayer.DropArm(true);
+        }
+        else
+        {
+            if (_playerWin.Equals(localPlayer))
+            {
+                actionPlayer.SpawnArm();
+            }
+        }
 
     }
     
