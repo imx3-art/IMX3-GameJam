@@ -146,6 +146,7 @@ public class GO_PlayerActions : MonoBehaviour
     {
         if(_inputPlayer.pull && !_endMiniGameCount)
         {
+            hudMinigame.PressSpace();
             _inputPlayer.pull = false;
             hudMinigame.SetPullCount(GO_PlayerNetworkManager.localPlayer.pullMiniGame);
         }
