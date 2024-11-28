@@ -84,6 +84,7 @@ MonoBehaviour:
     type: 3}
   colorPlayer: {fileID: 2339982077564267757}
   playerTransform: {fileID: 8556223988473314288}
+  inputPlayer: {fileID: 0}
   isLocalPlayer: 0
   otherPlayerTarget: {fileID: 0}
   actionPlayer: {fileID: 0}
@@ -215,6 +216,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
+      propertyPath: SprintSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
       propertyPath: _virtualCamera
       value: 
       objectReference: {fileID: 864961167180621693}
@@ -246,7 +252,7 @@ PrefabInstance:
     - target: {fileID: 6025776479445603127, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: StateHashes.Array.size
-      value: 12
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7773092177965768475, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
