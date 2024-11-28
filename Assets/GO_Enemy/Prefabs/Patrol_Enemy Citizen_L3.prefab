@@ -149,6 +149,7 @@ MonoBehaviour:
   colorState: {r: 0, g: 0.39888763, b: 1, a: 0}
   pickUpTime: 4
   throwTime: 2
+  stopDistance: 1
 --- !u!114 &1631768145325938434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,10 +215,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e30b14982bb36449a27b2ea2ac8e499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 1
-  runSpeed: 2
-  visionRange: 10
-  visionAngle: 167
+  walkSpeed: 2
+  runSpeed: 4
+  visionRange: 5
+  visionAngle: 60
   offset: {x: 0, y: 0.5, z: 0}
   navMeshAgent: {fileID: 0}
   _stateMachine: {fileID: 0}
