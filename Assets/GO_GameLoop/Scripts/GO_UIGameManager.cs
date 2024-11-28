@@ -1,8 +1,8 @@
 using StarterAssets;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GO_UIManager : MonoBehaviour
 {
@@ -33,6 +33,9 @@ public class GO_UIManager : MonoBehaviour
     private char[] userInput; // Array para manejar el input del usuario.
     private float delayBeforeClosing = 1f;
 
+    private float _fov;
+    private bool isShaking;
+
 
     private void Awake()
     {
@@ -44,7 +47,15 @@ public class GO_UIManager : MonoBehaviour
 
     private void Start()
     {
+        _fov = GO_MainCamera.MainCamera.fieldOfView;
+    }
 
+    private void Update()
+    {
+        if (isShaking)
+        {
+            ShakeCamera(false);
+        }
     }
 
     // Muestra el panel para ingresar el código de la puerta.
@@ -177,6 +188,8 @@ public class GO_UIManager : MonoBehaviour
 
         float elapsedTime = 0f;
 
+        isShaking = true;
+
         while (elapsedTime < doorMoveDistance / doorMoveSpeed)
         {
             doorLeft.transform.position = Vector3.Lerp(leftStartPosition, leftEndPosition, elapsedTime * doorMoveSpeed / doorMoveDistance);
@@ -185,17 +198,22 @@ public class GO_UIManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
+        isShaking = false;
+        ShakeCamera();
         doorLeft.transform.position = leftEndPosition;
         doorRight.transform.position = rightEndPosition;
 
         Debug.Log("¡Puerta abierta!");
-
         // Espera antes de cerrar la puerta
         yield return new WaitForSeconds(delayBeforeClosing);
-
         // Inicia la corrutina para cerrar la puerta
         StartCoroutine(CloseDoor(leftStartPosition, rightStartPosition));
+    }
+
+    public void ShakeCamera(bool _value = true)
+    {
+        GO_MainCamera.cinemachineBrain.enabled = _value;
+        GO_MainCamera.MainCamera.fieldOfView = Mathf.Lerp(GO_MainCamera.MainCamera.fieldOfView, UnityEngine.Random.Range(_fov * .95f, _fov * 1.35f), Time.deltaTime * 1);
     }
 
     public IEnumerator CloseDoor(Vector3 leftStartPosition, Vector3 rightStartPosition)
