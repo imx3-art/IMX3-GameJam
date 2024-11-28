@@ -233,12 +233,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         GO_PlayerNetworkManager playerWin = PlayersList.Find(player => player.playerID == _playerWinID);
         GO_PlayerNetworkManager playerLose = PlayersList.Find(player => player.playerID == _playerLoseID);
         {
-
-           
-            
             playerWin.DragArm(playerWin);
             playerLose.DropArm();
-
         }
 
     }
@@ -254,8 +250,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     {
         actionPlayer.DropArm(false, true);
     }
-
-
+    
     public void DropArm()
     {
         Debug.Log("LOSE ARM");
@@ -275,9 +270,11 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
                 actionPlayer.SpawnArm();
             }
         }
+        actionPlayer.UpdateArms();
+
 
     }
-    
+
     private void HandlePlayerStateChanged(PlayerState newState)
     {
         switch (newState)

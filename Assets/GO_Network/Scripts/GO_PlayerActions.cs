@@ -85,6 +85,7 @@ public class GO_PlayerActions : MonoBehaviour
             {
                 _target = null;
                 otherPlayerNetworkManager = null;
+                _inputPlayer.drag = false;
                 //GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);*/
             }
         }
@@ -102,8 +103,6 @@ public class GO_PlayerActions : MonoBehaviour
         }
         else if (_inputPlayer.grabDropItem)
         {
-            Debug.Log("RECOGIENO O TIRANDO");
-
             _inputPlayer.grabDropItem = false;
 
             if(SetExtraArm())//SI tiene brazo extra lo soltamos
@@ -114,7 +113,7 @@ public class GO_PlayerActions : MonoBehaviour
                     GO_AudioManager.Instance.PlayGameSoundByName("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
                 }
                 SetExtraArm(true);
-
+                onChangeArms?.Invoke();
             }
             else if(_armTMP) //si hay brazo en el piso 
             {
@@ -387,6 +386,11 @@ public class GO_PlayerActions : MonoBehaviour
             GO_PlayerNetworkManager.localPlayer.RPC_addNewArm();
         }
         _armTMP = null;
+        onChangeArms?.Invoke();
+    }
+
+    public void UpdateArms()
+    {
         onChangeArms?.Invoke();
     }
 }
