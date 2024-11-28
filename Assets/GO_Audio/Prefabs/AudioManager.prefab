@@ -44,9 +44,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f85096e69ecfd949a613c977908fbd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiSounds: []
-  gameSounds: []
+  uiSounds:
+  - {fileID: 1016971375230835620, guid: 8412645d0520d5447a5227ad3496acce, type: 3}
+  - {fileID: 1016971375230835620, guid: 9371368f316b61a488b41b5772fabca7, type: 3}
+  - {fileID: 1016971375230835620, guid: aedb130954eda1f49baf60a1aa2c78c6, type: 3}
+  - {fileID: 1016971375230835620, guid: fdbeb73045a70da4d9d447b175c99183, type: 3}
+  - {fileID: 1016971375230835620, guid: 1f6f6a8cb3838b5459ba056be9d021cb, type: 3}
+  - {fileID: 1016971375230835620, guid: 440f2ed299518fe47b4f57f8f333f180, type: 3}
+  - {fileID: 1016971375230835620, guid: 835a00802837fdd4b862f1b68f9da68c, type: 3}
+  gameSounds:
+  - {fileID: 1016971375230835620, guid: 470b8e36734cc16478167ff8568f486f, type: 3}
+  - {fileID: 1016971375230835620, guid: c81d45003bb50164590fde4f17125ec0, type: 3}
+  - {fileID: 1016971375230835620, guid: f428495a7c540de4982a58128b7accd5, type: 3}
+  - {fileID: 1016971375230835620, guid: 25612eab7bce37347800d8825076178c, type: 3}
+  - {fileID: 1016971375230835620, guid: 4c9821269c77e884bb02ca10fce13773, type: 3}
+  ambientSounds:
+  - {fileID: 1016971375230835620, guid: bf3c4dc16487699428ad431e61f5598a, type: 3}
+  - {fileID: 1016971375230835620, guid: ac80dc88a309ad241aa3ae5fd012b7e9, type: 3}
   minDistance: 1
-  maxDistance: 20
+  maxDistance: 10
   panRange: 10
   masterVolume: 1
+  playerTransform: {fileID: 0}
