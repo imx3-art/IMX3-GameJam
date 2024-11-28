@@ -1,3 +1,4 @@
+using System;
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,14 @@ using UnityEngine.Windows;
 
 public class GO_IntroSceneManager : MonoBehaviour
 {
+    public void Start()
+    {
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayAmbientSound("Main_theme");
+        }
+    }
+
     public void PlayGame()
     {
         GO_LoadScene.Instance.ShowLoadingScreen();
