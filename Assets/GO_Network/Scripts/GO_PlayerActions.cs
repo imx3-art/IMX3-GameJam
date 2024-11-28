@@ -328,7 +328,7 @@ public class GO_PlayerActions : MonoBehaviour
     {
         return (leftArmPlayer.activeSelf ? 1 : 0) + (rightArmPlayer.activeSelf ? 1 : 0) + (_armExtraInRightHand ? 1 : 0);
     }
-        
+    
     public void ShakeCamera(bool _value = false)
     {
         GO_MainCamera.cinemachineBrain.enabled = _value || _gameEnd;

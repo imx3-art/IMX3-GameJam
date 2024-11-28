@@ -28,6 +28,7 @@ public class GO_LevelManager : NetworkBehaviour
     public List<string> objectsSpawned = new List<string>();
     public List<NetworkObject> networkObjectsSpawned = new List<NetworkObject>();
     public bool isReady;
+    public bool isReadyObjects;
     public short id;
     public static GO_LevelManager instance = null;
     public GameObject popupManagerPrefab;
@@ -67,7 +68,7 @@ public class GO_LevelManager : NetworkBehaviour
     public override void Spawned()
     {
         Debug.Log("Iniciando " + instance);
-
+        _currentLevel = Level.L_GO_Level1;
         if (instance == null)
         {
             instance = this;
@@ -275,7 +276,8 @@ public class GO_LevelManager : NetworkBehaviour
     {
         _playerInstance.playerLives = totalLives;
         OnLivesChanged?.Invoke(_playerInstance.playerLives);
-        
+        Debug.Log("SERIE " + _currentLevel);
+
         switch (_currentLevel)
         {
             case Level.L_GO_Level0:
@@ -306,6 +308,7 @@ public class GO_LevelManager : NetworkBehaviour
                 SceneManager.LoadScene("IntroScene");
                 return;
         }
+        Debug.Log("SERIE " + _currentLevel);
         StartCoroutine(LoadLevelAsync(_currentLevel));
     }
 
@@ -374,6 +377,7 @@ public class GO_LevelManager : NetworkBehaviour
     public IEnumerator LoadLevelAsync(Level level)
     {
         string sceneName = level.ToString();
+        Debug.Log("*** CARGANDO SCENE " + sceneName);
 
         if (!CheckPlayerInLastLevel())//
         {
@@ -381,33 +385,41 @@ public class GO_LevelManager : NetworkBehaviour
         }
 
         OnPlayerChangeScene?.Invoke();
-        while (true) 
+
+        while (true)
         {
             GO_NetworkObject.readyChangeScene = true;
             yield return new WaitForSeconds(1);
             Debug.Log("ESPERANDO TRANSFERENCIA DE AUTORDADES");
-            if(GO_NetworkObject.readyChangeScene)
+            if (GO_NetworkObject.readyChangeScene)
             {
                 break;
             }
         }
 
-        if (SceneManager.GetActiveScene().name != sceneName || true)
+
+        if (SceneManager.GetActiveScene().name != sceneName)
         {
+            GO_SpawnPoint.currentSpawPoint = null;
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
             while (!asyncLoad.isDone)
             {
-                Debug.Log($"Cargando... {asyncLoad.progress * 100} %");
+                Debug.Log($"***Cargando... {asyncLoad.progress * 100} % - sceneName: " + sceneName + " - SpawnPoint: " + GO_SpawnPoint.currentSpawPoint);
                 yield return null;
             }
+
+            yield return new WaitWhile(() => GO_SpawnPoint.currentSpawPoint == null);
+            Debug.Log($"***Cargando... {asyncLoad.progress * 100} % - SpawnPointB: " + GO_SpawnPoint.currentSpawPoint);
+
             SpawnPlayer();
+
+            if (!CheckPlayerInLastLevel())//
+            {
+                Debug.Log("CAMBIO SCENE NO HAY PLAYER ACTIVOS EN LA ESCENA ACTUAL");
+                CheckPlayerInNewLevel();
+            }
+            OnPlayerChangeScene?.Invoke();
         }
-        if (!CheckPlayerInLastLevel())//
-        {
-            Debug.Log("CAMBIO SCENE NO HAY PLAYER ACTIVOS EN LA ESCENA ACTUAL");
-            CheckPlayerInNewLevel();
-        }
-        OnPlayerChangeScene?.Invoke();
     }
     private void Update()
     {
@@ -423,11 +435,10 @@ public class GO_LevelManager : NetworkBehaviour
     public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot, string _codeName = null )
     {
         Debug.Log("MANDO SPAWN " + objectsSpawned.Count);
-        //if (_codeName == null || !objectsSpawned.Contains(_codeName))
+
         if (_codeName == null || !objectsSpawned.Contains(_codeName))
         {
             Debug.Log("MANDO SPAWN un player " + _codeName);
-
 
             var NetworkObject = Runner.Spawn(prefabNetworkObjects, _pos, _rot);
             if (_codeName != null)
@@ -470,7 +481,25 @@ public class GO_LevelManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_GetPoolSpawnNetWorkObject()
     {
-        RPC_SendPoolSpawnObject(networkObjectsSpawned.ToArray());        
+        int chunkSize = 18;
+        if (networkObjectsSpawned.Count < chunkSize)
+        {
+            RPC_SendPoolSpawnObject(networkObjectsSpawned.ToArray(), 2);
+            return;
+        }
+        int totalChunks = Mathf.CeilToInt(networkObjectsSpawned.Count / (float)chunkSize);
+        List<List<NetworkObject>> listListTMP = new List<List<NetworkObject>>();
+
+        for (int i = 0; i < totalChunks; i++)
+        {
+            List<NetworkObject> chunk = networkObjectsSpawned.GetRange(i * chunkSize, Mathf.Min(chunkSize, networkObjectsSpawned.Count - i * chunkSize));
+            listListTMP.Add(chunk);
+        }
+
+        for (int i = 0; i < listListTMP.Count; i++)
+        {
+            RPC_SendPoolSpawnObject(listListTMP[i].ToArray(), (short)(i == listListTMP.Count - 1 ? 2 : (i == 0 ? 0 : 1)));
+        }
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -486,16 +515,16 @@ public class GO_LevelManager : NetworkBehaviour
         }
 
     }
+    
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_SendPoolSpawnObject(NetworkObject[] _listSpawnedObject)
+    public void RPC_SendPoolSpawnObject(NetworkObject[] _listSpawnedObject, short _poss)
     {
-        if (networkObjectsSpawned.Count == 0 && !Object.HasStateAuthority)
+        if (!isReadyObjects && !Object.HasStateAuthority)
         {
-            networkObjectsSpawned = _listSpawnedObject.ToList<NetworkObject>();
+            networkObjectsSpawned.AddRange(_listSpawnedObject.ToList<NetworkObject>());
+            isReadyObjects = _poss == 2;
         }
-        //isReady = true;
         Debug.Log("RECIBI ESTO OBJETO: " + _listSpawnedObject.Length);
-
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
@@ -506,6 +535,7 @@ public class GO_LevelManager : NetworkBehaviour
             objectsSpawned.Add(_nameObjectSpawned);
         }
     }
+    
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_SetPoolSpawnObject(NetworkObject _nameObjectSpawned)
     {
@@ -514,6 +544,7 @@ public class GO_LevelManager : NetworkBehaviour
             networkObjectsSpawned.Add(_nameObjectSpawned);
         }
     }
+    
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
     public void RPC_setLifes(short _playerID, short _value)
     {

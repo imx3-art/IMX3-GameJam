@@ -12,7 +12,10 @@ public class GO_SpawnPoint : MonoBehaviour
     public static event System.Action OnPlayerChangeSceneComplete;
     private void Awake()
     {
-        currentSpawPoint = this;
+        currentSpawPoint = this;        
+    }
+    private void Start()
+    {
         OnPlayerChangeSceneComplete?.Invoke();
     }
     public (Vector3 pos, Quaternion rot) getSpawPointPosition()
