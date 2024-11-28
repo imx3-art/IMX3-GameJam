@@ -72,6 +72,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         if (isLocalPlayer)
         {
             OnPlayerStateChanged += HandlePlayerStateChanged;
+
         }
         PlayersList.Add(this);
         GetColorPlayer();
@@ -135,7 +136,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         PlayersList.Remove(this);
 
     }
-    
+
     private void OnDestroy()
     {
         if (isLocalPlayer)
@@ -143,6 +144,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             OnPlayerStateChanged -= HandlePlayerStateChanged;
         }
     }
+
 
     public void TeleportPlayer(Vector3 _pos, Quaternion _rot)
     {
@@ -162,6 +164,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             }
         }
         while (true);// (playerTransform.transform.position - _pos).magnitude < .5f);
+
+
 
         if (GO_LoadScene.Instance)
         {
@@ -250,6 +254,11 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     {
         actionPlayer.DropArm(false, true);
     }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_ResetArms() 
+    {
+        actionPlayer.ResetArms();
+    }
     
     public void DropArm()
     {
@@ -291,4 +300,5 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
                 break;
         }
     }
+
 }
