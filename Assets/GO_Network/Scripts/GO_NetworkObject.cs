@@ -112,7 +112,15 @@ public class GO_NetworkObject : NetworkBehaviour
 
     }
 
-
+    //ARM Animation
+    public void ShowGlow(bool _value)
+    {
+        transform.GetChild(0).gameObject.SetActive(_value);
+        if (_value)
+        {
+            transform.rotation = Quaternion.identity;
+        }
+    }
 
 
 }

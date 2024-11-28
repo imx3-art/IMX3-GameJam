@@ -48,7 +48,7 @@ public class GO_PlayerActions : MonoBehaviour
 
         if (_inputPlayer.drag && ReadyForMiniGame() > 0)
         {
-            Debug.Log("STATUS: " + ReadyForMiniGame());
+            if(GO_LevelManager.instance.debug)Debug.Log("STATUS: " + ReadyForMiniGame());
 
             if (otherPlayerNetworkManager)
             {
@@ -64,8 +64,8 @@ public class GO_PlayerActions : MonoBehaviour
 
             if (Physics.Raycast(transform.position + transform.up * maxUpDistance, transform.forward, out RaycastHit hitInfo, maxDistance, layerMask))
             {
-                Debug.Log("***Objeto detectado: " + hitInfo.collider.gameObject.name);
-                Debug.Log("***Distancia al objeto: " + hitInfo.distance);
+                if(GO_LevelManager.instance.debug)Debug.Log("***Objeto detectado: " + hitInfo.collider.gameObject.name);
+                if(GO_LevelManager.instance.debug)Debug.Log("***Distancia al objeto: " + hitInfo.distance);
 
                 if (otherPlayerNetworkManager == null)
                 {
@@ -105,9 +105,9 @@ public class GO_PlayerActions : MonoBehaviour
         {
             _inputPlayer.grabDropItem = false;
 
-            if(SetExtraArm())//SI tiene brazo extra lo soltamos
+            if(SetExtraArm())//Si tiene brazo extra lo soltamos
             {
-                Debug.Log("+++SOLTANDO EXTRA");
+                if(GO_LevelManager.instance.debug)Debug.Log("+++SOLTANDO EXTRA");
                 if(GO_AudioManager.Instance != null)
                 {
                     GO_AudioManager.Instance.PlayGameSoundByName("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
@@ -117,26 +117,23 @@ public class GO_PlayerActions : MonoBehaviour
             }
             else if(_armTMP) //si hay brazo en el piso 
             {
-                Debug.Log("+++RECOGIENO ");
+                if(GO_LevelManager.instance.debug)Debug.Log("+++RECOGIENO ");
                 if(GO_AudioManager.Instance != null)
                 {
                     GO_AudioManager.Instance.PlayGameSoundByName("GO_Collect_Arms", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
                 }
-                BindUpArm();
+                GetUpArm();
             }
             else
             {
-                Debug.Log("+++TIRANDO PROPIO");
+                if(GO_LevelManager.instance.debug)Debug.Log("+++TIRANDO PROPIO");
                 if(GO_AudioManager.Instance != null)
                 {
                     GO_AudioManager.Instance.PlayGameSoundByName("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
                 }
                 GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);*/
-
             }
-
         }
-
     }
 
 
@@ -155,19 +152,19 @@ public class GO_PlayerActions : MonoBehaviour
         if (GO_PlayerNetworkManager.localPlayer.pullMiniGame >= maxPull && !_endMiniGameCount)
         {
             _endMiniGameCount = true;        
-            Debug.Log("*-*-*-GANADOR LOCAL " + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + GO_PlayerNetworkManager.localPlayer.pullMiniGame);
+            if(GO_LevelManager.instance.debug)Debug.Log("*-*-*-GANADOR LOCAL " + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + GO_PlayerNetworkManager.localPlayer.pullMiniGame);
         }
         else if(otherPlayerNetworkManager.pullMiniGame >= maxPull && !_endMiniGameCount)
         {
             _endMiniGameCount = true;
-            Debug.Log("*-*-*-GANADOR RIVAL" + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + otherPlayerNetworkManager.pullMiniGame);
+            if(GO_LevelManager.instance.debug)Debug.Log("*-*-*-GANADOR RIVAL" + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + otherPlayerNetworkManager.pullMiniGame);
         }        
         else if(_endMiniGameCount && !_gameEnd)
         {
             _gameEnd = true;
             EndMiniGame();
             ShowResult();
-            Debug.Log("*-*-*-JUEGO FINALIZADO " + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + GO_PlayerNetworkManager.localPlayer.pullMiniGame + " vs " + otherPlayerNetworkManager.pullMiniGame);
+            if(GO_LevelManager.instance.debug)Debug.Log("*-*-*-JUEGO FINALIZADO " + GO_PlayerNetworkManager.localPlayer.timeMinigame + " CLICKS: " + GO_PlayerNetworkManager.localPlayer.pullMiniGame + " vs " + otherPlayerNetworkManager.pullMiniGame);
         }
 
         if (!_endMiniGameCount)
@@ -188,15 +185,15 @@ public class GO_PlayerActions : MonoBehaviour
 
         _otherPlayerRate = otherPlayerNetworkManagerTMP.pullMiniGame / otherPlayerNetworkManagerTMP.timeMinigame;
                 
-        Debug.Log("+++ RESULTADO " + _localPlayerRate + " OTHER: " + _otherPlayerRate);
+        if(GO_LevelManager.instance.debug)Debug.Log("+++ RESULTADO " + _localPlayerRate + " OTHER: " + _otherPlayerRate);
         if(_localPlayerRate < _otherPlayerRate)
         {
-            Debug.Log("+++ GANO ENEMIGO ");
+            if(GO_LevelManager.instance.debug)Debug.Log("+++ GANO ENEMIGO ");
             GO_PlayerNetworkManager.localPlayer.RPC_setWinnerMiniGame(otherPlayerNetworkManagerTMP.playerID, GO_PlayerNetworkManager.localPlayer.playerID);
         }
         else
         {
-            Debug.Log("+++ GANO LOCAL PLAYER");
+            if(GO_LevelManager.instance.debug)Debug.Log("+++ GANO LOCAL PLAYER");
             GO_PlayerNetworkManager.localPlayer.RPC_setWinnerMiniGame(GO_PlayerNetworkManager.localPlayer.playerID, otherPlayerNetworkManagerTMP.playerID);            
         }
 
@@ -206,12 +203,27 @@ public class GO_PlayerActions : MonoBehaviour
     {
         if (this == GO_PlayerNetworkManager.localPlayer.actionPlayer)
         {
-            var armTMP = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, _rightHandRigg.position, _rightHandRigg.rotation).transform;
+            //var armTMP = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, _rightHandRigg.position, _rightHandRigg.rotation).transform;
+            var armTMP = GO_LevelManager.instance.SpawnObjects(GO_LevelManager.instance.armPlayer.gameObject, _rightHandRigg.position, Quaternion.identity).transform;
 
             if (_spawAndDrag)
             {
-                _armExtraInRightHand = armTMP;
+                SetExtraArm(armTMP);
             }
+        }
+    }
+
+    private void SetExtraArm(Transform _armTMP)
+    {
+        if (_armExtraInRightHand)
+        {
+            _armExtraInRightHand.GetComponent<GO_NetworkObject>().ShowGlow(_armTMP == null);
+        }
+        _armExtraInRightHand = _armTMP;
+
+        if (_armExtraInRightHand)
+        {
+            _armExtraInRightHand.GetComponent<GO_NetworkObject>().ShowGlow(_armTMP == null);
         }
     }
 
@@ -255,7 +267,7 @@ public class GO_PlayerActions : MonoBehaviour
     {
         if (_target != null)
         {
-            //Debug.Log("IK..." + animator + " - " + target);
+            //if(GO_LevelManager.instance.debug)Debug.Log("IK..." + animator + " - " + target);
 
             _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
             //animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
@@ -290,7 +302,8 @@ public class GO_PlayerActions : MonoBehaviour
 
         if ( _self && _armExtraInRightHand) 
         {
-        _armExtraInRightHand = null;
+            //_armExtraInRightHand = null;
+            SetExtraArm(null);
         return;
         }
 
@@ -321,11 +334,13 @@ public class GO_PlayerActions : MonoBehaviour
     /// <returns></returns>
     public bool SetExtraArm(bool _drop = false)
     {
-        if(_armExtraInRightHand)
+        onChangeArms?.Invoke();
+        if (_armExtraInRightHand)
         {
             if(_drop)
             {
-                _armExtraInRightHand = null;
+                //_armExtraInRightHand = null;
+                SetExtraArm(null);
             }
             return true;
         }
@@ -349,7 +364,7 @@ public class GO_PlayerActions : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("DETECTO ITEM: " + other.name + " - " + other.gameObject.layer);
+        if(GO_LevelManager.instance.debug)if(GO_LevelManager.instance.debug)Debug.Log("DETECTO ITEM: " + other.name + " - " + other.gameObject.layer);
 
         if(other.gameObject.layer == 8)
         {
@@ -359,7 +374,7 @@ public class GO_PlayerActions : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("ALEJO ITEM: " + other.name + " - " + other.gameObject.layer);
+        if(GO_LevelManager.instance.debug)Debug.Log("ALEJO ITEM: " + other.name + " - " + other.gameObject.layer);
 
         if(other.gameObject.layer == 8 && _armTMP == other.transform)
         {
@@ -367,18 +382,18 @@ public class GO_PlayerActions : MonoBehaviour
         }
     }
 
-    private void BindUpArm()
+    private void GetUpArm()
     {
         if (!_armTMP)
         {
             return;
         }
-        Debug.Log("AGARRO ITEM: " + _armTMP.name);
+        if(GO_LevelManager.instance.debug)Debug.Log("AGARRO ITEM: " + _armTMP.name);
         _armTMP.GetComponent<GO_NetworkObject>().ChangeAuthority();
 
         if (ReadyForMiniGame() == 2)
         {
-            _armExtraInRightHand = _armTMP;
+            SetExtraArm(_armTMP); 
         }
         else
         {
