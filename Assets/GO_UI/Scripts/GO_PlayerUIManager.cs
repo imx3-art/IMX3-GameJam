@@ -28,6 +28,7 @@ public class GO_PlayerUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sessionPlayersCount;
     [SerializeField] private TextMeshProUGUI popUpSharedCodeSessionName;
     [SerializeField] private TextMeshProUGUI armsCount;
+    [SerializeField] private GameObject[] armsState;
     [SerializeField] GameObject popUpSharedCode;
 
 
@@ -150,7 +151,12 @@ public class GO_PlayerUIManager : MonoBehaviour
     private IEnumerator ShowArmsThred()
     {
         yield return new WaitForSeconds(.5f);
-        armsCount.text = GO_PlayerNetworkManager.localPlayer.actionPlayer.CountArms() + "/3";        
+        armsCount.text = GO_PlayerNetworkManager.localPlayer.actionPlayer.CountArms() + "/3";
+        foreach (GameObject img in armsState)
+        {
+            img.SetActive(false);
+        }
+        armsState[GO_PlayerNetworkManager.localPlayer.actionPlayer.CountArms()].SetActive(true);
     }
     private void UpdateStaminaUI(float currentStamina)
     {
@@ -257,7 +263,6 @@ public class GO_PlayerUIManager : MonoBehaviour
         float spacing = 120f; // Espaciado entre elementos
         newBookNumber.transform.localPosition = new Vector3(spacing * (childCount - 2), 0, 0);
     }
-
 
     public void RemoveBooksNumber()
     {

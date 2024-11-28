@@ -162,6 +162,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             }
         }
         while (true);// (playerTransform.transform.position - _pos).magnitude < .5f);
+
         if (GO_LoadScene.Instance)
         {
             GO_LoadScene.Instance.HideLoadingScreen();

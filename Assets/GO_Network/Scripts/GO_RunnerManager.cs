@@ -82,7 +82,7 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Shared,
-            SessionName = string.IsNullOrEmpty(_nameSession) ? nameSession : _nameSession,
+            SessionName = string.IsNullOrEmpty(_nameSession) ? nameSession.ToUpper() : _nameSession.ToUpper(),
             PlayerCount = maxPlayersPublic + maxPlayersInvite,
             CustomLobbyName = "MyCustomLobby",
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()

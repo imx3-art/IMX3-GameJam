@@ -23,7 +23,10 @@ public class GO_NetworkObject : NetworkBehaviour
     private IEnumerator Start()
     {
         yield return new WaitWhile(() => level_ID == -1);
-        yield return new WaitForSeconds(1);        
+        yield return new WaitWhile(() => !GO_LevelManager.instance);
+        yield return new WaitWhile(() => !GO_LevelManager.instance.isReadyObjects);
+        yield return new WaitForSeconds(1);       
+        
         gameObject.SetActive(level_ID == (short)GO_SpawnPoint.currentSpawPoint.level_ID);
     }
     private void OnEnable()
