@@ -33,7 +33,12 @@ public class GO_State_Patrol : GO_State
         Transform playerTransform;
         if (enemy.visionController.SeeThePlayer(out playerTransform))
         {
-            GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
+            //GO_PlayerNetworkManager player = GO_PlayerNetworkManager.localPlayer;
+            GO_PlayerNetworkManager player = playerTransform.GetComponentInParent<GO_PlayerNetworkManager>(); ;
+            if(player == GO_PlayerNetworkManager.localPlayer)
+            {
+                GetComponent<GO_NetworkObject>().ChangeAuthority();
+            }
             if (player != null && player.CurrentPlayerState != PlayerState.Duel && player.CurrentPlayerState != PlayerState.Ghost)
             {
                 // Cambiar al estado de persecución si el jugador no está en duelo

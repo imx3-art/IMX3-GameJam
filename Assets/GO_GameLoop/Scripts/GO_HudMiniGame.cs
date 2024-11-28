@@ -8,10 +8,13 @@ public class GO_HudMiniGame : MonoBehaviour
     [SerializeField] private Image leftPlayer;
     [SerializeField] private Image rightPlayer;
     [SerializeField] private Image remainTimeIMG;
+    [SerializeField] private GameObject[] spaceKey;
     private float dificult = .55f;
     int lastLeft;
     int lastRight;
     float inc = .1f;
+    float maxTime = .05f;
+    float timeKeySpaceRestore = .05f;
     public void SetRemainTime(float _value)
     {
         remainTimeIMG.fillAmount = _value;
@@ -40,6 +43,13 @@ public class GO_HudMiniGame : MonoBehaviour
     {
         leftPlayer.fillAmount = rightPlayer.fillAmount = lastRight = lastLeft = 0;
     }
+
+    public void PressSpace()
+    {
+        spaceKey[0].SetActive(false);
+        spaceKey[1].SetActive(true);
+        timeKeySpaceRestore = maxTime;
+    }
     private void LateUpdate()
     {
         if (leftPlayer.fillAmount > 0)
@@ -50,6 +60,14 @@ public class GO_HudMiniGame : MonoBehaviour
         {
             rightPlayer.fillAmount -= Time.deltaTime * dificult;
         }
+        if(timeKeySpaceRestore > 0)
+        {
+            if((timeKeySpaceRestore -= Time.deltaTime) < 0)
+            {
+                spaceKey[0].SetActive(true);
+                spaceKey[1].SetActive(false);
+            }
 
+        }
     }
 }

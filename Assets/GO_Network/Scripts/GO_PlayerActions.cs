@@ -386,5 +386,6 @@ public class GO_PlayerActions : MonoBehaviour
             GO_PlayerNetworkManager.localPlayer.RPC_addNewArm();
         }
         _armTMP = null;
+        onChangeArms?.Invoke();
     }
 }
