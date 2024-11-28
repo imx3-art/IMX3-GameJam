@@ -8,6 +8,8 @@ public class GO_State_PickUpArm : GO_State
     private float pickUpTime = 4.0f;
     [SerializeField]
     private float throwTime = 2.0f; 
+    [SerializeField]
+    private float stopDistance = 1.0f;
 
     private Transform armTransform;
     private bool _processStarted = false; 
@@ -84,7 +86,10 @@ public class GO_State_PickUpArm : GO_State
             yield break;
         }
 
-        enemy.navMeshController.UpdateDestinationPoint(closestTrashCan.position);
+        Vector3 direction = (closestTrashCan.position - enemy.transform.position).normalized;
+        Vector3 targetPosition = closestTrashCan.position - direction * stopDistance;
+
+        enemy.navMeshController.UpdateDestinationPoint(targetPosition);
         
         while (!enemy.navMeshController.ArrivedPoint())
         {
