@@ -47,5 +47,5 @@ MonoBehaviour:
   codeManagerPrefabs:
   - {fileID: 2340203780797604135, guid: 29c08de8fca55f1409ae67407650562c, type: 3}
   - {fileID: 2340203780797604135, guid: dc2da33d7a10a984484f71c0a209c260, type: 3}
-  - {fileID: 2340203780797604135, guid: 8856399f87cfeac4ea00b1f934bc5b1e, type: 3}
-  - {fileID: 2340203780797604135, guid: 8856399f87cfeac4ea00b1f934bc5b1e, type: 3}
+  - {fileID: 2340203780797604135, guid: 967446a7450c5c34694efc6febd9485e, type: 3}
+  - {fileID: 2340203780797604135, guid: 4c7ec9418c9aa8d4f9a2171b72f5cb06, type: 3}
