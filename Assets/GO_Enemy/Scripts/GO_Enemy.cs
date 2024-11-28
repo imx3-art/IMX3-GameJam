@@ -103,7 +103,11 @@ public abstract class GO_Enemy : NetworkBehaviour
             {
                 var index = Random.Range(0, FootstepAudioClips.Length);
                 //AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.position, FootstepAudioVolume);
-                GO_AudioManager.Instance.PlayGameSoundDynamic(FootstepAudioClips[index], transform.position);
+                if (GO_AudioManager.Instance != null)
+                {
+                    GO_AudioManager.Instance.PlayGameSoundDynamic(FootstepAudioClips[index], transform.position);
+                }
+                
             }
         }
     }

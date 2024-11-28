@@ -128,7 +128,7 @@ public class GO_AudioManager : MonoBehaviour
                 float pan = Mathf.Clamp((soundObject.transform.position.x - player.position.x) / panRange, -1f, 1f);
                 source.panStereo = pan;
 
-                //Debug.Log($"Sonando sonido dinámico. Distancia: {distance}, Volumen: {volume}");
+                //Debug.Log($"Sonando sonido dinámico. Distancia:{clip.name} {distance}, Volumen: {volume}");
             }
             else
             {

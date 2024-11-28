@@ -109,17 +109,29 @@ public class GO_PlayerActions : MonoBehaviour
             if(SetExtraArm())//SI tiene brazo extra lo soltamos
             {
                 Debug.Log("+++SOLTANDO EXTRA");
+                if(GO_AudioManager.Instance != null)
+                {
+                    GO_AudioManager.Instance.PlayGameSoundByName("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
+                }
                 SetExtraArm(true);
 
             }
             else if(_armTMP) //si hay brazo en el piso 
             {
                 Debug.Log("+++RECOGIENO ");
+                if(GO_AudioManager.Instance != null)
+                {
+                    GO_AudioManager.Instance.PlayGameSoundByName("GO_Collect_Arms", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
+                }
                 BindUpArm();
             }
             else
             {
                 Debug.Log("+++TIRANDO PROPIO");
+                if(GO_AudioManager.Instance != null)
+                {
+                    GO_AudioManager.Instance.PlayGameSoundByName("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
+                }
                 GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);*/
 
             }

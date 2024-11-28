@@ -23,6 +23,10 @@ public class GO_State_PickUpArm : GO_State
 
     private void OnEnable()
     {
+        if(GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayGameSoundByName("GO_Human_Confusion", transform.position);
+        }
         enemy.navMeshAgent.speed = enemy.walkSpeed;
         enemy.UpdateAnimation("Walk");
     }
@@ -100,6 +104,10 @@ public class GO_State_PickUpArm : GO_State
         enemy.navMeshAgent.isStopped = true;
         enemy.UpdateAnimation("Idle");
         
+        if(GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayGameSoundByName("GO_Human_Fridge", transform.position);
+        }
         yield return new WaitForSeconds(throwTime); 
 
         enemy.hasArm = false;
