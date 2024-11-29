@@ -148,6 +148,7 @@ MonoBehaviour:
   colorState: {r: 0, g: 0.39888763, b: 1, a: 0}
   pickUpTime: 4
   throwTime: 2
+  stopDistance: 1
 --- !u!114 &1631768145325938434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,7 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eyes: {fileID: 3205396699051537262}
-  visionConeMaterial: {fileID: 2100000, guid: ae36786ae151172439bca7006ab7d235, type: 2}
+  visionConeMaterial: {fileID: 2100000, guid: ac12c5864f9b63449969d8d4d883e9d5, type: 2}
   meshSegments: 20
   visionLayerMask:
     serializedVersion: 2
@@ -234,6 +235,9 @@ MonoBehaviour:
     _value: 0
   _validWaypointCount: 0
   _WaypointsPositions: []
+  patrolState: {fileID: 0}
+  persecutionState: {fileID: 0}
+  pickupState: {fileID: 0}
 --- !u!114 &3426412638943614207
 MonoBehaviour:
   m_ObjectHideFlags: 0

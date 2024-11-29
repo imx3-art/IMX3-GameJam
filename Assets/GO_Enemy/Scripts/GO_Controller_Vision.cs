@@ -8,6 +8,7 @@ using UnityEditor;
 
 public class GO_Controller_Vision : MonoBehaviour
 {
+    
     public Transform eyes;
 
     public Material visionConeMaterial;
