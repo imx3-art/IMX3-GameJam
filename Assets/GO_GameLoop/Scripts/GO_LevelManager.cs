@@ -64,6 +64,8 @@ public class GO_LevelManager : NetworkBehaviour
     public event Action<float> OnLivesChanged;
 
     public bool debug;
+    
+    public static event Action OnPlayerDied;
 
     public override void Spawned()
     {
@@ -145,6 +147,7 @@ public class GO_LevelManager : NetworkBehaviour
         if (_playerInstance != null)
         {
             (Vector3 pos, Quaternion rot) = GO_SpawnPoint.currentSpawPoint.getSpawPointPosition();
+            
             _playerInstance.TeleportPlayer(pos, rot);
         }
     }
@@ -267,6 +270,7 @@ public class GO_LevelManager : NetworkBehaviour
             _playerInstance.playerLives--;
             if(debug)Debug.Log($"Jugador Recibio ataque, vidas restantes"+_playerInstance.playerLives);
             OnLivesChanged?.Invoke(_playerInstance.playerLives);
+            OnPlayerDied?.Invoke();
             GO_ThirdPersonController control = _playerInstance.GetComponentInChildren<GO_ThirdPersonController>();
             control.RegenerateAllStamina();
             ResetPlayerPosition();

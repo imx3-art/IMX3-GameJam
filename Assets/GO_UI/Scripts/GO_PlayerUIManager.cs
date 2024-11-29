@@ -22,7 +22,12 @@ public class GO_PlayerUIManager : MonoBehaviour
 
     [Header("Secret Code")]
     [SerializeField] private Transform bookNumbersContainer; // Contenedor en el HUD
-    [SerializeField] private GameObject bookNumberPrefab; // Prefab del número del libro
+    [SerializeField] private GameObject bookNumberPrefab; 
+    
+    [Header("Books UI")]
+    public TextMeshProUGUI booksCounterText; // Texto UI para mostrar el contador
+    private int totalBooksInMap = 0;
+    private int collectedBooks = 0;// Prefab del número del libro
 
     [Header("Session Info")]
     [SerializeField] private TextMeshProUGUI sessionPlayersCount;
@@ -72,7 +77,6 @@ public class GO_PlayerUIManager : MonoBehaviour
                     GO_RunnerManager.Instance.OnEventTriggeredPlayerChange += ChangePlayerNumber;
 
                     totalLives = GO_LevelManager.instance.totalLives;
-                    Debug.Log("vidas actuales" + totalLives);
 
                     for (int i = 0; i < totalLives; i++)
                     {
@@ -240,7 +244,6 @@ public class GO_PlayerUIManager : MonoBehaviour
             Color ColorFromExistinNumber = child.GetChild(0).GetComponent<Image>().color;
             if (existingNumberText != null && existingNumberText.text == number && color == ColorFromExistinNumber)
             {
-                Debug.Log($"El número {number} con color {ColorFromExistinNumber} ya está en el HUD. No se instanciará de nuevo.");
                 return; // Salir del método si el número ya existe
             }
         }
@@ -273,5 +276,55 @@ public class GO_PlayerUIManager : MonoBehaviour
         }
     }
 
+    public void UpdateBooks()
+    {
+        totalBooksInMap = FindObjectsOfType<GO_InteractableBook>().Length;
+        UpdateBooksCounterUI();
+    }
+    public void BookCollected()
+    {
+        collectedBooks++;
+        UpdateBooksCounterUI();
+    }
+    private void UpdateBooksCounterUI()
+    {
+        int booksRemaining = totalBooksInMap - collectedBooks;
+        booksCounterText.text = $"{booksRemaining}";
+    }
+    private void OnEnable()
+    {
+        SpawnCodeManager.OnCodeManagerReady += OnPlayerChangeScene;
+    }
 
+    private void OnDisable()
+    {
+        SpawnCodeManager.OnCodeManagerReady -= OnPlayerChangeScene;
+    }
+    private void OnPlayerChangeScene()
+    {
+        StartCoroutine(UpdateBooksAfterDelay());
+    }
+    
+    private IEnumerator UpdateBooksAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);
+
+        GO_InteractableBook[] allBooksInScene = FindObjectsOfType<GO_InteractableBook>(true);
+
+        List<GO_InteractableBook> activeBooks = new List<GO_InteractableBook>();
+
+        foreach (GO_InteractableBook book in allBooksInScene)
+        {
+            if (book.gameObject.activeInHierarchy)
+            {
+                activeBooks.Add(book);
+            }
+        }
+
+        totalBooksInMap = activeBooks.Count;
+    
+        collectedBooks = 0;
+
+        UpdateBooksCounterUI();
+    }
 }

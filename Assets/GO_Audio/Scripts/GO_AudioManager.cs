@@ -35,9 +35,10 @@ public class GO_AudioManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        InitializeAudioSources();
     }
     
-    void Start()
+    private void InitializeAudioSources()
     {
         foreach (GO_Sound s in uiSounds)
         {

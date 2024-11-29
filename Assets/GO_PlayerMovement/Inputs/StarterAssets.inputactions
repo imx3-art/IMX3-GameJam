@@ -325,7 +325,7 @@
                 {
                     "name": "",
                     "id": "60426263-215a-4346-a4f3-7f16c87829e2",
-                    "path": "<Mouse>/pressure",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

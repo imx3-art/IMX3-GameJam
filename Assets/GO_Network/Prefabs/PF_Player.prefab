@@ -214,6 +214,16 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616923963035743064, guid: 3801d110c0f0f9244a347a16572a82c1,
+        type: 3}
+      propertyPath: m_StepOffset
+      value: 0.08
+      objectReference: {fileID: 0}
     - target: {fileID: 5927310016163308373, guid: 3801d110c0f0f9244a347a16572a82c1,
         type: 3}
       propertyPath: SprintSpeed
