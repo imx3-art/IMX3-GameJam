@@ -59,8 +59,8 @@ MonoBehaviour:
   positionColors:
   - {r: 0, g: 0.64651275, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.14372826, a: 1}
-  - {r: 0.5424528, g: 1, b: 0.7155282, a: 1}
-  - {r: 0.9489641, g: 1, b: 0.5801887, a: 1}
+  - {r: 0.05882353, g: 0.65882355, b: 0.3647059, a: 1}
+  - {r: 0.9254902, g: 0.43529412, b: 0.25882354, a: 1}
 --- !u!114 &5010866588841132142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,6 +172,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "Hey, whoever you are your friend, the doctor? She\u2019s the reason
+        I\u2019m out of that FDT death wagon. By the way, I\u2019m just another rebel
+        trying to stick it to Big Pharma. They grabbed her, but she didn\u2019t go
+        quietly took down two guards and even managed to unlock my cuffs mid chaos.
+        She made me promise to leave this note for you.  I hate to say it, but\u2026
+        she\u2019s probably gone by now. She mentioned something about you heading
+        to Zombie Heaven. Don\u2019t waste what she gave up for you. Keep going."
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -266,6 +277,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "Yeah, yeah, I know I said no more letters. But let\u2019s be real,
+        even the undead could use some good news. So here it is: there\u2019s a Savior
+        who gave everything so that even the messiest, most lost souls yes, even
+        zombies can find redemption. His grace, it\u2019s free, unlike zombie patties
+        at FDT. All you have to do is accept it. So, keep moving. Life\u2019s tough,
+        but hope\u2019s closer than you think. Don\u2019t waste it."
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -369,6 +390,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "Hey, it\u2019s me again. Sorry, but this is the last note I\u2019m
+        leaving. The doctor didn\u2019t have time to share everything, and the final
+        code digit? That\u2019s on you to figure out. Guess this is where your rotting
+        brain gets to shine. You\u2019ve made it this far, so don\u2019t mess it
+        up now. The doctor believed in you. So do I\u2026 kinda. Good luck, zombie.
+        You\u2019re on your own now."
       objectReference: {fileID: 0}
     - target: {fileID: 6218933375570712969, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
@@ -474,6 +505,13 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "I barely made it last night found some scraps to keep moving. But now\u2026
+        I hear them. FDT\u2019s here. I tried to hide this note, just in case. If
+        you find it, just know "
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

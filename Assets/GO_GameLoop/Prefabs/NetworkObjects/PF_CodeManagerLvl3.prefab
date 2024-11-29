@@ -59,8 +59,8 @@ MonoBehaviour:
   positionColors:
   - {r: 0, g: 0.64651275, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.14372826, a: 1}
-  - {r: 0.5424528, g: 1, b: 0.7155282, a: 1}
-  - {r: 0.9489641, g: 1, b: 0.5801887, a: 1}
+  - {r: 0.05882353, g: 0.65882355, b: 0.3647059, a: 1}
+  - {r: 0.9254902, g: 0.43529412, b: 0.25882354, a: 1}
 --- !u!114 &5010866588841132142
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,6 +172,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "Too late for me... can't move... books... all I could do. Zombie Heaven\u2014north.
+        You're on your own now. Make it count. "
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -266,6 +272,15 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "Can\u2019t write much\u2026 FDT\u2019s close. Things are not good.
+        I\u2019m a walking blood donation center. The books\u2026 hidden. Just\u2026
+        find them. Every step hurts like hell, but I\u2019ll keep moving. Zombie
+        Heaven\u2019s ahead. Don\u2019t let this all be for nothing. Please\u2026
+        hurry. "
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -369,6 +384,15 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "FDT\u2019s goons were on my heels, so I stashed the books in a hurry.
+        Finding them won\u2019t be easy I wasn\u2019t exactly careful while dodging
+        syringes and bullets. Find them all, and maybe we\u2019ll both make it to
+        Zombie Heaven. So, good luck, genius. If you screw this up, my blood loss
+        will have been for nothing\u2026 "
       objectReference: {fileID: 0}
     - target: {fileID: 6218933375570712969, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
@@ -474,6 +498,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: TextLore
+      value: "You made it this far? Color me impressed most zombies don\u2019t survive
+        past the laboratory, let alone the city. But here you are, smelling worse
+        than ever and proving me wrong. Zombie Heaven is not far away just keep heading
+        north. Me? Well, let\u2019s just say I\u2019ve had better days. FDT\u2019s
+        hunting me harder than they hunt profits, and I\u2019ve narrowly dodged becoming
+        a \u2018lab accident.\u2019 If I don\u2019t make it to Zombie Heaven, congratulations
+        you\u2019re officially on your own."
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
