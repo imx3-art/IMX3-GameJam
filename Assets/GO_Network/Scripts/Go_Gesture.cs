@@ -1,20 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Go_Gesture : MonoBehaviour
 {
     private Coroutine _gestureCoroutine;
     [SerializeField] private CanvasGroup msjGesture;
+    [SerializeField] private TextMeshProUGUI msjGestureText;
+    [SerializeField] private string[] msjGestureTexts;
     private void LateUpdate()
     {
         transform.LookAt(GO_MainCamera.MainCamera.transform);
     }
 
-    public void ShowGesture()
+    public void ShowGesture(short _msjIndex)
     {
         msjGesture.gameObject.SetActive(true);
-
+        msjGestureText.text = msjGestureTexts[_msjIndex];
         if (_gestureCoroutine != null)
         {
             StopCoroutine(_gestureCoroutine);

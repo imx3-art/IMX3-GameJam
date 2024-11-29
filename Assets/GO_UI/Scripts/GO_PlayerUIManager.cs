@@ -192,21 +192,27 @@ public class GO_PlayerUIManager : MonoBehaviour
                 }
                 return;
             case 1:
-                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_BeCareful");                                    
+                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_BeCareful", (short)(_value -1) );                
                 break;
             case 2:
-                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_Close");
+                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_Close", (short)(_value - 1));
                 break; 
             case 3:
-                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_Help");
+                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_Help", (short)(_value - 1));
                 break; 
             case 4:
-                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_GiveMe");
+                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_GiveMe", (short)(_value - 1));
                 break;
             }
+        if (selectGestureButon)
+        {
+            selectGestureButon.color = Color.black;
+        }
+        selectGestureButon = popUpShowMsj.transform.GetChild(_value - 1).GetComponent<Image>();
+        selectGestureButon.color = new Color(0, 150, 0, 1);
         ShowMsj(-1);
     }
-
+    private Image selectGestureButon;
     IEnumerator ShowMsjCoroutine()
     {
         popUpShowMsj.alpha = 0;
@@ -231,10 +237,18 @@ public class GO_PlayerUIManager : MonoBehaviour
         {
             do
             {
+                if (selectGestureButon)
+                {
+                    selectGestureButon.color = Color.Lerp(selectGestureButon.color, Color.black, Time.deltaTime * 6);
+                }
                 popUpShowMsj.alpha = Mathf.Lerp(popUpShowMsj.alpha, 0, Time.deltaTime * 4);
                 yield return null;
             } while (popUpShowMsj.alpha > .05f);
             popUpShowMsj.gameObject.SetActive(false);
+        }
+        if (selectGestureButon)
+        {
+            selectGestureButon.color = Color.black;
         }
         _coroutineHideMsj = null;
     }

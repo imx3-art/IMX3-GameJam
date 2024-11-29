@@ -305,9 +305,9 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     }
     
     [Rpc(RpcSources.All, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
-    public void RPC_Gesture(string _clipName)
+    public void RPC_Gesture(string _clipName, short _msj)
     {
-        msjGesture.ShowGesture();
+        msjGesture.ShowGesture(_msj);
         if (GO_AudioManager.Instance)
         {
             GO_AudioManager.Instance.PlayGameSoundByName("GO_BeCareful", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
