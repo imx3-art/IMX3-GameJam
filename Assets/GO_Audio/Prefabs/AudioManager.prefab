@@ -52,6 +52,8 @@ MonoBehaviour:
   - {fileID: 1016971375230835620, guid: 1f6f6a8cb3838b5459ba056be9d021cb, type: 3}
   - {fileID: 1016971375230835620, guid: 440f2ed299518fe47b4f57f8f333f180, type: 3}
   - {fileID: 1016971375230835620, guid: 835a00802837fdd4b862f1b68f9da68c, type: 3}
+  - {fileID: 1016971375230835620, guid: 8fcd6b8d374bf514a80a6e87331c7156, type: 3}
+  - {fileID: 1016971375230835620, guid: dff0202b7abaf424c9a35764db7a5ed3, type: 3}
   gameSounds:
   - {fileID: 1016971375230835620, guid: 470b8e36734cc16478167ff8568f486f, type: 3}
   - {fileID: 1016971375230835620, guid: c81d45003bb50164590fde4f17125ec0, type: 3}
@@ -61,6 +63,7 @@ MonoBehaviour:
   ambientSounds:
   - {fileID: 1016971375230835620, guid: bf3c4dc16487699428ad431e61f5598a, type: 3}
   - {fileID: 1016971375230835620, guid: ac80dc88a309ad241aa3ae5fd012b7e9, type: 3}
+  - {fileID: 1016971375230835620, guid: 417a315466868b245847b374bd4ca4a7, type: 3}
   minDistance: 1
   maxDistance: 10
   panRange: 10

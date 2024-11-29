@@ -24,6 +24,8 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
 
     private GO_InputsPlayer inputsPlayer;
     private GO_PlayerUIManager uiplayer;
+    
+    private bool isCollected = false;
 
     private void EnsureInputsPlayer()
     {
@@ -59,6 +61,13 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
                 uiplayer.AddBookNumber(number, positionColor);
             }
             
+            if (!isCollected)
+            {
+                isCollected = true;
+
+                uiplayer.BookCollected();
+            }
+            
         }else
         {
             playInteractSound();
@@ -81,5 +90,24 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
         {
             GO_AudioManager.Instance.PlayUISound("GO_Interacts_Sound");
         }
+    }
+    
+    private void OnEnable()
+    {
+        GO_LevelManager.OnPlayerDied += OnPlayerDied;
+    }
+
+    private void OnDisable()
+    {
+        GO_LevelManager.OnPlayerDied -= OnPlayerDied;
+    }
+    
+    private void OnPlayerDied()
+    {
+        EnsureInputsPlayer();
+        GO_UIManager.Instance.HideBookPanel();
+        GO_InputsPlayer.IsPause = false;
+        inputsPlayer.SetCursorState(true);
+        visualHint.SetActive(true);
     }
 }

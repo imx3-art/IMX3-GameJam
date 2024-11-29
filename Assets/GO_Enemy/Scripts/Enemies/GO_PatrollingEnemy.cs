@@ -48,7 +48,6 @@ public class GO_PatrollingEnemy : GO_Enemy
 
         if (patrolState != null)
         {
-            Debug.Log("Activando patrullaje");
             GetComponent<NetworkTransform>().Teleport(transform.GetChild(0).position, transform.GetChild(0).rotation);
             GetComponent<NavMeshAgent>().enabled = true;
             stateMachine.ActivateState(patrolState);
@@ -66,7 +65,6 @@ public class GO_PatrollingEnemy : GO_Enemy
         {
             WaypointsPositions.Set(i, waypoints[i]);
         }
-        Debug.Log("waypoints inicializados");
         initializedWaypoints = true;
     }
 

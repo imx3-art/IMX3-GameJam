@@ -9,12 +9,18 @@ using UnityEngine.Windows;
 
 public class GO_IntroSceneManager : MonoBehaviour
 {
-    public void Start()
+    private void Start()
     {
-        if (GO_AudioManager.Instance != null)
+        StartCoroutine(WaitForAudioManagerAndPlaySound());
+    }
+
+    private IEnumerator WaitForAudioManagerAndPlaySound()
+    {
+        while (GO_AudioManager.Instance == null)
         {
-            GO_AudioManager.Instance.PlayAmbientSound("Main_theme");
+            yield return null; 
         }
+        GO_AudioManager.Instance.PlayAmbientSound("Main_theme");
     }
 
     public void PlayGame()

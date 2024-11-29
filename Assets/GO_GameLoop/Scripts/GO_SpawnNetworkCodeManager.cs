@@ -1,13 +1,15 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SpawnCodeManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] codeManagerPrefabs; // Prefabs de CodeManager específicos para cada nivel.
+    [SerializeField] private GameObject[] codeManagerPrefabs; // Prefabs de CodeManager especï¿½ficos para cada nivel.
     private GO_LevelManager _levelManager;
     private static GameObject currentCodeManager; // Referencia al CodeManager actual para evitar duplicados.
-
+    public static event Action OnCodeManagerReady;
+    
     private void Start()
     {
         StartCoroutine(WaitForLevelManagerAndSpawn());
@@ -39,14 +41,14 @@ public class SpawnCodeManager : MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-        // Verifica que el índice esté dentro del rango del array de prefabs.
+        // Verifica que el ï¿½ndice estï¿½ dentro del rango del array de prefabs.
         if (currentSceneIndex >= codeManagerPrefabs.Length)
         {
             Debug.LogError("No hay un CodeManager configurado para este nivel.");
             return;
         }
 
-        // Construye un nombre único para identificar el CodeManager de este nivel.
+        // Construye un nombre ï¿½nico para identificar el CodeManager de este nivel.
         string codeManagerName = $"CodeManager_Level_{currentSceneIndex}";
 
         // Verifica si ya existe un CodeManager global.
@@ -71,9 +73,7 @@ public class SpawnCodeManager : MonoBehaviour
             name
         );
         }
-        // Instancia el CodeManager para este nivel.
        
-        Debug.Log("APARECIO UN PLAYER SE CORRIO ESTO 4");
-        Debug.Log($"CodeManager para el nivel {currentSceneIndex} instanciado y marcado como persistente.");       
+        OnCodeManagerReady?.Invoke();
     }
 }
