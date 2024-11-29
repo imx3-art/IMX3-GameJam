@@ -35,7 +35,7 @@ public class GO_PlayerUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI armsCount;
     [SerializeField] private GameObject[] armsState;
     [SerializeField] GameObject popUpSharedCode;
-
+    [SerializeField] CanvasGroup popUpShowMsj;
 
 
     private GO_PlayerNetworkManager playerNetworkManager;
@@ -48,7 +48,8 @@ public class GO_PlayerUIManager : MonoBehaviour
     private Coroutine hideStaminaPanelCoroutine;
 
     private PlayerState currentPlayerState;
-
+    private Coroutine _coroutineShowMsj;
+    private Coroutine _coroutineHideMsj;
     private IEnumerator Start()
     {
         while (true)
@@ -68,7 +69,7 @@ public class GO_PlayerUIManager : MonoBehaviour
                     controller.OnStaminaChanged += UpdateStaminaUI;
                     GO_PlayerNetworkManager.localPlayer.inputPlayer.onShowShared += ShowCodeSession;
                     GO_PlayerNetworkManager.localPlayer.actionPlayer.onChangeArms += ShowArms;
-
+                    GO_PlayerNetworkManager.localPlayer.inputPlayer.onShowMsj += ShowMsj;
 
                     previousStamina = controller.Stamina;
 
@@ -125,6 +126,7 @@ public class GO_PlayerUIManager : MonoBehaviour
 
         GO_PlayerNetworkManager.localPlayer.inputPlayer.onShowShared -= ShowCodeSession;
         GO_PlayerNetworkManager.localPlayer.actionPlayer.onChangeArms -= ShowArms;
+        GO_PlayerNetworkManager.localPlayer.inputPlayer.onShowMsj -= ShowMsj;
     }
 
     private void UpdateLivesUI(float currentLives)
@@ -162,6 +164,81 @@ public class GO_PlayerUIManager : MonoBehaviour
         }
         armsState[GO_PlayerNetworkManager.localPlayer.actionPlayer.CountArms()].SetActive(true);
     }
+
+    private void ShowMsj(int _value)
+    {
+
+        switch (_value)
+        {
+            case -1:
+            case 0:
+                if (popUpShowMsj.gameObject.activeSelf || _value == -1)
+                {
+                    if (_coroutineShowMsj != null)
+                    {
+                        StopCoroutine(_coroutineShowMsj);
+                        _coroutineShowMsj = null;
+                    }
+                    _coroutineHideMsj = StartCoroutine(HideMsjCoroutine());
+                }
+                else
+                {
+                    if (_coroutineHideMsj != null)
+                    {
+                        StopCoroutine(_coroutineHideMsj);
+                        _coroutineHideMsj = null;
+                    }
+                    _coroutineShowMsj = StartCoroutine(ShowMsjCoroutine());
+                }
+                return;
+            case 1:
+                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_BeCareful");                                    
+                break;
+            case 2:
+                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_Close");
+                break; 
+            case 3:
+                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_Help");
+                break; 
+            case 4:
+                GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_GiveMe");
+                break;
+            }
+        ShowMsj(-1);
+    }
+
+    IEnumerator ShowMsjCoroutine()
+    {
+        popUpShowMsj.alpha = 0;
+        GO_PlayerNetworkManager.localPlayer.msjGesture.HideGesture();
+
+        popUpShowMsj.gameObject.SetActive(true);
+        do
+        {
+            popUpShowMsj.alpha = Mathf.Lerp(popUpShowMsj.alpha, 1, Time.deltaTime * 4);
+            yield return null;
+        } while (popUpShowMsj.alpha < .95f);
+
+        yield return new WaitForSeconds(2);
+        _coroutineShowMsj = null;
+        StartCoroutine(HideMsjCoroutine());
+
+    }
+    IEnumerator HideMsjCoroutine()
+    {
+        //popUpShowMsj.alpha = 1;
+        if (popUpShowMsj.gameObject.activeSelf)
+        {
+            do
+            {
+                popUpShowMsj.alpha = Mathf.Lerp(popUpShowMsj.alpha, 0, Time.deltaTime * 4);
+                yield return null;
+            } while (popUpShowMsj.alpha > .05f);
+            popUpShowMsj.gameObject.SetActive(false);
+        }
+        _coroutineHideMsj = null;
+    }
+
     private void UpdateStaminaUI(float currentStamina)
     {
         float normalizedStamina = Mathf.InverseLerp(controller.MinStamina, controller.MaxStamina, currentStamina);

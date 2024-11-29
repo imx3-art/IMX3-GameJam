@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public enum PlayerState
 {
@@ -33,6 +34,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
 
     [SerializeField] private GO_PlayerUIManager canvasUIPlayer;
     [SerializeField] private Renderer colorPlayer;
+    public Go_Gesture msjGesture;
 
     public NetworkTransform playerTransform;
     public GO_InputsPlayer inputPlayer;
@@ -44,8 +46,9 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     public GO_PlayerActions actionPlayer;
     public PlayerState CurrentPlayerState;
 
-    public event Action<PlayerState> OnPlayerStateChanged; 
-    
+    public event Action<PlayerState> OnPlayerStateChanged;
+
+
     public override void Spawned()
     {
         DontDestroyOnLoad(gameObject);
@@ -77,6 +80,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         PlayersList.Add(this);
         GetColorPlayer();
     }
+
     public void GetColorPlayer()
     {
         if (PlayersList.Count != Runner.SessionInfo.PlayerCount ||
@@ -144,7 +148,6 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             OnPlayerStateChanged -= HandlePlayerStateChanged;
         }
     }
-
 
     public void TeleportPlayer(Vector3 _pos, Quaternion _rot)
     {
@@ -300,5 +303,14 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
                 break;
         }
     }
-
+    
+    [Rpc(RpcSources.All, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
+    public void RPC_Gesture(string _clipName)
+    {
+        msjGesture.ShowGesture();
+        if (GO_AudioManager.Instance)
+        {
+            GO_AudioManager.Instance.PlayGameSoundByName("GO_BeCareful", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
+        }
+    }
 }

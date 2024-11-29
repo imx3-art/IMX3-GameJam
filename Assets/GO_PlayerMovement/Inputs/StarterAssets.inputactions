@@ -87,6 +87,51 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Msj",
+                    "type": "PassThrough",
+                    "id": "031975ba-53a0-49a5-9562-a7c5f8c8fef2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Msj1",
+                    "type": "PassThrough",
+                    "id": "1e40c69f-8a15-4f2d-be2e-e247e91a5a78",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Msj2",
+                    "type": "PassThrough",
+                    "id": "45c16b60-3806-49de-a089-960bc5983f6b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Msj3",
+                    "type": "PassThrough",
+                    "id": "ad0a232f-4933-4a80-8620-79957d5e8ba6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Msj4",
+                    "type": "PassThrough",
+                    "id": "a5e7266c-45fa-4b5c-8028-6ffe86710df8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "GrabDropItem",
                     "type": "Value",
                     "id": "db91ffe3-2321-4b30-a4fa-f695464435a6",
@@ -407,6 +452,61 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Share",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e27d89ce-adbf-4ee3-9ef9-161bf18b84e4",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Msj1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "95caf9a7-403e-4f42-8012-b3afa6eb8582",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Msj2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53055a96-415f-406e-a345-5c223cde2fff",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Msj3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "59717fb7-0334-42f8-972c-454cf1980419",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Msj4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b177ca57-811e-44f9-a0ed-e323a87d8731",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Msj",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

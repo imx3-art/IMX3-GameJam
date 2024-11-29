@@ -1,3 +1,4 @@
+using System.Drawing;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -22,6 +23,7 @@ namespace StarterAssets
 
         public event System.Action onInteract;
         public event System.Action onShowShared;
+        public event System.Action<int> onShowMsj;
 
 
 #if ENABLE_INPUT_SYSTEM
@@ -31,7 +33,7 @@ namespace StarterAssets
         }
         public new void OnLook(InputValue value)
         {
-            LookInput(value.Get<Vector2>());            
+            LookInput(value.Get<Vector2>());
         }
         public void OnStealth(InputValue value)
         {
@@ -66,13 +68,50 @@ namespace StarterAssets
         {
             NextLevelInput(value.isPressed);
         }
-        
-        public void OnCameraVision(InputValue value) 
+
+        public void OnCameraVision(InputValue value)
         {
             CameraVisionInput(value.isPressed);
         }
+        public void OnMsj(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                onShowMsj?.Invoke(0);
+            }
+        }
+        public void OnMsj1(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                onShowMsj?.Invoke(1);
+            }
+        }
+        public void OnMsj2(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                onShowMsj?.Invoke(2);
+            }
+        }
+        public void OnMsj3(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                onShowMsj?.Invoke(3);
+            }
+        }
+        public void OnMsj4(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                onShowMsj?.Invoke(4);
+            }
+        }
 
-        
+
+
+
 #endif
         private void ToggleInteract()
         {
@@ -93,17 +132,17 @@ namespace StarterAssets
             }
 
         }
-         public void GrabDropItemInput(bool newStealthState)
+        public void GrabDropItemInput(bool newStealthState)
         {
-            
+
             grabDropItem = newStealthState;
-            
+
         }
         public void ShareInput(bool newStealthState)
         {
             onShowShared?.Invoke();
             shared = newStealthState;
-            
+
         }
 
         public void DragInput(bool newDragthState)
@@ -113,7 +152,7 @@ namespace StarterAssets
                 return;
             }
 
-            if (drag) 
+            if (drag)
             {
                 move = Vector2.zero;
             }
@@ -152,13 +191,13 @@ namespace StarterAssets
         {
             Cursor.lockState = (cursorLocked = newState) ? CursorLockMode.Locked : CursorLockMode.None;
         }
-        
+
         public void NextLevelInput(bool newState)
         {
             GO_LevelManager.instance.HandlePlayerEnterArea();
         }
-        
-        public void CameraVisionInput(bool newCameraVisionState) 
+
+        public void CameraVisionInput(bool newCameraVisionState)
         {
             cameraVision = newCameraVisionState;
         }
