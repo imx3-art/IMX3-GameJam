@@ -43,6 +43,7 @@ public class GO_PlayerUIManager : MonoBehaviour
 
     private int totalLives = 0;
     private List<Image> heartImages = new List<Image>();
+    private Image selectGestureButonTmp;
 
     private float previousStamina;
     private Coroutine hideStaminaPanelCoroutine;
@@ -204,15 +205,14 @@ public class GO_PlayerUIManager : MonoBehaviour
                 GO_PlayerNetworkManager.localPlayer.RPC_Gesture("GO_GiveMe", (short)(_value - 1));
                 break;
             }
-        if (selectGestureButon)
+        if (selectGestureButonTmp)
         {
-            selectGestureButon.color = Color.black;
+            selectGestureButonTmp.color = Color.black;
         }
-        selectGestureButon = popUpShowMsj.transform.GetChild(_value - 1).GetComponent<Image>();
-        selectGestureButon.color = new Color(0, 150, 0, 1);
+        selectGestureButonTmp = popUpShowMsj.transform.GetChild(_value - 1).GetComponent<Image>();
+        selectGestureButonTmp.color = new Color(0, 150, 0, 1);
         ShowMsj(-1);
     }
-    private Image selectGestureButon;
     IEnumerator ShowMsjCoroutine()
     {
         popUpShowMsj.alpha = 0;
@@ -237,18 +237,18 @@ public class GO_PlayerUIManager : MonoBehaviour
         {
             do
             {
-                if (selectGestureButon)
+                if (selectGestureButonTmp)
                 {
-                    selectGestureButon.color = Color.Lerp(selectGestureButon.color, Color.black, Time.deltaTime * 6);
+                    selectGestureButonTmp.color = Color.Lerp(selectGestureButonTmp.color, Color.black, Time.deltaTime * 6);
                 }
                 popUpShowMsj.alpha = Mathf.Lerp(popUpShowMsj.alpha, 0, Time.deltaTime * 4);
                 yield return null;
             } while (popUpShowMsj.alpha > .05f);
             popUpShowMsj.gameObject.SetActive(false);
         }
-        if (selectGestureButon)
+        if (selectGestureButonTmp)
         {
-            selectGestureButon.color = Color.black;
+            selectGestureButonTmp.color = Color.black;
         }
         _coroutineHideMsj = null;
     }
@@ -322,9 +322,8 @@ public class GO_PlayerUIManager : MonoBehaviour
     }
     private void ChangePlayerNumber()
     {
-        sessionPlayersCount.text = GO_RunnerManager.Instance._runner.SessionInfo.PlayerCount + "/6";
+        sessionPlayersCount.text = GO_RunnerManager.Instance._runner.SessionInfo.PlayerCount + "/6";        
     }
-
     public void AddBookNumber(string number, Color color)
     {
         // Verificar si el número ya existe en el HUD

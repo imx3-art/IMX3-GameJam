@@ -20,7 +20,6 @@ public enum STATUSCONNECTION
 
 }
 
-
 public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
 {
 

@@ -78,7 +78,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
 
         }
         PlayersList.Add(this);
-        GetColorPlayer();
+        GetColorPlayer();        
     }
 
     public void GetColorPlayer()
@@ -86,7 +86,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         if (PlayersList.Count != Runner.SessionInfo.PlayerCount ||
             !GO_LevelManager.instance)
         {
-            Invoke("GetColorPlayer", 1);
+            Invoke("GetColorPlayer", .1f);
             return;
         }
         if (Object.HasStateAuthority)
@@ -122,22 +122,21 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             Invoke("SetColorPlayer", 1);
             return;
         }
-        //colorPlayer.material.color = GO_LevelManager.instance.playerColors[idColor];
         colorPlayer.material.SetColor("_ReflectionColor", GO_LevelManager.instance.playerColors[idColor]);
+        GO_LevelManager.instance.ShowOtherPlayers();
     }
     private IEnumerator Start()
     {
         (controller = GetComponentInChildren<GO_ThirdPersonController>()).enabled = isLocalPlayer;
         yield return new WaitWhile(() => GO_LevelManager.instance == null); 
-        while (!GO_LevelManager.instance.isReady) 
+        while (!GO_LevelManager.instance.isReadyObjects) 
         {
         yield return null;
         }
-        GO_LevelManager.instance.CheckPlayerInNewLevel();        
+        GO_LevelManager.instance.CheckPlayerInNewLevel();
     }
     private void OnDisable()
     {
-        PlayersList.Remove(this);
 
     }
 
@@ -145,6 +144,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
+            PlayersList.Remove(this);
             OnPlayerStateChanged -= HandlePlayerStateChanged;
         }
     }
