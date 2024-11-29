@@ -199,6 +199,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         {
             RPC_setOtherPlayer(otherPlayerTarget.playerID, playerID, false);
         }
+        actionPlayer.DragArmAnimation(false);
         otherPlayerTarget = null;
         actionPlayer.ActiveCanvas(false);
     }
@@ -222,6 +223,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
                 otherPlayerTargetTMP.pullMiniGame = 0;
                 otherPlayerTargetTMP.timeMinigame = 0;
                 otherPlayerTargetTMP.actionPlayer.ResetMinigame(false);
+                otherPlayerTargetTMP.actionPlayer.DragArmAnimation(true);
                 //otherPlayerTargetTMP.StartdragMode();
             }
             else

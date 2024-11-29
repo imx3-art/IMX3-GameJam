@@ -444,16 +444,12 @@ public class GO_LevelManager : NetworkBehaviour
 }
         private IEnumerator ShowOtherPlayersCoroutine(bool _value)
         {
-        Debug.Log("Apagando player_: " + GO_PlayerNetworkManager.PlayersList.Count + "  +  " + GO_RunnerManager.Instance._runner.SessionInfo.PlayerCount);
-
+       
         yield return new WaitWhile(() => GO_PlayerNetworkManager.PlayersList.Count != GO_RunnerManager.Instance._runner.SessionInfo.PlayerCount);
-        Debug.Log("Apagando player_ " + GO_PlayerNetworkManager.PlayersList.Count);
-
         foreach (GO_PlayerNetworkManager pn in GO_PlayerNetworkManager.PlayersList)
         {
         if (pn != GO_PlayerNetworkManager.localPlayer)
         {
-            Debug.Log("Apagando player_ " + pn);
             yield return new WaitWhile(() => !GO_PlayerNetworkManager.PlayersList.Contains(pn));
             pn.playerTransform.gameObject.SetActive(_value);
             }

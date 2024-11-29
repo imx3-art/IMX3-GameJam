@@ -143,8 +143,6 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<GO_InputsPlayer>();
-            //networkManager = GetComponentInParent<GO_PlayerNetworkManager>();
-
             AssignAnimationIDs();
         }
 
@@ -572,10 +570,16 @@ namespace StarterAssets
         }
 
         private void StopGrabItem()
-        {
-            Debug.Log("LLAMANDO LA FUNCION");
+        {            
             _animator.SetBool("Grab", false);        
         }
+
+        public void PlayBoolAnimation(string _Key, bool _value)
+        {
+            Debug.Log("LLAMANDO LA FUNCION");
+            _animator.SetBool(_Key, _value);
+        }
+
         public void RestoreSpeed()
         {
             if (IsSpeedReduced)
