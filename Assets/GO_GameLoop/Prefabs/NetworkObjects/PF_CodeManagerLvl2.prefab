@@ -174,12 +174,11 @@ PrefabInstance:
     - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
       propertyPath: TextLore
-      value: "Shortcuts and Sabotage Well, look who\u2019s still shambling along.
-        Most zombies either get stuck chewing fences or arguing over who gets to
-        keep the last arm. Here\u2019s a tip: sometimes, the fastest path isn\u2019t
-        the obvious one. Look for hidden shortcuts, but be warned\u2014they might
-        take two zombies to activate. Cooperation is key... unless you\u2019re busy
-        stealing arms again."
+      value: "Well, look who\u2019s still shambling along. Most zombies either get
+        stuck chewing fences or arguing over who gets to keep the last arm. Here\u2019s
+        a tip: sometimes, the fastest path isn\u2019t the obvious one. Look for hidden
+        shortcuts, but be warned\u2014they might take two zombies to activate. Cooperation
+        is key... unless you\u2019re busy stealing arms again."
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -279,13 +278,12 @@ PrefabInstance:
     - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
       propertyPath: TextLore
-      value: "Zombie Haven: It\u2019s Real, Right? \u2026Right? Not all humans are
-        jerks, you know. Years ago, Dr. Ricardo (Rick) Zanch\xE9z discovered the
-        anti-aging enzyme. When he saw FDT\u2019s zombie-farming plans, he went full
-        rogue and said, \u2018Screw this.\u2019 Legend has it, he freed a bunch of
-        zombies and built Zombie Haven in the mountains. And yes, Zombie Heaven is
-        real. Or it better be, because if it\u2019s not, we\u2019re all wasting a
-        lot of time reading these notes."
+      value: "Not all humans are jerks, you know. Years ago, Dr. Ricardo (Rick) Zanch\xE9z
+        discovered the anti-aging enzyme. When he saw FDT\u2019s zombie-farming plans,
+        he went full rogue and said, \u2018Screw this.\u2019 Legend has it, he freed
+        a bunch of zombies and built Zombie Haven in the mountains. And yes, Zombie
+        Heaven is real. Or it better be, because if it\u2019s not, we\u2019re all
+        wasting a lot of time reading these notes."
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -385,12 +383,12 @@ PrefabInstance:
     - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
       propertyPath: TextLore
-      value: "Zombie Heaven: No Jerks Allowed Congrats, are you having fun ripping
-        off someone\u2019s arm and tossing it to the humans? Real classy. But hey,
-        sabotage all you want\u2014just know Zombie Heaven isn\u2019t for selfish
-        jerks. They\u2019ve got standards\u2026 I think. And limb-flinging cowards
-        don\u2019t make the cut. So maybe stop throwing your friends under the bus\u2026
-        or into the humans\u2019 mouths. Try using your own arm, you coward."
+      value: "Congrats, are you having fun ripping off someone\u2019s arm and tossing
+        it to the humans? Real classy. But hey, sabotage all you want\u2014just know
+        Zombie Heaven isn\u2019t for selfish jerks. They\u2019ve got standards\u2026
+        I think. And limb-flinging cowards don\u2019t make the cut. So maybe stop
+        throwing your friends under the bus\u2026 or into the humans\u2019 mouths.
+        Try using your own arm, you coward."
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
