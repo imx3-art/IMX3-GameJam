@@ -39,11 +39,6 @@ public class GO_CodeManager : NetworkBehaviour
         if (string.IsNullOrEmpty(generatedCodes[levelIndex]))
         {
             generatedCodes.Set(levelIndex, Random.Range(1000, 9999).ToString());
-            Debug.Log($"C�digo nuevo para el nivel {levelIndex}: {generatedCodes[levelIndex]}");
-        }
-        else
-        {
-            Debug.Log($"C�digo existente para el nivel {levelIndex}: {generatedCodes[levelIndex]}");
         }
     }
 
@@ -107,15 +102,11 @@ public class GO_CodeManager : NetworkBehaviour
         }
 
         displayedCode = new string(inputCode.ToArray());
-        Debug.Log($"C�digo distribuido para el nivel {levelIndex}: {displayedCode}");
     }
 
     public bool ValidateCode(string userInput)
     {
         int currentLevelIndex = GetCurrentLevelIndex();
-        Debug.Log("CONTRASAE�A" + generatedCodes[currentLevelIndex]);
-        Debug.Log("CURRENT LEVEL" + currentLevelIndex);
-        Debug.Log("USERINPUT" + userInput);
         bool isOk = userInput == generatedCodes[currentLevelIndex];
         Debug.Log(isOk);
         return isOk;

@@ -49,8 +49,9 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
     public void Interact()
     {
         EnsureInputsPlayer();
-        if (inputsPlayer.interact)
+        if (!GO_InteractionManager.IsInteracting)
         {
+            GO_InteractionManager.IsInteracting = true;
             GO_InputsPlayer.IsPause = true;
             inputsPlayer.SetCursorState(false);
             visualHint.SetActive(false);
@@ -70,6 +71,7 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
             
         }else
         {
+            GO_InteractionManager.IsInteracting = false;
             playInteractSound();
             GO_UIManager.Instance.HideBookPanel();
             GO_InputsPlayer.IsPause = false;

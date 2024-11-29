@@ -9,6 +9,7 @@ public class GO_InteractionManager : MonoBehaviour
     private GameObject currentVisualHint; // Referencia al objeto visual de ayuda.
     private GO_PlayerNetworkManager playerNetworkManager;
     private GO_InteractableAutomaticDoor Currentdoor;
+    public static bool IsInteracting;
 
     private void Start()
     {
@@ -94,8 +95,7 @@ public class GO_InteractionManager : MonoBehaviour
                 {
                     Currentdoor.CloseAutomaticDoor();
                 }
-            }
-            Debug.Log("SALIENDO DEL AREA");          
+            }       
         }
     }
 

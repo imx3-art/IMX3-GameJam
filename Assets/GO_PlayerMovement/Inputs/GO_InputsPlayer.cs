@@ -61,7 +61,10 @@ namespace StarterAssets
         }
         public void OnInteract(InputValue value)
         {
-            ToggleInteract();
+            if(value.isPressed)
+            {
+                onInteract?.Invoke();
+            }
         }
 
         public void OnNextLevel(InputValue value)
@@ -113,12 +116,7 @@ namespace StarterAssets
 
 
 #endif
-        private void ToggleInteract()
-        {
-            interact = !interact; // Invierte el estado actual.
-            Debug.Log($"Interactuar est� ahora: {interact}");
-            onInteract?.Invoke(); // Dispara el evento de interacci�n.
-        }
+        
         public void StealthInput(bool newStealthState)
         {
             stealth = newStealthState;
