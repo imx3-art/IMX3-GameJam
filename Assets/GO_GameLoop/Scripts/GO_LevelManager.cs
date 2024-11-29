@@ -68,7 +68,7 @@ public class GO_LevelManager : NetworkBehaviour
     public override void Spawned()
     {
         if(debug)Debug.Log("Iniciando " + instance);
-        _currentLevel = Level.L_GO_Level1;
+        _currentLevel = Level.L_GO_Level0;
         if (instance == null)
         {
             instance = this;
@@ -373,7 +373,7 @@ public class GO_LevelManager : NetworkBehaviour
     [ContextMenu("RESET LEVEL")]
     public void LoadLevelAsync()
     {
-        StartCoroutine(LoadLevelAsync(_currentLevel = Level.L_GO_Level1));
+        StartCoroutine(LoadLevelAsync(_currentLevel = Level.L_GO_Level0));
         GO_PlayerNetworkManager.localPlayer.RPC_ResetArms();
       
     }
