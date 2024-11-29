@@ -8,9 +8,9 @@ using UnityEngine;
 public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
 {
     [SerializeField] private string TextLore;
+    [SerializeField] private string number;
     [SerializeField] private GameObject visualHint;
 
-    private string number; // N�mero del libro.
     private int positionInCode; // Posici�n del n�mero en el c�digo.
     private Color positionColor; // Color asociado a esta posici�n.
 
@@ -54,7 +54,10 @@ public class GO_InteractableBook : MonoBehaviour, GO_IInteractable
             visualHint.SetActive(false);
             playInteractSound();
             GO_UIManager.Instance.ShowBookNumber(number, positionColor, TextLore);
-            uiplayer.AddBookNumber(number, positionColor);
+            if (positionColor != Color.clear && number != null)
+            {
+                uiplayer.AddBookNumber(number, positionColor);
+            }
             
         }else
         {
