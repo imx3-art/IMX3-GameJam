@@ -20,7 +20,7 @@ public enum PlayerState
 public class GO_PlayerNetworkManager : NetworkBehaviour
 {
 
-    private GO_ThirdPersonController controller;
+    
 
     [Networked] public string playerName { get; set; }
     [Networked] public short idColor { get; set; } = -1;
@@ -34,6 +34,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
 
     [SerializeField] private GO_PlayerUIManager canvasUIPlayer;
     [SerializeField] private Renderer colorPlayer;
+
+    public GO_ThirdPersonController controller;
     public Go_Gesture msjGesture;
 
     public NetworkTransform playerTransform;
@@ -78,7 +80,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
 
         }
         PlayersList.Add(this);
-        GetColorPlayer();        
+        GetColorPlayer();  
+
     }
 
     public void GetColorPlayer()
@@ -123,7 +126,6 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
             return;
         }
         colorPlayer.material.SetColor("_ReflectionColor", GO_LevelManager.instance.playerColors[idColor]);
-        GO_LevelManager.instance.ShowOtherPlayers();
     }
     private IEnumerator Start()
     {
@@ -134,6 +136,8 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         yield return null;
         }
         GO_LevelManager.instance.CheckPlayerInNewLevel();
+        GO_LevelManager.instance.ShowOtherPlayers();
+
     }
     private void OnDisable()
     {
