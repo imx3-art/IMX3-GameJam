@@ -168,9 +168,11 @@ public class GO_LevelManager : NetworkBehaviour
             uiplayer  = _playerInstance.transform.GetChild(2).GetComponent<GO_PlayerUIManager>();
             uiplayer.RemoveBooksNumber();
             CurrentPlayerRefChangeScene = Runner.LocalPlayer;
-
-
             ChangeScene();
+            if (GO_PlayerNetworkManager.localPlayer.actionPlayer.CountArms() < 2)
+            {
+                GO_PlayerNetworkManager.localPlayer.RPC_addNewArm();
+            }
         }
     }
     /// <summary>
@@ -267,7 +269,6 @@ public class GO_LevelManager : NetworkBehaviour
             OnLivesChanged?.Invoke(_playerInstance.playerLives);
             GO_ThirdPersonController control = _playerInstance.GetComponentInChildren<GO_ThirdPersonController>();
             control.RegenerateAllStamina();
-            //RPC_setLifes(_playerInstance.playerID, -1);
             ResetPlayerPosition();
         }
         if(debug)Debug.Log(_playerInstance.playerLives);
@@ -373,6 +374,8 @@ public class GO_LevelManager : NetworkBehaviour
     public void LoadLevelAsync()
     {
         StartCoroutine(LoadLevelAsync(_currentLevel = Level.L_GO_Level1));
+        GO_PlayerNetworkManager.localPlayer.RPC_ResetArms();
+      
     }
     public IEnumerator LoadLevelAsync(Level level)
     {
@@ -398,7 +401,7 @@ public class GO_LevelManager : NetworkBehaviour
         }
 
 
-        if (SceneManager.GetActiveScene().name != sceneName)
+        if (SceneManager.GetActiveScene().name != sceneName || true)
         {
             GO_SpawnPoint.currentSpawPoint = null;
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);

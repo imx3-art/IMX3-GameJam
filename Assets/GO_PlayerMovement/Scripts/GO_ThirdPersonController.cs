@@ -85,7 +85,6 @@ namespace StarterAssets
         private Rigidbody grabbedObjectRb;  // Rigidbody del objeto agarrado
         private FixedJoint joint;
 
-
         private CharacterController _controller;
         private GO_InputsPlayer _input;
         private GameObject _mainCamera;
@@ -130,10 +129,6 @@ namespace StarterAssets
         private float yaw = 0f; // Rotación acumulada en Y
         private float initialYOffset;
 
-       
-
-        
-
         private void Awake()
         {
             //_mainCamera = Camera.main.gameObject; ALBERT
@@ -162,6 +157,11 @@ namespace StarterAssets
             Move();
             AdjustCameraFraming();
             HandleStaminaAndSpeed();
+
+            if (_input.grabDropItem)
+            {
+                _animator.SetBool("Grab", true);
+            }
 
             if (_input.Grab)
             {
@@ -212,7 +212,6 @@ namespace StarterAssets
                 _virtualCamera.OnTargetObjectWarped(transform, positionDelta);
             }
         }
-
 
         private void Move()
         {
@@ -332,7 +331,6 @@ namespace StarterAssets
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
-
 
         private void AdjustCameraFraming()
         {
@@ -573,6 +571,11 @@ namespace StarterAssets
             }
         }
 
+        private void StopGrabItem()
+        {
+            Debug.Log("LLAMANDO LA FUNCION");
+            _animator.SetBool("Grab", false);        
+        }
         public void RestoreSpeed()
         {
             if (IsSpeedReduced)

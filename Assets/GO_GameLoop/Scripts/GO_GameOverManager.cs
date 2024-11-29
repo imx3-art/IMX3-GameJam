@@ -45,11 +45,9 @@ public class GO_GameOverManager : MonoBehaviour
 
     public void Retry()
     {
-
         GO_LoadScene.Instance.ShowLoadingScreen();
         _currentLevel = GO_LevelManager.Level.L_GO_Level1;  // Cambia a Nivel1 para reiniciar
-        GO_LevelManager.instance.LoadLevelAsync();
-        
+        GO_LevelManager.instance.LoadLevelAsync();        
         HidePopup();  // Oculta el popup despu�s de reiniciar el nivel
     }
 
