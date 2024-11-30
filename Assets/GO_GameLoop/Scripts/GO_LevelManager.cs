@@ -23,7 +23,6 @@ public class GO_LevelManager : NetworkBehaviour
 
 
     //[Networked] public List<Level> levelsLoaded { get; set; } = new List<Level>();
-
     public List<string> objectsSpawned = new List<string>();
     public List<NetworkObject> networkObjectsSpawned = new List<NetworkObject>();
     public bool isReady;
@@ -48,7 +47,7 @@ public class GO_LevelManager : NetworkBehaviour
     private GameObject _playerPrefab;
 
     public Level _currentLevel;
-    
+
     public Color[] playerColors;
 
     private Transform _spawnPoint;
@@ -59,17 +58,16 @@ public class GO_LevelManager : NetworkBehaviour
     [SerializeField] GameObject prefabNetworkObjects;
 
     public static event Action OnPlayerChangeScene;
-    
+
     public event Action<float> OnLivesChanged;
-    
 
     public bool debug;
-    
+
     public static event Action OnPlayerDied;
 
     public override void Spawned()
     {
-        if(debug)Debug.Log("Iniciando " + instance);
+        if (debug) Debug.Log("Iniciando " + instance);
         _currentLevel = Level.L_GO_Level0;
         if (instance == null)
         {
@@ -107,8 +105,8 @@ public class GO_LevelManager : NetworkBehaviour
         while (true)
         {
             yield return new WaitForSeconds(.1f);
-            if(debug)Debug.Log("No player Ready");
-            if(GO_PlayerNetworkManager.localPlayer != null)
+            if (debug) Debug.Log("No player Ready");
+            if (GO_PlayerNetworkManager.localPlayer != null)
             {
                 _playerInstance = GO_PlayerNetworkManager.localPlayer;
                 break;
@@ -149,7 +147,7 @@ public class GO_LevelManager : NetworkBehaviour
         if (_playerInstance != null)
         {
             (Vector3 pos, Quaternion rot) = GO_SpawnPoint.currentSpawPoint.getSpawPointPosition();
-            
+
             _playerInstance.TeleportPlayer(pos, rot);
         }
     }
@@ -170,7 +168,7 @@ public class GO_LevelManager : NetworkBehaviour
         {
             //Muestra pantalla de Carga
             GO_LoadScene.Instance.ShowLoadingScreen();
-            uiplayer  = _playerInstance.transform.GetChild(2).GetComponent<GO_PlayerUIManager>();
+            uiplayer = _playerInstance.transform.GetChild(2).GetComponent<GO_PlayerUIManager>();
             uiplayer.RemoveBooksNumber();
             CurrentPlayerRefChangeScene = Runner.LocalPlayer;
             ChangeScene();
@@ -186,29 +184,29 @@ public class GO_LevelManager : NetworkBehaviour
     /// <returns></returns>
     public bool CheckPlayerInLastLevel()
     {
-        foreach(GO_PlayerNetworkManager player in GO_PlayerNetworkManager.PlayersList) 
+        foreach (GO_PlayerNetworkManager player in GO_PlayerNetworkManager.PlayersList)
         {
             if (player.playerID == GO_PlayerNetworkManager.localPlayer.playerID)
             {
                 continue;
             }
-            if(debug)Debug.Log("*** CAMBIO SCENE " + player.currentLevel_ID + " - " + player.name + " POINT: " + GO_SpawnPoint.currentSpawPoint.level_ID);
+            if (debug) Debug.Log("*** CAMBIO SCENE " + player.currentLevel_ID + " - " + player.name + " POINT: " + GO_SpawnPoint.currentSpawPoint.level_ID);
 
-            if ((short) GO_SpawnPoint.currentSpawPoint.level_ID == player.currentLevel_ID)
+            if ((short)GO_SpawnPoint.currentSpawPoint.level_ID == player.currentLevel_ID)
             {
-                if(debug)Debug.Log("*** CAMBIO SCENE " + player.currentLevel_ID + " - " + player.name);
+                if (debug) Debug.Log("*** CAMBIO SCENE " + player.currentLevel_ID + " - " + player.name);
 
                 foreach (var playerRef in Runner.ActivePlayers)
                 {
-                    if(debug)Debug.Log("*** CAMBIO SCENE ACTIVE PLAYERS REF " + playerRef);
+                    if (debug) Debug.Log("*** CAMBIO SCENE ACTIVE PLAYERS REF " + playerRef);
 
                     if (Runner.TryGetPlayerObject(playerRef, out NetworkObject playerObject))
                     {
-                        if(debug)Debug.Log("*** CAMBIO SCENE PLAYER ASOCIADO " + playerObject + " - " + playerObject.GetComponent<GO_PlayerNetworkManager>().currentLevel_ID);
+                        if (debug) Debug.Log("*** CAMBIO SCENE PLAYER ASOCIADO " + playerObject + " - " + playerObject.GetComponent<GO_PlayerNetworkManager>().currentLevel_ID);
 
                         if (playerObject.GetComponent<GO_PlayerNetworkManager>().playerID == player.playerID)
                         {
-                            if(debug)Debug.Log("*** CAMBIO SCENE ASIGNE E LNUEVO REFT ");
+                            if (debug) Debug.Log("*** CAMBIO SCENE ASIGNE E LNUEVO REFT ");
                             newPlayerRefAuthorityChangeScene = playerRef;
                             break;
                         }
@@ -225,23 +223,23 @@ public class GO_LevelManager : NetworkBehaviour
     {
         foreach (GO_PlayerNetworkManager player in GO_PlayerNetworkManager.PlayersList)
         {
-            if(debug)Debug.Log("---COMPARAMOS PLAYER: " + player.playerID);
+            if (debug) Debug.Log("---COMPARAMOS PLAYER: " + player.playerID);
 
             if (player != GO_PlayerNetworkManager.localPlayer)
             {
-                if (player.currentLevel_ID == (short) GO_SpawnPoint.currentSpawPoint.level_ID)
+                if (player.currentLevel_ID == (short)GO_SpawnPoint.currentSpawPoint.level_ID)
                 {
-                    if(debug)Debug.Log("---ENTONTRAMOS PLAYER: " + player.playerID);        
+                    if (debug) Debug.Log("---ENTONTRAMOS PLAYER: " + player.playerID);
                     return;
                 }
             }
         }
-        foreach(NetworkObject networkObject in networkObjectsSpawned)
+        foreach (NetworkObject networkObject in networkObjectsSpawned)
         {
-            if(debug)Debug.Log("---COMPARAMOS EL SIGUIENTE OBJETO: " + networkObject.name);
+            if (debug) Debug.Log("---COMPARAMOS EL SIGUIENTE OBJETO: " + networkObject.name);
             if (networkObject.GetComponent<GO_NetworkObject>().level_ID == GO_PlayerNetworkManager.localPlayer.currentLevel_ID)
             {
-                if(debug)Debug.Log("---APROBAMOS EN EL NIVEL ACUTAL EL SIGUIENTE OBJETO: " + networkObject.name);
+                if (debug) Debug.Log("---APROBAMOS EN EL NIVEL ACUTAL EL SIGUIENTE OBJETO: " + networkObject.name);
                 networkObject.RequestStateAuthority();
             }
         }
@@ -254,7 +252,7 @@ public class GO_LevelManager : NetworkBehaviour
         {
             foreach (NetworkObject networkObject in networkObjectsSpawned)
             {
-                if(debug)Debug.Log("+++COMPARAMOS EL SIGUIENTE OBJETO: " + networkObject.name);
+                if (debug) Debug.Log("+++COMPARAMOS EL SIGUIENTE OBJETO: " + networkObject.name);
 
                 if (networkObject.StateAuthority == _player)
                 {
@@ -267,23 +265,23 @@ public class GO_LevelManager : NetworkBehaviour
     [ContextMenu("PERDER VIDA")]
     public void perderUnaVida()
     {
-        if(_currentLevel != Level.L_GO_Level1 || true)//REVERT
+        if (_currentLevel != Level.L_GO_Level1 || true)//REVERT
         {
             _playerInstance.playerLives--;
-            if(debug)Debug.Log($"Jugador Recibio ataque, vidas restantes"+_playerInstance.playerLives);
+            if (debug) Debug.Log($"Jugador Recibio ataque, vidas restantes" + _playerInstance.playerLives);
             OnLivesChanged?.Invoke(_playerInstance.playerLives);
             OnPlayerDied?.Invoke();
             GO_ThirdPersonController control = _playerInstance.GetComponentInChildren<GO_ThirdPersonController>();
             control.RegenerateAllStamina();
             ResetPlayerPosition();
         }
-        if(debug)Debug.Log(_playerInstance.playerLives);
+        if (debug) Debug.Log(_playerInstance.playerLives);
     }
     private void ChangeScene()
     {
         _playerInstance.playerLives = totalLives;
         OnLivesChanged?.Invoke(_playerInstance.playerLives);
-        if(debug)Debug.Log("SERIE " + _currentLevel);
+        if (debug) Debug.Log("SERIE " + _currentLevel);
 
         switch (_currentLevel)
         {
@@ -297,7 +295,7 @@ public class GO_LevelManager : NetworkBehaviour
                 _currentLevel = Level.L_GO_ZombieHeaven;
                 break;
         }
-        if(debug)Debug.Log("SERIE " + _currentLevel);
+        if (debug) Debug.Log("SERIE " + _currentLevel);
         StartCoroutine(LoadLevelAsync(_currentLevel));
     }
 
@@ -337,43 +335,43 @@ public class GO_LevelManager : NetworkBehaviour
             {
                 GO_GameOverManager.Instance.ShowPopup();
             }
-            
+
             // Instancia PopupManager si no existe
             //RPC_setLifes(_playerInstance.playerID, (short)totalLives);
             _playerInstance.playerLives = totalLives;
             OnLivesChanged?.Invoke(_playerInstance.playerLives);
             _currentLevel = Level.L_GO_Level1;
-            if(debug)Debug.Log(_playerInstance.playerLives);
-            
+            if (debug) Debug.Log(_playerInstance.playerLives);
+
         }
     }
-    
+
     private IEnumerator WaitForPopupManagerAndShowPopup()
     {
         while (GO_GameOverManager.Instance == null)
         {
-            yield return null; 
+            yield return null;
         }
 
         GO_GameOverManager.Instance.ShowPopup();
     }
-    
+
     [ContextMenu("RESET LEVEL")]
     public void LoadLevelAsync()
     {
         StartCoroutine(LoadLevelAsync(_currentLevel = Level.L_GO_Level0));
         GO_PlayerNetworkManager.localPlayer.RPC_ResetArms();
-      
+
     }
     public IEnumerator LoadLevelAsync(Level level)
     {
         string sceneName = level.ToString();
 
-        if(debug)Debug.Log("*** CARGANDO SCENE " + sceneName);
+        if (debug) Debug.Log("*** CARGANDO SCENE " + sceneName);
 
         if (!CheckPlayerInLastLevel())//
         {
-            if(debug)Debug.Log("*** CAMBIO SCENE NO HAY PLAYER ACTIVOS");
+            if (debug) Debug.Log("*** CAMBIO SCENE NO HAY PLAYER ACTIVOS");
         }
 
         OnPlayerChangeScene?.Invoke();
@@ -382,7 +380,7 @@ public class GO_LevelManager : NetworkBehaviour
         {
             GO_NetworkObject.readyChangeScene = true;
             yield return new WaitForSeconds(1);
-            if(debug)Debug.Log("ESPERANDO TRANSFERENCIA DE AUTORDADES");
+            if (debug) Debug.Log("ESPERANDO TRANSFERENCIA DE AUTORDADES");
             if (GO_NetworkObject.readyChangeScene)
             {
                 break;
@@ -394,12 +392,14 @@ public class GO_LevelManager : NetworkBehaviour
         {
             GO_SpawnPoint.currentSpawPoint = null;
 
-
+#if UNITY_EDITOR
             if (GO_RunnerManager.Instance.useAsetsBundles)
+#else
+            if (true)
+#endif
             {
                 GO_DownloadSceneFromAssetsBundles.Instance.downloadScene(sceneName);
                 yield return new WaitWhile(() => !GO_DownloadSceneFromAssetsBundles.Instance.loadingSceneComplete);
-
             }
             else
             {
@@ -412,51 +412,43 @@ public class GO_LevelManager : NetworkBehaviour
                 yield return new WaitWhile(() => GO_SpawnPoint.currentSpawPoint == null);
                 if (debug) Debug.Log($"***Cargando... {asyncLoad.progress * 100} % - SpawnPointB: " + GO_SpawnPoint.currentSpawPoint);
             }
-            
-            
-            
-
 
             SpawnPlayer();
 
             if (!CheckPlayerInLastLevel())//
             {
-                if(debug)Debug.Log("CAMBIO SCENE NO HAY PLAYER ACTIVOS EN LA ESCENA ACTUAL");
+                if (debug) Debug.Log("CAMBIO SCENE NO HAY PLAYER ACTIVOS EN LA ESCENA ACTUAL");
                 CheckPlayerInNewLevel();
             }
             OnPlayerChangeScene?.Invoke();
         }
 
-       
-       ShowOtherPlayers();
-       
+        ShowOtherPlayers();
     }
-    
+
     public int GetCurrentLevelName()
     {
         return (int)GO_SpawnPoint.currentSpawPoint.level_ID;
     }
 
     public void ShowOtherPlayers()
-{
-    StartCoroutine(ShowOtherPlayersCoroutine(_currentLevel != GO_LevelManager.Level.L_GO_Level0));
-}
-        private IEnumerator ShowOtherPlayersCoroutine(bool _value)
-        {
-       
+    {
+        StartCoroutine(ShowOtherPlayersCoroutine(_currentLevel != GO_LevelManager.Level.L_GO_Level0));
+    }
+    private IEnumerator ShowOtherPlayersCoroutine(bool _value)
+    {
+
         yield return new WaitWhile(() => GO_PlayerNetworkManager.PlayersList.Count != GO_RunnerManager.Instance._runner.SessionInfo.PlayerCount);
         foreach (GO_PlayerNetworkManager pn in GO_PlayerNetworkManager.PlayersList)
         {
-        if (pn != GO_PlayerNetworkManager.localPlayer)
-        {
-            yield return new WaitWhile(() => !GO_PlayerNetworkManager.PlayersList.Contains(pn));
-            pn.playerTransform.gameObject.SetActive(_value);
+            if (pn != GO_PlayerNetworkManager.localPlayer)
+            {
+                yield return new WaitWhile(() => !GO_PlayerNetworkManager.PlayersList.Contains(pn));
+                pn.playerTransform.gameObject.SetActive(_value);
             }
         }
-}
-
-
-private void Update()
+    }
+    private void Update()
     {
         if (isChangingScene && SceneManager.GetActiveScene().name == _currentLevel.ToString())
         {
@@ -467,13 +459,13 @@ private void Update()
     {
         isChangingScene = false;
     }
-    public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos , Quaternion _rot, string _codeName = null )
+    public NetworkObject SpawnObjects(GameObject prefabNetworkObjects, Vector3 _pos, Quaternion _rot, string _codeName = null)
     {
-        if(debug)Debug.Log("MANDO SPAWN " + objectsSpawned.Count);
+        if (debug) Debug.Log("MANDO SPAWN " + objectsSpawned.Count);
 
         if (_codeName == null || !objectsSpawned.Contains(_codeName))
         {
-            if(debug)Debug.Log("MANDO SPAWN un player " + _codeName);
+            if (debug) Debug.Log("MANDO SPAWN un player " + _codeName);
 
             var NetworkObject = Runner.Spawn(prefabNetworkObjects, _pos, _rot);
             if (_codeName != null)
@@ -492,27 +484,27 @@ private void Update()
     public void RPC_GetPoolSpawnObject()
     {
         int chunkSize = 18;
-        if(objectsSpawned.Count < chunkSize)
+        if (objectsSpawned.Count < chunkSize)
         {
-            RPC_SendPoolSpawnObject(objectsSpawned.ToArray(), 2);        
+            RPC_SendPoolSpawnObject(objectsSpawned.ToArray(), 2);
             return;
         }
         int totalChunks = Mathf.CeilToInt(objectsSpawned.Count / (float)chunkSize);
-        List< List<string> > listListTMP = new List< List<string> >();
+        List<List<string>> listListTMP = new List<List<string>>();
 
 
         for (int i = 0; i < totalChunks; i++)
         {
             List<string> chunk = objectsSpawned.GetRange(i * chunkSize, Mathf.Min(chunkSize, objectsSpawned.Count - i * chunkSize));
-            listListTMP.Add( chunk );                       
+            listListTMP.Add(chunk);
         }
 
         for (int i = 0; i < listListTMP.Count; i++)
         {
-            RPC_SendPoolSpawnObject(listListTMP[i].ToArray(), (short)(i == listListTMP.Count - 1 ? 2 : ( i == 0 ? 0 : 1 ))); //SendChunk(chunk);
+            RPC_SendPoolSpawnObject(listListTMP[i].ToArray(), (short)(i == listListTMP.Count - 1 ? 2 : (i == 0 ? 0 : 1))); //SendChunk(chunk);
         }
-       // RPC_SendPoolSpawnObject(objectsSpawned.ToArray());        
-    } 
+        // RPC_SendPoolSpawnObject(objectsSpawned.ToArray());        
+    }
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_GetPoolSpawnNetWorkObject()
     {
@@ -540,7 +532,7 @@ private void Update()
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_SendPoolSpawnObject(string[] _listSpawnedObject, short _poss)
     {
-        if(debug)Debug.Log("RECIBI ESTO: " + objectsSpawned.Count + " - " + _listSpawnedObject.Length);
+        if (debug) Debug.Log("RECIBI ESTO: " + objectsSpawned.Count + " - " + _listSpawnedObject.Length);
 
         if (/*(objectsSpawned.Count == 0 && _poss == 0) && */ !isReady && !Object.HasStateAuthority)
         {
@@ -550,7 +542,7 @@ private void Update()
         }
 
     }
-    
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_SendPoolSpawnObject(NetworkObject[] _listSpawnedObject, short _poss)
     {
@@ -559,7 +551,7 @@ private void Update()
             networkObjectsSpawned.AddRange(_listSpawnedObject.ToList<NetworkObject>());
             isReadyObjects = _poss == 2;
         }
-        if(debug)Debug.Log("RECIBI ESTO OBJETO: " + _listSpawnedObject.Length);
+        if (debug) Debug.Log("RECIBI ESTO OBJETO: " + _listSpawnedObject.Length);
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
@@ -570,7 +562,7 @@ private void Update()
             objectsSpawned.Add(_nameObjectSpawned);
         }
     }
-    
+
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_SetPoolSpawnObject(NetworkObject _nameObjectSpawned)
     {
@@ -579,12 +571,12 @@ private void Update()
             networkObjectsSpawned.Add(_nameObjectSpawned);
         }
     }
-    
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]//, HostMode = RpcHostMode.SourceIsHostPlayer)]
     public void RPC_setLifes(short _playerID, short _value)
     {
-        if(debug)Debug.Log("RPC: " + _playerID + " - " + GO_PlayerNetworkManager.localPlayer.playerID);
-        if(_playerID == GO_PlayerNetworkManager.localPlayer.playerID)
+        if (debug) Debug.Log("RPC: " + _playerID + " - " + GO_PlayerNetworkManager.localPlayer.playerID);
+        if (_playerID == GO_PlayerNetworkManager.localPlayer.playerID)
         {
             GO_PlayerNetworkManager.localPlayer.playerLives += _value;
         }
@@ -620,4 +612,3 @@ private void Update()
 
 
 }
- 
