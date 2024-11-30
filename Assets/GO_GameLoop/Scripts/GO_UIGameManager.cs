@@ -50,14 +50,6 @@ public class GO_UIManager : MonoBehaviour
         _fov = GO_MainCamera.MainCamera.fieldOfView;
     }
 
-    private void Update()
-    {
-        if (isShaking)
-        {
-            ShakeCamera(false);
-        }
-    }
-
     // Muestra el panel para ingresar el código de la puerta.
     public void ShowCodePanel()
     {
@@ -203,12 +195,6 @@ public class GO_UIManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        if (isShaking)
-        {
-            isShaking = false;
-            ShakeCamera();
-        }
         
         doorLeft.transform.position = leftEndPosition;
         doorRight.transform.position = rightEndPosition;
@@ -218,12 +204,6 @@ public class GO_UIManager : MonoBehaviour
         yield return new WaitForSeconds(delayBeforeClosing);
         // Inicia la corrutina para cerrar la puerta
         StartCoroutine(CloseDoor(leftStartPosition, rightStartPosition));
-    }
-
-    public void ShakeCamera(bool _value = true)
-    {
-        GO_MainCamera.cinemachineBrain.enabled = _value;
-        GO_MainCamera.MainCamera.fieldOfView = Mathf.Lerp(GO_MainCamera.MainCamera.fieldOfView, UnityEngine.Random.Range(_fov * .95f, _fov * 1.35f), Time.deltaTime * 1);
     }
 
     public IEnumerator CloseDoor(Vector3 leftStartPosition, Vector3 rightStartPosition)
