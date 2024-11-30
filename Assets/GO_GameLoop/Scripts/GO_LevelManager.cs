@@ -18,8 +18,7 @@ public class GO_LevelManager : NetworkBehaviour
         L_GO_Level2,
         L_GO_Level3,
         L_GO_Level4,
-        L_GO_Level5,
-        L_GO_Level6,
+        L_GO_ZombieHeaven
     }
 
 
@@ -295,26 +294,8 @@ public class GO_LevelManager : NetworkBehaviour
                 _currentLevel++;
                 break;
             case Level.L_GO_Level4:
-                _playerInstance.playerLives = 3;
-                OnLivesChanged?.Invoke(_playerInstance.playerLives);
-                //RPC_setLifes(_playerInstance.playerID, 3);
-                if (DidSabotage)
-                {
-                    _currentLevel = Level.L_GO_Level5;
-                }
-                else
-                {
-                    _currentLevel = Level.L_GO_Level6;
-                }
+                _currentLevel = Level.L_GO_ZombieHeaven;
                 break;
-            case Level.L_GO_Level5:
-            case Level.L_GO_Level6:
-                _currentLevel = Level.L_GO_Level1;
-                _playerInstance.playerLives = 3;
-                OnLivesChanged?.Invoke(_playerInstance.playerLives);
-                //RPC_setLifes(_playerInstance.playerID, 3);
-                SceneManager.LoadScene("IntroScene");
-                return;
         }
         if(debug)Debug.Log("SERIE " + _currentLevel);
         StartCoroutine(LoadLevelAsync(_currentLevel));

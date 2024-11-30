@@ -31,7 +31,7 @@ public class GO_CodeManager : NetworkBehaviour
     private void OnEnable()
     {   
 
-        Current = GO_SpawnPoint.currentSpawPoint.level_ID;
+        //Current = GO_SpawnPoint.currentSpawPoint.level_ID;
         int currentLevelIndex = (int)GO_SpawnPoint.currentSpawPoint.level_ID;
         StartCoroutine(WaitAndDistributeCode(currentLevelIndex));
     }
