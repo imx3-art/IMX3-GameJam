@@ -46,7 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiSounds:
   - {fileID: 1016971375230835620, guid: 8412645d0520d5447a5227ad3496acce, type: 3}
-  - {fileID: 1016971375230835620, guid: 9371368f316b61a488b41b5772fabca7, type: 3}
   - {fileID: 1016971375230835620, guid: aedb130954eda1f49baf60a1aa2c78c6, type: 3}
   - {fileID: 1016971375230835620, guid: fdbeb73045a70da4d9d447b175c99183, type: 3}
   - {fileID: 1016971375230835620, guid: 1f6f6a8cb3838b5459ba056be9d021cb, type: 3}
@@ -64,6 +63,7 @@ MonoBehaviour:
   - {fileID: 1016971375230835620, guid: 125ad8dd13a35014685540a0c63640d2, type: 3}
   - {fileID: 1016971375230835620, guid: 97182c2d2a0fc04419d85cd4a50478b6, type: 3}
   - {fileID: 1016971375230835620, guid: 1cd0d07b1c55e8e449d4953bfa207104, type: 3}
+  - {fileID: 1016971375230835620, guid: 9371368f316b61a488b41b5772fabca7, type: 3}
   ambientSounds:
   - {fileID: 1016971375230835620, guid: bf3c4dc16487699428ad431e61f5598a, type: 3}
   - {fileID: 1016971375230835620, guid: ac80dc88a309ad241aa3ae5fd012b7e9, type: 3}

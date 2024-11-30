@@ -22,6 +22,9 @@ public class GO_AudioManager : MonoBehaviour
     [Range(0f, 1f)]
     public float masterVolume = 1f;
     
+    [Range(0f, 1f)]
+    public float gameVolume = 1f;
+    
     [SerializeField]
     private Transform playerTransform;
 
@@ -116,7 +119,8 @@ public class GO_AudioManager : MonoBehaviour
             AudioSource source = soundObject.AddComponent<AudioSource>();
             source.clip = clip;
             source.loop = false; 
-            source.spatialBlend = 1f; 
+            source.spatialBlend = 0f; 
+            source.playOnAwake = false;
 
             Transform player = GetPlayerTransform();
 
@@ -124,17 +128,17 @@ public class GO_AudioManager : MonoBehaviour
             {
                 float distance = Vector3.Distance(soundObject.transform.position, player.position);
                 float volume = Mathf.Clamp01(1 - ((distance - minDistance) / (maxDistance - minDistance)));
-                source.volume = volume * masterVolume;
+                source.volume = volume * masterVolume * gameVolume;
 
                 float pan = Mathf.Clamp((soundObject.transform.position.x - player.position.x) / panRange, -1f, 1f);
                 source.panStereo = pan;
 
-                //Debug.Log($"Sonando sonido dinámico. Distancia:{clip.name} {distance}, Volumen: {volume}");
+                //Debug.Log($"Sonando sonido dinámico. Distancia:{clip.name} {distance}, Volumen: {source.volume}");
             }
             else
             {
                 Debug.LogWarning("playerTransform es nulo en PlayGameSoundDynamic.");
-                source.volume = masterVolume;
+                source.volume = masterVolume * gameVolume;
             }
 
             source.Play();
@@ -158,7 +162,7 @@ public class GO_AudioManager : MonoBehaviour
             {
                 float distance = Vector3.Distance(source.transform.position, player.position);
                 float volume = Mathf.Clamp01(1 - ((distance - minDistance) / (maxDistance - minDistance)));
-                source.volume = volume * masterVolume;
+                source.volume = volume * masterVolume * gameVolume;
 
                 float pan = Mathf.Clamp((source.transform.position.x - player.position.x) / panRange, -1f, 1f);
                 source.panStereo = pan;
@@ -205,13 +209,19 @@ public class GO_AudioManager : MonoBehaviour
         foreach (GO_Sound s in gameSounds)
         {
             if (s.source != null)
-                s.source.volume = s.volume * masterVolume;
+                s.source.volume = s.volume * masterVolume * gameVolume; 
         }
     }
 
     public void SetMasterVolume(float value)
     {
         masterVolume = Mathf.Clamp01(value);
+        UpdateVolumes();
+    }
+    
+    public void SetGameVolume(float value)
+    {
+        gameVolume = Mathf.Clamp01(value);
         UpdateVolumes();
     }
 

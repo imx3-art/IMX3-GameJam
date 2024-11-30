@@ -6,14 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="7fde4156-46e4-4df9-aca2-6e1e8e742b75" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.IMX3-GameJam/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.IMX3-GameJam/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Images/Animation/Image.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Images/Animation/Image.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Prefabs/UI/PF_LoadScene.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Prefabs/UI/PF_LoadScene.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_CodeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_CodeManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_SpawnNetworkCodeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_SpawnNetworkCodeManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_SpawnNetworkGameObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_SpawnNetworkGameObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_Audio/Prefabs/AudioManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Audio/Prefabs/AudioManager.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_Audio/Scripts/GO_AudioManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Audio/Scripts/GO_AudioManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scenes/IntroScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scenes/IntroScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_IntroSceneManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_IntroSceneManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_LoadScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_LoadScene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_UIGameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_UIGameManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level0.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level0.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level1.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GO_UI/Scripts/Cinematics/GO_CinematicManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_UI/Scripts/Cinematics/GO_CinematicManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

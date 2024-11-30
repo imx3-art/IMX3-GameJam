@@ -159,7 +159,10 @@ public class GO_UIManager : MonoBehaviour
             GO_InputsPlayer.IsPause = false;
             HideCodePanel();
             //StartCoroutine(OpenDoor());
+            Debug.Log("haciendo shake");
+            isShaking = true;
             GO_LevelManager.instance.RPC_OpenFinalDoor();
+            
         }
         else
         {
@@ -175,9 +178,10 @@ public class GO_UIManager : MonoBehaviour
     public IEnumerator OpenDoor()
     {
         Debug.Log("Abriendo puerta");
+        
         if (GO_AudioManager.Instance != null)
         {
-            GO_AudioManager.Instance.PlayUISound("GO_Open_Door_Lab");
+            GO_AudioManager.Instance.PlayGameSoundByName("GO_Open_Door_Lab", doorLeft.transform.position);
         }
 
         Vector3 leftStartPosition = doorLeft.transform.position;
@@ -188,7 +192,7 @@ public class GO_UIManager : MonoBehaviour
 
         float elapsedTime = 0f;
 
-        isShaking = true;
+        //isShaking = true;
 
         while (elapsedTime < doorMoveDistance / doorMoveSpeed)
         {
@@ -198,8 +202,13 @@ public class GO_UIManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        isShaking = false;
-        ShakeCamera();
+
+        if (isShaking)
+        {
+            isShaking = false;
+            ShakeCamera();
+        }
+        
         doorLeft.transform.position = leftEndPosition;
         doorRight.transform.position = rightEndPosition;
 

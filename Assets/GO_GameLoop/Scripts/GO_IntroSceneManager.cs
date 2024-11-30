@@ -32,6 +32,17 @@ public class GO_IntroSceneManager : MonoBehaviour
 
     private IEnumerator LoadGameScene()
     {
+        bool fadeInCompleted = false;
+
+        GO_LoadScene.Instance.ShowLoadingScreen(() => {
+            fadeInCompleted = true;
+        });
+
+        while (!fadeInCompleted)
+        {
+            yield return null;
+        }
+
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("L_GO_Level0");
 
         while (!asyncLoad.isDone)
@@ -39,7 +50,16 @@ public class GO_IntroSceneManager : MonoBehaviour
             yield return null;
         }
 
-        GO_LoadScene.Instance.HideLoadingScreen();
+        bool fadeOutCompleted = false;
+
+        GO_LoadScene.Instance.HideLoadingScreen(() => {
+            fadeOutCompleted = true;
+        });
+
+        while (!fadeOutCompleted)
+        {
+            yield return null;
+        }
     }
 
     public void ShowCredits()
