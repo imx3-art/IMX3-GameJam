@@ -48,7 +48,7 @@ public class GO_LevelManager : NetworkBehaviour
 
     private GameObject _playerPrefab;
 
-    [SerializeField] private Level _currentLevel;
+    public Level _currentLevel;
     
     public Color[] playerColors;
 
@@ -80,6 +80,7 @@ public class GO_LevelManager : NetworkBehaviour
             {
                 SpawnObjects(prefabNetworkObjects, prefabNetworkObjects.transform.position, Quaternion.identity);
                 isReady = true;
+                isReadyObjects = true;
             }
             else
             {
@@ -138,7 +139,8 @@ public class GO_LevelManager : NetworkBehaviour
             _playerInstance.transform.position = _spawnPoint.position;
         }*/
 
-       // StartCoroutine(LoadLevelAsync(_currentLevel));
+        //ShowOtherPlayers();
+        ShowOtherPlayers();
     }
 
     [ContextMenu("Teleport last Pont")]
@@ -427,8 +429,35 @@ public class GO_LevelManager : NetworkBehaviour
             }
             OnPlayerChangeScene?.Invoke();
         }
+
+       
+       ShowOtherPlayers();
+       
     }
-    private void Update()
+
+
+
+
+    public void ShowOtherPlayers()
+{
+    StartCoroutine(ShowOtherPlayersCoroutine(_currentLevel != GO_LevelManager.Level.L_GO_Level0));
+}
+        private IEnumerator ShowOtherPlayersCoroutine(bool _value)
+        {
+       
+        yield return new WaitWhile(() => GO_PlayerNetworkManager.PlayersList.Count != GO_RunnerManager.Instance._runner.SessionInfo.PlayerCount);
+        foreach (GO_PlayerNetworkManager pn in GO_PlayerNetworkManager.PlayersList)
+        {
+        if (pn != GO_PlayerNetworkManager.localPlayer)
+        {
+            yield return new WaitWhile(() => !GO_PlayerNetworkManager.PlayersList.Contains(pn));
+            pn.playerTransform.gameObject.SetActive(_value);
+            }
+        }
+}
+
+
+private void Update()
     {
         if (isChangingScene && SceneManager.GetActiveScene().name == _currentLevel.ToString())
         {

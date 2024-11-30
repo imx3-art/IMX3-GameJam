@@ -70,6 +70,7 @@ public class GO_PlayerActions : MonoBehaviour
                 if (otherPlayerNetworkManager == null)
                 {
                     otherPlayerNetworkManager = hitInfo.collider.gameObject.GetComponentInParent<GO_PlayerNetworkManager>();
+                    DragArmAnimation(true);
                     if (otherPlayerNetworkManager.actionPlayer.ReadyForMiniGame() == 0 || otherPlayerNetworkManager.isDrag != 0)
                     {
                         otherPlayerNetworkManager = null;
@@ -234,8 +235,17 @@ public class GO_PlayerActions : MonoBehaviour
         GO_PlayerNetworkManager.localPlayer.pullMiniGame = 0;
         _inputPlayer.drag = false;
         ShakeCamera(true);
+        DragArmAnimation(false);
+
     }
 
+
+    public void DragArmAnimation(bool _value)
+    {
+        GO_PlayerNetworkManager.localPlayer.controller.PlayBoolAnimation("DragArms", _value);
+        Debug.Log("DRAGF ARMS " + _value);
+    }
+    
     public void ActiveCanvas(bool _state)
     {
         hudMinigame.gameObject.SetActive(_state);
@@ -263,7 +273,7 @@ public class GO_PlayerActions : MonoBehaviour
         }
     }
 
-    private void OnAnimatorIK()
+    private void OnAnimatorIK_OLD()
     {
         if (_target != null)
         {
