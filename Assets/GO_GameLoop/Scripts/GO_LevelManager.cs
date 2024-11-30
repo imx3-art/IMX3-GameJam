@@ -37,7 +37,7 @@ public class GO_LevelManager : NetworkBehaviour
     public PlayerRef newPlayerRefAuthorityChangeScene;// Posible player que queda en el nivel actual y se le puedn transferir las Autoridades
 
     public int totalLives = 3;
-    public bool DidSabotage = false;
+    public static bool DidSabotage = false;
 
     //private int _currentLives;
 
