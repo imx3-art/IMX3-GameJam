@@ -71,7 +71,10 @@ public class GO_NetworkObject : NetworkBehaviour
             return;
         }
         Debug.Log("---ACTIVAR EL PLAYER: " + name + " " + level_ID + " CONTRA: " + GO_SpawnPoint.currentSpawPoint.level_ID);
-        gameObject.SetActive(levelindexLocal == (short)GO_SpawnPoint.currentSpawPoint.level_ID);
+        if(levelindexLocal != -1)
+        {
+            gameObject.SetActive(levelindexLocal == (short)GO_SpawnPoint.currentSpawPoint.level_ID);
+        }
     }
     private IEnumerator verifyLevelID()
     {

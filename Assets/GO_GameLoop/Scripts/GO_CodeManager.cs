@@ -12,23 +12,25 @@ public class GO_CodeManager : NetworkBehaviour
     [SerializeField] private List<Color> positionColors;
     public static string displayedCode;
     private GO_LevelManager.Level Current;
+    private bool isSpawned;
 
     public override void Spawned()
     {
         int currentLevelIndex = (int)GO_SpawnPoint.currentSpawPoint.level_ID;
-
         // Solo el nodo con autoridad genera el c�digo si a�n no est� definido.
         if (Object.HasStateAuthority && string.IsNullOrEmpty(generatedCodes[currentLevelIndex]))
         {
             GenerateCode(currentLevelIndex);
         }
-
+        
         // Asegurarse de distribuir el c�digo actual.
         StartCoroutine(WaitAndDistributeCode(currentLevelIndex));
+        isSpawned = true;
     }
 
     private void OnEnable()
-    {
+    {   
+
         Current = GO_SpawnPoint.currentSpawPoint.level_ID;
         int currentLevelIndex = (int)GO_SpawnPoint.currentSpawPoint.level_ID;
         StartCoroutine(WaitAndDistributeCode(currentLevelIndex));
@@ -53,6 +55,10 @@ public class GO_CodeManager : NetworkBehaviour
     private IEnumerator WaitAndDistributeCode(int levelIndex)
     {
         // Espera a que el c�digo del nivel actual est� sincronizado en todos los nodos.
+        while (!isSpawned)
+        {
+            yield return null;
+        }
         while (string.IsNullOrEmpty(generatedCodes[levelIndex]))
         {
             Debug.Log("VALOR: " + generatedCodes[levelIndex]); 
