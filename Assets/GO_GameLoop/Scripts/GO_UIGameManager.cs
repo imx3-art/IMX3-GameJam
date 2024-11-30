@@ -72,6 +72,7 @@ public class GO_UIManager : MonoBehaviour
     public void HideCodePanel()
     {
         codePanel.SetActive(false);
+        GO_InteractionManager.IsInteracting = false;
         ClearInput();
     }
 
