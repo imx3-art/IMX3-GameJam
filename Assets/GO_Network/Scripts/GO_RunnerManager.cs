@@ -32,6 +32,7 @@ public class GO_RunnerManager : MonoBehaviour, INetworkRunnerCallbacks
     
     [SerializeField] private GO_SpawnPoint spawnPoint;
 
+    public bool useAsetsBundles = true;
     public NetworkRunner _runner;
     private string _nameSession;
 

@@ -387,6 +387,7 @@ public class GO_LevelManager : NetworkBehaviour
     public IEnumerator LoadLevelAsync(Level level)
     {
         string sceneName = level.ToString();
+
         if(debug)Debug.Log("*** CARGANDO SCENE " + sceneName);
 
         if (!CheckPlayerInLastLevel())//
@@ -411,15 +412,29 @@ public class GO_LevelManager : NetworkBehaviour
         if (SceneManager.GetActiveScene().name != sceneName || true)
         {
             GO_SpawnPoint.currentSpawPoint = null;
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-            while (!asyncLoad.isDone)
-            {
-                if(debug)Debug.Log($"***Cargando... {asyncLoad.progress * 100} % - sceneName: " + sceneName + " - SpawnPoint: " + GO_SpawnPoint.currentSpawPoint);
-                yield return null;
-            }
 
-            yield return new WaitWhile(() => GO_SpawnPoint.currentSpawPoint == null);
-            if(debug)Debug.Log($"***Cargando... {asyncLoad.progress * 100} % - SpawnPointB: " + GO_SpawnPoint.currentSpawPoint);
+
+            if (GO_RunnerManager.Instance.useAsetsBundles)
+            {
+                GO_DownloadSceneFromAssetsBundles.Instance.downloadScene(sceneName);
+                yield return new WaitWhile(() => !GO_DownloadSceneFromAssetsBundles.Instance.loadingSceneComplete);
+
+            }
+            else
+            {
+                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+                while (!asyncLoad.isDone)
+                {
+                    if (debug) Debug.Log($"***Cargando... {asyncLoad.progress * 100} % - sceneName: " + sceneName + " - SpawnPoint: " + GO_SpawnPoint.currentSpawPoint);
+                    yield return null;
+                }
+                yield return new WaitWhile(() => GO_SpawnPoint.currentSpawPoint == null);
+                if (debug) Debug.Log($"***Cargando... {asyncLoad.progress * 100} % - SpawnPointB: " + GO_SpawnPoint.currentSpawPoint);
+            }
+            
+            
+            
+
 
             SpawnPlayer();
 

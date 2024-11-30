@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1054538482858934516}
   - component: {fileID: 7091650876004755717}
+  - component: {fileID: 1752527477779037120}
   m_Layer: 0
   m_Name: RunnerManager
   m_TagString: Untagged
@@ -53,6 +54,21 @@ MonoBehaviour:
   maxPlayersInvite: 3
   maxSecondsAFK: 600
   spawnPoint: {fileID: 426297146952939071}
+  useAsetsBundles: 0
+  _runner: {fileID: 0}
+--- !u!114 &1752527477779037120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043190951745294727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19a32e760efe2ac469a0ab8fcf7f6a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  urlAssets: https://sftpbcdus.blob.core.windows.net/sftpbcdus/GO_JAM/Scenes/
 --- !u!1001 &885265110266872100
 PrefabInstance:
   m_ObjectHideFlags: 0
