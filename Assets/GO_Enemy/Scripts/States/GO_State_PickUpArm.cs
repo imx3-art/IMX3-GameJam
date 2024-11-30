@@ -163,7 +163,11 @@ public class GO_State_PickUpArm : GO_State
         Transform playerTransform;
         if (enemy.visionController.SeeThePlayer(out playerTransform))
         {
-            patrollingEnemy.PlaySoundAlert();
+            GO_PlayerNetworkManager player = playerTransform.GetComponentInParent<GO_PlayerNetworkManager>();
+            if (player.isLocalPlayer)
+            {
+                patrollingEnemy.PlaySoundAlert();
+            }
             stateMachine.ActivateState(patrollingEnemy.persecutionState);
         }
         else
