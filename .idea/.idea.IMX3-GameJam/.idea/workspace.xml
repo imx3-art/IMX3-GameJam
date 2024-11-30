@@ -5,16 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fde4156-46e4-4df9-aca2-6e1e8e742b75" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/GO_Enemy/Scripts/GO_Controller_Vision.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Enemy/Scripts/GO_Controller_Vision.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.IMX3-GameJam/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.IMX3-GameJam/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Images/Animation/Image.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Images/Animation/Image.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Prefabs/UI/PF_LoadScene.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Prefabs/UI/PF_LoadScene.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_CodeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_CodeManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_SpawnNetworkCodeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_SpawnNetworkCodeManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_SpawnNetworkGameObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_GameLoop/Scripts/GO_SpawnNetworkGameObject.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level0.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level0.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level2.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level3.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level3.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/URP-Balanced.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/URP-Balanced.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/URP-HighFidelity.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/URP-HighFidelity.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/URP-Performant.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/URP-Performant.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/UnityConnectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/UnityConnectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_Scenes/L_GO_Level1.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GO_UI/Scripts/Cinematics/GO_CinematicManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GO_UI/Scripts/Cinematics/GO_CinematicManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +24,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/10871f9e312b442cb78b9b97db88fdcb172a00/11/79581fcf/Object.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/10871f9e312b442cb78b9b97db88fdcb172a00/bf/84ddb9a0/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/10871f9e312b442cb78b9b97db88fdcb172a00/ca/cc0971df/Camera.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/10871f9e312b442cb78b9b97db88fdcb172a00/ef/b53bb685/Scene.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/10871f9e312b442cb78b9b97db88fdcb172a00/f0/ef59bc66/SceneManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/eaeed7563bb54141986573d11508bb3eb0800/4d/25571aac/SimulationBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/eaeed7563bb54141986573d11508bb3eb0800/9f/72748b65/NetworkRunner.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GO_Audio/Scripts/GO_AudioManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GO_Audio/Scripts/GO_Sound.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GO_UI/Scripts/GO_ButtonHoverHandler.cs" root0="FORCE_HIGHLIGHTING" />
@@ -111,7 +115,8 @@
       <workItem from="1732640495574" duration="2298000" />
       <workItem from="1732670628373" duration="12408000" />
       <workItem from="1732760082345" duration="16558000" />
-      <workItem from="1732846869381" duration="13058000" />
+      <workItem from="1732846869381" duration="14681000" />
+      <workItem from="1732933252349" duration="6830000" />
     </task>
     <servers />
   </component>

@@ -14,7 +14,10 @@ public class GO_CinematicManager : MonoBehaviour
 
     private void Start()
     {
-        GO_LoadScene.Instance.HideLoadingScreen();
+        if (GO_LoadScene.Instance)
+        {
+            GO_LoadScene.Instance.HideLoadingScreen();
+        }
 
         if (playableDirector == null)
         {

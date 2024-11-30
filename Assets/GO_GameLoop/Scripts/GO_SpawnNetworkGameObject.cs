@@ -15,7 +15,6 @@ public class GO_SpawnNetworkGameObject : MonoBehaviour
 
         
         GO_LevelManager.instance.SpawnObjects(spawnedObject, transform.position, transform.rotation, name);
-        Debug.Log("SPAWNEO EL PF_CODEMANAGER");
         
     }
 }

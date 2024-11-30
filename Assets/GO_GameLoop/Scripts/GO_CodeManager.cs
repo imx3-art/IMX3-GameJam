@@ -30,7 +30,7 @@ public class GO_CodeManager : NetworkBehaviour
     {
         // Aqu� puedes implementar c�mo obtener el �ndice del nivel actual.
         // Por simplicidad, asumimos que los niveles est�n indexados desde 0.
-        return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex -1;
     }
 
     public void GenerateCode(int levelIndex)
