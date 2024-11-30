@@ -62,6 +62,7 @@ public class GO_LevelManager : NetworkBehaviour
     public static event Action OnPlayerChangeScene;
     
     public event Action<float> OnLivesChanged;
+    
 
     public bool debug;
     
@@ -434,9 +435,11 @@ public class GO_LevelManager : NetworkBehaviour
        ShowOtherPlayers();
        
     }
-
-
-
+    
+    public int GetCurrentLevelName()
+    {
+        return (int)GO_SpawnPoint.currentSpawPoint.level_ID;
+    }
 
     public void ShowOtherPlayers()
 {

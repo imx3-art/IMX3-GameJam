@@ -1483,6 +1483,7 @@ MonoBehaviour:
   bookNumberPrefab: {fileID: 7388512226356730781, guid: 94c873d0188451848b925e52f5cc0311,
     type: 3}
   booksCounterText: {fileID: 6570685789523354400}
+  levelText: {fileID: 7493465990517458189}
   sessionPlayersCount: {fileID: 878292534067231787}
   popUpSharedCodeSessionName: {fileID: 1952672293155509354}
   armsCount: {fileID: 6158806918371429947}

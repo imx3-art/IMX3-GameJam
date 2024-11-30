@@ -29,6 +29,8 @@ public class GO_PlayerUIManager : MonoBehaviour
     private int totalBooksInMap = 0;
     private int collectedBooks = 0;// Prefab del número del libro
 
+    [Header("Level UI")] public TextMeshProUGUI levelText;
+    
     [Header("Session Info")]
     [SerializeField] private TextMeshProUGUI sessionPlayersCount;
     [SerializeField] private TextMeshProUGUI popUpSharedCodeSessionName;
@@ -144,6 +146,15 @@ public class GO_PlayerUIManager : MonoBehaviour
             }
         }
     }
+    
+    private void UpdateLevelUI()
+    {
+        if (GO_LevelManager.instance != null)
+        {
+            int levelName = GO_LevelManager.instance.GetCurrentLevelName();
+            levelText.text = $"Level {levelName}";
+        }
+    }
 
     public void ShowCodeSession()
     {
@@ -151,6 +162,7 @@ public class GO_PlayerUIManager : MonoBehaviour
         popUpSharedCode.SetActive(!popUpSharedCode.activeSelf);
         GO_PlayerNetworkManager.localPlayer.inputPlayer.SetCursorState(!popUpSharedCode.activeSelf);
     }
+    
     private void ShowArms()
     {
         StartCoroutine(ShowArmsThred());
@@ -392,6 +404,7 @@ public class GO_PlayerUIManager : MonoBehaviour
     }
     private void OnPlayerChangeScene()
     {
+        UpdateLevelUI();
         StartCoroutine(UpdateBooksAfterDelay());
     }
     
