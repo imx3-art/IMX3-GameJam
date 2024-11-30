@@ -14,7 +14,7 @@ public class GO_InteractableAutomaticDoor : MonoBehaviour
     private Vector3 EndPosition;
 
     private bool isOpen = false; // Estado de la puerta.
-    private bool isMoving = false; // Para evitar múltiples corrutinas simultáneas.
+    private bool isMoving = false; // Para evitar mï¿½ltiples corrutinas simultï¿½neas.
 
     private void Start()
     {
@@ -52,6 +52,7 @@ public class GO_InteractableAutomaticDoor : MonoBehaviour
     {
         if (!isOpen && !isMoving)
         {
+            GO_LevelManager.instance.RPC_PlaySound3D("GO_Open_Door_Lab", transform.position);
             StartCoroutine(MoveDoor(StartPosition, EndPosition, true));
         }
     }
@@ -60,6 +61,7 @@ public class GO_InteractableAutomaticDoor : MonoBehaviour
     {
         if (isOpen && !isMoving)
         {
+            GO_LevelManager.instance.RPC_PlaySound3D("GO_Open_Door_Lab", transform.position);
             StartCoroutine(MoveDoor(EndPosition, StartPosition, false));
         }
     }
@@ -77,12 +79,12 @@ public class GO_InteractableAutomaticDoor : MonoBehaviour
             yield return null;
         }
 
-        // Asegúrate de que las puertas terminen exactamente en sus posiciones finales.
+        // Asegï¿½rate de que las puertas terminen exactamente en sus posiciones finales.
         transform.position = leftEnd;
 
         isOpen = opening; // Actualizar el estado de la puerta.
         isMoving = false;
 
-        Debug.Log(opening ? "¡Puerta abierta!" : "¡Puerta cerrada!");
+        Debug.Log(opening ? "ï¿½Puerta abierta!" : "ï¿½Puerta cerrada!");
     }
 }

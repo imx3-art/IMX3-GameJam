@@ -109,29 +109,21 @@ public class GO_PlayerActions : MonoBehaviour
             if(SetExtraArm())//Si tiene brazo extra lo soltamos
             {
                 if(GO_LevelManager.instance.debug)Debug.Log("+++SOLTANDO EXTRA");
-                if(GO_AudioManager.Instance != null)
-                {
-                    GO_AudioManager.Instance.PlayGameSoundByName("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
-                }
+                GO_LevelManager.instance.RPC_PlaySound3D("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
                 SetExtraArm(true);
                 onChangeArms?.Invoke();
             }
             else if(_armTMP) //si hay brazo en el piso 
             {
                 if(GO_LevelManager.instance.debug)Debug.Log("+++RECOGIENO ");
-                if(GO_AudioManager.Instance != null)
-                {
-                    GO_AudioManager.Instance.PlayGameSoundByName("GO_Collect_Arms", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
-                }
+                GO_LevelManager.instance.RPC_PlaySound3D("GO_Collect_Arms", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
+                
                 GetUpArm();
             }
             else
             {
                 if(GO_LevelManager.instance.debug)Debug.Log("+++TIRANDO PROPIO");
-                if(GO_AudioManager.Instance != null)
-                {
-                    GO_AudioManager.Instance.PlayGameSoundByName("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
-                }
+                GO_LevelManager.instance.RPC_PlaySound3D("GO_Zombie_Arm", GO_PlayerNetworkManager.localPlayer.playerTransform.transform.position);
                 GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);*/
             }
         }

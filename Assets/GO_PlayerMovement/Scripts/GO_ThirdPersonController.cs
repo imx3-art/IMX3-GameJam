@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Cinemachine;
+using Fusion;
 using Random = UnityEngine.Random;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
@@ -426,7 +427,14 @@ namespace StarterAssets
 
                         joint.massScale = 10; //Ajusta la tension
                         _grabLimits = hit.collider.GetComponent<GO_GrabLimits>();
+        
+                        string boxName = grabbedObjectRb.name;
+                        string soundID = boxName; 
 
+                        Vector3 position = grabbedObjectRb.transform.position;
+                        NetworkObject box = grabbedObjectRb.GetComponent<NetworkObject>();
+
+                        GO_LevelManager.instance.RPC_PlayLoopingSound("GO_Move_box", position, box, soundID);
                     }
                 }
             }
@@ -465,6 +473,11 @@ namespace StarterAssets
                     }
                     _grabbedObject = null;
                     Debug.Log("Soltando objeto");
+                    
+                    string boxName = grabbedObjectRb.name;
+                    string soundID = boxName; 
+
+                    GO_LevelManager.instance.RPC_StopLoopingSound(soundID);
                 }
             }
         }

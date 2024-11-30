@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GO_CooperativeDoor : MonoBehaviour
 {
-    [Header("Configuración de la puerta")]
+    [Header("Configuraciï¿½n de la puerta")]
     [Tooltip("Distancia que las puertas deben moverse.")]
     [SerializeField] private float doorMoveDistance = 5f;
     [Tooltip("Velocidad de movimiento de la puerta.")]
@@ -13,26 +13,26 @@ public class GO_CooperativeDoor : MonoBehaviour
     [SerializeField] private float closeDelay = 3f;
 
     [Header("GameObject de la puerta")]
-    [Tooltip("El GameObject de la puerta que se moverá.")]
+    [Tooltip("El GameObject de la puerta que se moverï¿½.")]
     [SerializeField] private GameObject doorObject; // Referencia al GameObject de la puerta a mover
 
     private Vector3 startPosition;
     private Vector3 endPosition;
     private bool isOpen = false;
     private bool isMoving = false;
-    private bool isClosingPending = false; // Bandera para saber si el cierre está pendiente
+    private bool isClosingPending = false; // Bandera para saber si el cierre estï¿½ pendiente
 
     [SerializeField] private bool MoveLeftUp;
     [SerializeField] private bool Horizontal;
 
-    private HashSet<Rigidbody> objectsInArea = new HashSet<Rigidbody>(); // Rastrea los rigidbodies únicos dentro del área
+    private HashSet<Rigidbody> objectsInArea = new HashSet<Rigidbody>(); // Rastrea los rigidbodies ï¿½nicos dentro del ï¿½rea
 
     private void Start()
     {
-        // Aseguramos que el objeto puerta esté asignado
+        // Aseguramos que el objeto puerta estï¿½ asignado
         if (doorObject == null)
         {
-            doorObject = gameObject; // Si no se asignó, el propio objeto del script será el que se mueva
+            doorObject = gameObject; // Si no se asignï¿½, el propio objeto del script serï¿½ el que se mueva
         }
 
         startPosition = doorObject.transform.position;
@@ -53,24 +53,25 @@ public class GO_CooperativeDoor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Verificamos si el objeto que entra en el área es válido
+        // Verificamos si el objeto que entra en el ï¿½rea es vï¿½lido
         Rigidbody rb = other.attachedRigidbody;
         if (IsValidObject(other) && rb != null && !objectsInArea.Contains(rb))
         {
+            GO_LevelManager.instance.RPC_PlaySound3D("GO_Pressure_Plate", transform.position);
             objectsInArea.Add(rb);
-            Debug.Log($"Objeto agregado: {other.name}. Total en el área: {objectsInArea.Count}");
+            Debug.Log($"Objeto agregado: {other.name}. Total en el ï¿½rea: {objectsInArea.Count}");
             CheckDoorState();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // Verificamos si el objeto que sale es válido y lo eliminamos de la lista
+        // Verificamos si el objeto que sale es vï¿½lido y lo eliminamos de la lista
         Rigidbody rb = other.attachedRigidbody;
         if (IsValidObject(other) && rb != null && objectsInArea.Contains(rb))
         {
             objectsInArea.Remove(rb);
-            Debug.Log($"Objeto removido: {other.name}. Total en el área: {objectsInArea.Count}");
+            Debug.Log($"Objeto removido: {other.name}. Total en el ï¿½rea: {objectsInArea.Count}");
             CheckDoorState();
         }
     }
@@ -82,7 +83,7 @@ public class GO_CooperativeDoor : MonoBehaviour
 
     private void CheckDoorState()
     {
-        Debug.Log($"CheckDoorState: Objetos en el área: {objectsInArea.Count}, isOpen: {isOpen}");
+        Debug.Log($"CheckDoorState: Objetos en el ï¿½rea: {objectsInArea.Count}, isOpen: {isOpen}");
 
         if (objectsInArea.Count >= 2 && !isOpen)
         {
@@ -92,9 +93,9 @@ public class GO_CooperativeDoor : MonoBehaviour
         {
             if (!isClosingPending)
             {
-                isClosingPending = true; // Marca que el cierre está pendiente
+                isClosingPending = true; // Marca que el cierre estï¿½ pendiente
                 CancelInvoke(nameof(CloseCooperativeDoor)); // Cancela cierres pendientes
-                Invoke(nameof(CloseCooperativeDoor), closeDelay); // Inicia el cierre después de un retraso
+                Invoke(nameof(CloseCooperativeDoor), closeDelay); // Inicia el cierre despuï¿½s de un retraso
             }
         }
     }
@@ -135,7 +136,7 @@ public class GO_CooperativeDoor : MonoBehaviour
 
         Debug.Log(opening ? "Puerta abierta" : "Puerta cerrada");
 
-        if (!isOpen) // Si la puerta está cerrada, no está pendiente el cierre
+        if (!isOpen) // Si la puerta estï¿½ cerrada, no estï¿½ pendiente el cierre
         {
             isClosingPending = false;
         }

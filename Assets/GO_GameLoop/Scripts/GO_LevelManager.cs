@@ -596,7 +596,27 @@ private void Update()
     {
         StartCoroutine(GO_UIManager.Instance.OpenDoor());
     }
+    
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_PlaySound3D(string nameSound, Vector3 position)
+    {
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayGameSoundByName(nameSound, position);
+        }
+    }
+    
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_PlayLoopingSound(string soundName, Vector3 position, NetworkObject parent, string soundID)
+    {
+        GO_AudioManager.Instance.PlayGameSoundByName(soundName, position, parent,  soundID);
+    }
 
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_StopLoopingSound(string soundID)
+    {
+        GO_AudioManager.Instance.StopGameSoundLoop(soundID);
+    }
 
 
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2361859797500415551}
   - component: {fileID: 1016971375230835620}
   m_Layer: 0
-  m_Name: GO_Start_Game
+  m_Name: GO_Pressure_Plate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd74fb3245af1404bb3fb343c51226d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: GO_Start_Game
-  clip: {fileID: 8300000, guid: b65180fc71cd9e54ba900bbbc65f0305, type: 3}
+  name: GO_Pressure_Plate
+  clip: {fileID: 8300000, guid: f8cab98b10db6184d985aba394d2c943, type: 3}
   loop: 0
-  volume: 0.077
+  volume: 0.03
   source: {fileID: 0}

@@ -24,6 +24,11 @@ public class GO_CinematicManager : MonoBehaviour
             playableDirector = GetComponent<PlayableDirector>();
         }
 
+        if (GO_AudioManager.Instance != null)
+        {
+            GO_AudioManager.Instance.PlayAmbientSound("GO_Cinematic_Track");
+        }
+
         playableDirector.stopped += OnPlayableDirectorStopped;
         playableDirector.Play();
 
