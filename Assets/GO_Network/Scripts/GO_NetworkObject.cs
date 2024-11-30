@@ -9,9 +9,10 @@ public class GO_NetworkObject : NetworkBehaviour
 {
     [Networked] public short level_ID { get; set; } = -1;
     
-    [SerializeField] private bool IgnoreColisionChangeAuthority;
+    [SerializeField] public bool IgnoreColisionChangeAuthority;
+    [SerializeField] public bool IgnoreDisableOnChangeScene;
     
-    private NetworkObject networkObject;
+    public NetworkObject networkObject;
     public static bool readyChangeScene;
     public override void Spawned()
     {
@@ -43,6 +44,10 @@ public class GO_NetworkObject : NetworkBehaviour
 
     private void ChangeScene()
     {
+        if (IgnoreDisableOnChangeScene)
+        {
+            return;
+        }
         Debug.Log("*-*MI NAME: " + name);
         Debug.Log("*-*MI NAME: " + Object.StateAuthority);
         Debug.Log("*-*MI NAME: " + GO_LevelManager.instance.CurrentPlayerRefChangeScene);
@@ -57,6 +62,10 @@ public class GO_NetworkObject : NetworkBehaviour
     }
     private void ChangeSceneComplete()
     {
+        if (IgnoreDisableOnChangeScene)
+        {
+            return;
+        }
         Debug.Log("---ACTIVAR EL PLAYER: " + name + " " + level_ID + " CONTRA: " + GO_SpawnPoint.currentSpawPoint.level_ID);
         gameObject.SetActive(level_ID == (short) GO_SpawnPoint.currentSpawPoint.level_ID);
     }

@@ -39,7 +39,7 @@ public class SpawnCodeManager : MonoBehaviour
 
     public void SpawnOrKeepCodeManager()
     {
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex -1;
+        int currentSceneIndex = (int)GO_SpawnPoint.currentSpawPoint.level_ID;
 
         // Verifica que el �ndice est� dentro del rango del array de prefabs.
         if (currentSceneIndex >= codeManagerPrefabs.Length)

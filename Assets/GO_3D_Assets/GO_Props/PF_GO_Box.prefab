@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5538957452707944262}
-  - component: {fileID: 951642468087342986}
   - component: {fileID: 8650723958866559646}
   - component: {fileID: 4675612422024219352}
   - component: {fileID: -4670482320920137827}
   - component: {fileID: 254111703540754130}
   - component: {fileID: 2062328069481334747}
+  - component: {fileID: 8141674883620311294}
   m_Layer: 0
   m_Name: PF_GO_Box
   m_TagString: GrabbableObject
@@ -40,20 +40,6 @@ Transform:
   - {fileID: 7116150085267650132}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
---- !u!114 &951642468087342986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2616858604821568853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0c9e59b6c135e54384c8924fa8f9878, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _level_ID: -1
-  IgnoreColisionChangeAuthority: 0
 --- !u!114 &8650723958866559646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,8 +57,8 @@ MonoBehaviour:
   Flags: 524289
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 951642468087342986}
   - {fileID: -4670482320920137827}
+  - {fileID: 8141674883620311294}
 --- !u!54 &4675612422024219352
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -153,6 +139,22 @@ MonoBehaviour:
   number: 
   visualHint: {fileID: 4163184217996438367}
   interactionArea: {fileID: 8781317566946327437}
+--- !u!114 &8141674883620311294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616858604821568853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c9e59b6c135e54384c8924fa8f9878, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _level_ID: -1
+  IgnoreColisionChangeAuthority: 0
+  IgnoreDisableOnChangeScene: 1
+  networkObject: {fileID: 0}
 --- !u!1 &5629634437250119532
 GameObject:
   m_ObjectHideFlags: 0

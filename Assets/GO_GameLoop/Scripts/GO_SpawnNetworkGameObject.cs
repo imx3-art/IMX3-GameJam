@@ -10,7 +10,7 @@ public class GO_SpawnNetworkGameObject : MonoBehaviour
     {   
         yield return new WaitWhile(() => GO_LevelManager.instance == null);
         Debug.Log("Paso la instance");
-        yield return new WaitWhile(() => GO_LevelManager.instance.isReady == false);
+        yield return new WaitWhile(() => GO_LevelManager.instance.isReadyObjects == false);
         Debug.Log("Paso el is ready");
 
         

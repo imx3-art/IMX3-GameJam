@@ -12,9 +12,9 @@ public class GO_CodeManager : NetworkBehaviour
     [SerializeField] private List<Color> positionColors;
     public static string displayedCode;
 
-    private void Start()
+    public override void Spawned()
     {
-        int currentLevelIndex = GetCurrentLevelIndex();
+        int currentLevelIndex = (int)GO_SpawnPoint.currentSpawPoint.level_ID;
 
         // Solo el nodo con autoridad genera el c�digo si a�n no est� definido.
         if (Object.HasStateAuthority && string.IsNullOrEmpty(generatedCodes[currentLevelIndex]))
@@ -26,11 +26,17 @@ public class GO_CodeManager : NetworkBehaviour
         StartCoroutine(WaitAndDistributeCode(currentLevelIndex));
     }
 
+    private void OnEnable()
+    {
+        int currentLevelIndex = (int)GO_SpawnPoint.currentSpawPoint.level_ID;
+        StartCoroutine(WaitAndDistributeCode(currentLevelIndex));
+    }
+
     private int GetCurrentLevelIndex()
     {
         // Aqu� puedes implementar c�mo obtener el �ndice del nivel actual.
         // Por simplicidad, asumimos que los niveles est�n indexados desde 0.
-        return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex -1;
+        return (int)GO_SpawnPoint.currentSpawPoint.level_ID;
     }
 
     public void GenerateCode(int levelIndex)
@@ -47,6 +53,7 @@ public class GO_CodeManager : NetworkBehaviour
         // Espera a que el c�digo del nivel actual est� sincronizado en todos los nodos.
         while (string.IsNullOrEmpty(generatedCodes[levelIndex]))
         {
+            Debug.Log("VALOR: " + generatedCodes[levelIndex]); 
             yield return null; // Espera un frame.
         }
 
@@ -55,6 +62,7 @@ public class GO_CodeManager : NetworkBehaviour
 
     public void DistributeCode(int levelIndex)
     {
+        Debug.Log("LEVEL INDEXx" + levelIndex);
         // Obt�n el c�digo del nivel actual.
         string code = generatedCodes[levelIndex];
 
@@ -73,6 +81,10 @@ public class GO_CodeManager : NetworkBehaviour
         // Lista de �ndices asignados a los libros.
         List<int> assignedIndexes = new List<int>();
 
+        for (int i= 0; i<assignedIndexes.Count; i++)
+        {
+            Debug.Log("INDICES ASIGNADOS: " + assignedIndexes[i]);
+        }
         // Asigna los n�meros a los libros.
         for (int i = 0; i < predefinedBooks.Count; i++)
         {
