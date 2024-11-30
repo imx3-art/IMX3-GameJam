@@ -74,6 +74,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level_ID: -1
   IgnoreColisionChangeAuthority: 1
+  IgnoreDisableOnChangeScene: 0
+  networkObject: {fileID: 0}
 --- !u!114 &3865442845449994384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,7 +131,7 @@ PrefabInstance:
     - target: {fileID: 4275990800465380495, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.010983659
+      value: 0.022
       objectReference: {fileID: 0}
     - target: {fileID: 4275990800465380495, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
@@ -338,7 +340,7 @@ PrefabInstance:
     - target: {fileID: 4275990800465380495, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.010983659
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 4275990800465380495, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
