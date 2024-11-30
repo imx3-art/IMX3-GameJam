@@ -11,6 +11,7 @@ public class GO_CodeManager : NetworkBehaviour
     public List<GameObject> predefinedBooks; // Lista de libros predefinidos en la escena.
     [SerializeField] private List<Color> positionColors;
     public static string displayedCode;
+    private GO_LevelManager.Level Current;
 
     public override void Spawned()
     {
@@ -28,6 +29,7 @@ public class GO_CodeManager : NetworkBehaviour
 
     private void OnEnable()
     {
+        Current = GO_SpawnPoint.currentSpawPoint.level_ID;
         int currentLevelIndex = (int)GO_SpawnPoint.currentSpawPoint.level_ID;
         StartCoroutine(WaitAndDistributeCode(currentLevelIndex));
     }
