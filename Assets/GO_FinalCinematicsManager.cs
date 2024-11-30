@@ -8,7 +8,8 @@ public class GO_FinalCinematicsManager : MonoBehaviour
     [SerializeField] private GameObject BadEnding;
     void Start()
     {
-        GO_LevelManager.DidSabotage = true;
+        GO_RunnerManager.Instance._runner.Disconnect(GO_RunnerManager.Instance._runner.LocalPlayer);
+        GO_LoadScene.Instance.gameObject.SetActive(false);
         if(GO_LevelManager.DidSabotage)
         {
             BadEnding.SetActive(true);
