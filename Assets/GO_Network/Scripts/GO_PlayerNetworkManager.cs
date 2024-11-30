@@ -184,6 +184,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
 
     public void StartdragMode(bool _RPC = false)
     {
+        GO_LevelManager.DidSabotage = true;
         isDrag = 1;
         if (_RPC)
         {
