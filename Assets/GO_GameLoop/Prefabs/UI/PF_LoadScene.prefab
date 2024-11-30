@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 8233894971452338646}
   - component: {fileID: 5061640036868944684}
   - component: {fileID: 7870776850951194024}
-  - component: {fileID: 8169267761846512928}
+  - component: {fileID: 3912608108614964855}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &8169267761846512928
+--- !u!95 &3912608108614964855
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -211,7 +211,7 @@ Animator:
   m_GameObject: {fileID: 3549259946299674736}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b68583c230a07a8439086602073662bc, type: 2}
+  m_Controller: {fileID: 9100000, guid: c10dfab5ca869c34fbef22fce9a3fa1b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
