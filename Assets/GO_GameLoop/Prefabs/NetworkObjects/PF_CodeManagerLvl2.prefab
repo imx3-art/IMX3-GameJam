@@ -51,7 +51,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _generatedCodes: []
   predefinedBooks:
-  - {fileID: 0}
   - {fileID: 1055577258710474266}
   - {fileID: 3179009437100559942}
   - {fileID: 1173354074754612152}
@@ -75,6 +74,7 @@ MonoBehaviour:
   _level_ID: -1
   IgnoreColisionChangeAuthority: 1
   IgnoreDisableOnChangeScene: 0
+  levelindexLocal: 0
   networkObject: {fileID: 0}
 --- !u!114 &3865442845449994384
 MonoBehaviour:
