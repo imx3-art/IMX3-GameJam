@@ -25,9 +25,11 @@ public class GO_CinematicManager : MonoBehaviour
             Debug.Log("Loading sCENE APAGADA");
             GO_LoadScene.Instance.HideLoadingScreen();
         }
-
+        
+        
         if (GO_LevelManager.instance != null)
         {
+            GO_PlayerNetworkManager.localPlayer.gameObject.SetActive(false);
             Debug.Log("Desconectando jugador A");
             if (GO_LevelManager.instance._currentLevel == GO_LevelManager.Level.L_GO_ZombieHeaven)
             {
@@ -47,6 +49,8 @@ public class GO_CinematicManager : MonoBehaviour
                 
             }
         }
+        
+        
         if (hasCinematicPlayed)
         {
             HandleCinematicCompletion();
