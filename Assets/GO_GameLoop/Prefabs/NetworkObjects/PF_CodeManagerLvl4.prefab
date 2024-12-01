@@ -305,12 +305,12 @@ PrefabInstance:
     - target: {fileID: 5712628028779082590, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
       propertyPath: TextLore
-      value: "Hey, it\u2019s me again. Sorry, but this is the last note I\u2019m
-        leaving. The doctor didn\u2019t have time to share everything, and the final
-        code digit? That\u2019s on you to figure out. Guess this is where your rotting
-        brain gets to shine. You\u2019ve made it this far, so don\u2019t mess it
-        up now. The doctor believed in you. So do I\u2026 kinda. Good luck, zombie.
-        You\u2019re on your own now."
+      value: "Hey, it\u2019s me again. I\u2019ve got one more code for you. Sorry,
+        but this is the last one I\u2019m leaving. The doctor didn\u2019t have time
+        to share everything. And the final code digit? That\u2019s on you to figure
+        out. Guess this is where your rotting brain gets to shine. You\u2019ve made
+        it this far, so don\u2019t mess it up now. The doctor believed in you. So
+        do I\u2026 kinda. Good luck, zombie. You\u2019re on your own now"
       objectReference: {fileID: 0}
     - target: {fileID: 6218933375570712969, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
