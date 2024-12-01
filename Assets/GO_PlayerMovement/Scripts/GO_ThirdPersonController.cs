@@ -153,17 +153,7 @@ namespace StarterAssets
 
             FalloutGravity();
             GroundedCheck();
-            if (!GO_InputsPlayer.IsPause)
-            {
-                Move();
-            }
-            else
-            {
-                _speed = 0f;
-                _animationBlend = 0f;
-                _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetFloat(_animIDMotionSpeed, 0f);
-            }
+            Move();
             AdjustCameraFraming();
             HandleStaminaAndSpeed();
 
