@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eyes: {fileID: 3205396699051537262}
-  visionConeMaterial: {fileID: 2100000, guid: ae36786ae151172439bca7006ab7d235, type: 2}
+  visionConeMaterial: {fileID: 2100000, guid: ac12c5864f9b63449969d8d4d883e9d5, type: 2}
   meshSegments: 20
   visionLayerMask:
     serializedVersion: 2
@@ -308,6 +308,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level_ID: -1
   IgnoreColisionChangeAuthority: 1
+  IgnoreDisableOnChangeScene: 0
+  levelindexLocal: 0
+  networkObject: {fileID: 0}
 --- !u!1 &2851710751060393574
 GameObject:
   m_ObjectHideFlags: 0
