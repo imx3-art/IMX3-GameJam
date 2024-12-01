@@ -175,13 +175,12 @@ namespace StarterAssets
             {
                 if (_input.cameraVision)
                 {
-                    GO_InputsPlayer.IsPause = true;
+                    _input.SetCursorState(true);
                     HandleCameraDistance(cameraVisionDistance);
                     HandleCameraRotation();
                 }
                 else
                 {
-                    GO_InputsPlayer.IsPause = false;
                     HandleCameraDistance(normalCameraDistance);
                 }
             }

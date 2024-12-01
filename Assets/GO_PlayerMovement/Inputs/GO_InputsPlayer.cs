@@ -124,6 +124,11 @@ namespace StarterAssets
         public void PullInput(bool newStealthState)
         {
             pull = newStealthState;
+            if (pull && cameraVision)
+            {
+                CameraVisionInput(false); 
+            }
+            
             if (GO_PlayerNetworkManager.localPlayer.isDrag > 0 && newStealthState)
             {
                 GO_PlayerNetworkManager.localPlayer.pullMiniGame++;

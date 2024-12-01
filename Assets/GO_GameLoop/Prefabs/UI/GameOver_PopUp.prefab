@@ -122,7 +122,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GO_GameOverPopup, Assembly-CSharp
+        m_TargetAssemblyTypeName: GO_PopUpManager, Assembly-CSharp
         m_MethodName: QuitToIntro
         m_Mode: 1
         m_Arguments:
@@ -359,7 +359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5993028730656325843
 RectTransform:
   m_ObjectHideFlags: 0
@@ -598,7 +598,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GO_GameOverPopup, Assembly-CSharp
+        m_TargetAssemblyTypeName: GO_PopUpManager, Assembly-CSharp
         m_MethodName: Retry
         m_Mode: 1
         m_Arguments:
@@ -757,7 +757,6 @@ GameObject:
   - component: {fileID: 4642087895284681684}
   - component: {fileID: 6658735675100624787}
   - component: {fileID: 6803658949488920056}
-  - component: {fileID: 875117147815253574}
   m_Layer: 5
   m_Name: GameOver_PopUp
   m_TagString: Untagged
@@ -772,7 +771,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9155739006206558251}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -783,10 +782,10 @@ RectTransform:
   - {fileID: 5993028730656325843}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
-  m_SizeDelta: {x: 552.792, y: 310.94556}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6674771809270578768
 Canvas:
@@ -802,7 +801,7 @@ Canvas:
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 1
+  m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
@@ -889,21 +888,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &875117147815253574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9155739006206558251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5b2b28a3b9d2ff48822a471ee527fca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  frame7Sprite: {fileID: 21300000, guid: 514024695f21d0c48bb4c5345bbbebb3, type: 3}
-  defaultSprite: {fileID: 21300000, guid: c2db6eafac0cb5f4d9057f13f422d2fd, type: 3}
-  descriptionText: {fileID: 6271042655097571258}
-  continueDescription: "Contin\xFAa el juego desde el \xFAltimo punto de guardado."
-  quitDescription: Cierra el juego.
-  newTextDescription: "Explicaci\xF3n adicional del nuevo texto."

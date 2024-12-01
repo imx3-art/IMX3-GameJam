@@ -8,12 +8,20 @@ public class GO_CinematicManager : MonoBehaviour
     public PlayableDirector playableDirector; 
     public GameObject[] objectsToEnable;      
     public GameObject[] objectsToDisable;    
-    public bool destroyOnFinish = true;     
+    public bool destroyOnFinish = true;  
+    private static bool hasCinematicPlayed = false;
+
 
     private bool isCinematicPlaying = false; 
 
     private void Start()
     {
+        if (hasCinematicPlayed)
+        {
+            HandleCinematicCompletion();
+            return;
+        }
+
         if (GO_LoadScene.Instance)
         {
             GO_LoadScene.Instance.HideLoadingScreen();
@@ -32,8 +40,10 @@ public class GO_CinematicManager : MonoBehaviour
         playableDirector.stopped += OnPlayableDirectorStopped;
         playableDirector.Play();
 
-        isCinematicPlaying = true; 
+        isCinematicPlaying = true;
     }
+
+
 
     private void Update()
     {
@@ -60,7 +70,7 @@ public class GO_CinematicManager : MonoBehaviour
 
     private void OnPlayableDirectorStopped(PlayableDirector director)
     {
-        isCinematicPlaying = false; 
+        isCinematicPlaying = false;
 
         foreach (GameObject obj in objectsToEnable)
         {
@@ -77,7 +87,35 @@ public class GO_CinematicManager : MonoBehaviour
                 obj.SetActive(false);
             }
         }
-        
+
+        GO_LoadScene.Instance.ShowLoadingScreen();
+
+        hasCinematicPlayed = true;
+
+        if (destroyOnFinish)
+        {
+            Destroy(gameObject);
+        }
+    }
+    
+    private void HandleCinematicCompletion()
+    {
+        foreach (GameObject obj in objectsToEnable)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(true);
+            }
+        }
+
+        foreach (GameObject obj in objectsToDisable)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
+
         GO_LoadScene.Instance.ShowLoadingScreen();
 
         if (destroyOnFinish)
@@ -85,4 +123,6 @@ public class GO_CinematicManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+
 }

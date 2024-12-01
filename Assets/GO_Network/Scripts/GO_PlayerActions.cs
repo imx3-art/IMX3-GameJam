@@ -88,6 +88,7 @@ public class GO_PlayerActions : MonoBehaviour
                 otherPlayerNetworkManager = null;
                 _inputPlayer.drag = false;
                 //GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);*/
+                //GO_PlayerNetworkManager.localPlayer.RPC_SelfDropArm(); //DropArm(false, true);*/
             }
         }
         else if (GO_PlayerNetworkManager.localPlayer.isDrag == 2) //Control del otro player
