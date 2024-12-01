@@ -22,6 +22,8 @@ public class GO_NetworkObject : NetworkBehaviour
         if (Object.HasStateAuthority)
         {
             level_ID = (short)GO_SpawnPoint.currentSpawPoint.level_ID;
+            Debug.Log("Asignando level ID"+ level_ID + gameObject.name);
+            levelindexLocal = level_ID;
         }
         DontDestroyOnLoad(gameObject);
     }
@@ -30,6 +32,7 @@ public class GO_NetworkObject : NetworkBehaviour
     {
         yield return new WaitWhile(() => level_ID == -1);
         levelindexLocal = level_ID;
+        Debug.Log("Asignando level index local"+ levelindexLocal + gameObject.name);
         yield return new WaitWhile(() => !GO_LevelManager.instance);
         yield return new WaitWhile(() => !GO_LevelManager.instance.isReadyObjects);
         yield return new WaitForSeconds(1);
@@ -65,7 +68,7 @@ public class GO_NetworkObject : NetworkBehaviour
     }
     private void ChangeSceneComplete()
     {
-        Debug.Log("SE EJECTURÓ EL CHANGESCENE COMPLETE DEL NETWORKOBJECT");
+        Debug.Log("SE EJECTURï¿½ EL CHANGESCENE COMPLETE DEL NETWORKOBJECT");
         if (IgnoreDisableOnChangeScene)
         {
             return;

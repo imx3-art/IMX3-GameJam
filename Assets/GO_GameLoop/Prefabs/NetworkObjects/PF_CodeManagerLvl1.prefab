@@ -73,6 +73,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level_ID: -1
   IgnoreColisionChangeAuthority: 1
+  IgnoreDisableOnChangeScene: 0
+  levelindexLocal: 0
+  networkObject: {fileID: 0}
 --- !u!114 &3865442845449994384
 MonoBehaviour:
   m_ObjectHideFlags: 0
