@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.UI;
 using Fusion;
 using StarterAssets;
 using TMPro;
+using UnityEngine.PlayerLoop;
 
 public class GO_PlayerUIManager : MonoBehaviour
 {
@@ -30,6 +32,8 @@ public class GO_PlayerUIManager : MonoBehaviour
     private int collectedBooks = 0;// Prefab del número del libro
 
     [Header("Level UI")] public TextMeshProUGUI levelText;
+
+    [Header("Time UI")] public TextMeshProUGUI totalTime;
     
     [Header("Session Info")]
     [SerializeField] private TextMeshProUGUI sessionPlayersCount;
@@ -53,6 +57,23 @@ public class GO_PlayerUIManager : MonoBehaviour
     private PlayerState currentPlayerState;
     private Coroutine _coroutineShowMsj;
     private Coroutine _coroutineHideMsj;
+    private float elapsedTime = 0;
+
+    void Update()
+    {
+        // Increment elapsedTime by the time passed since last frame
+        elapsedTime += Time.deltaTime;
+        UpdateTimerUI();
+    }
+
+    // Update the timer text in the UI
+    private void UpdateTimerUI()
+    {
+        int minutes = Mathf.FloorToInt(elapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
+
+        totalTime.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
     private IEnumerator Start()
     {
         while (true)

@@ -180,6 +180,7 @@ public class GO_PlayerNetworkManager : NetworkBehaviour
         }
         ChangePlayerState(PlayerState.Normal);
         RPC_setState((int)PlayerState.Normal);
+        GO_LevelManager.instance.ResumeTimer();
     }
 
     public void StartdragMode(bool _RPC = false)

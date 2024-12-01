@@ -36,6 +36,9 @@ public class GO_LevelManager : NetworkBehaviour
 
     public int totalLives = 3;
     public static bool DidSabotage = false;
+    
+    public float totalTime;  // Tiempo total acumulado
+    private bool isRunning;   // Verifica si el temporizador está activo
 
     //private int _currentLives;
 
@@ -162,11 +165,14 @@ public class GO_LevelManager : NetworkBehaviour
         GO_AreaTrigger.OnPlayerEnterArea -= HandlePlayerEnterArea;
     }
 
+
     public void HandlePlayerEnterArea()
     {
         if (!isChangingScene)
         {
             //Muestra pantalla de Carga
+            PauseTimer();
+            Debug.Log("TIEMPO TRANSCURRIDO EN EL "+ _currentLevel +" " + totalTime);
             GO_LoadScene.Instance.ShowLoadingScreen();
             uiplayer = _playerInstance.transform.GetChild(2).GetComponent<GO_PlayerUIManager>();
             uiplayer.RemoveBooksNumber();
@@ -450,10 +456,23 @@ public class GO_LevelManager : NetworkBehaviour
     }
     private void Update()
     {
+        
+        if (isRunning)
+        {
+            totalTime += Time.deltaTime;  // Acumular tiempo mientras esté activo
+        }
         if (isChangingScene && SceneManager.GetActiveScene().name == _currentLevel.ToString())
         {
             OnSceneLoaded();
         }
+    }
+    public void ResumeTimer()
+    {
+        isRunning = true;
+    }
+    public void PauseTimer()
+    {
+        isRunning = false;
     }
     public void OnSceneLoaded()
     {
