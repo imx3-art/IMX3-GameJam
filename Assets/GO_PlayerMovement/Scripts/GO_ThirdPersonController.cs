@@ -153,7 +153,17 @@ namespace StarterAssets
 
             FalloutGravity();
             GroundedCheck();
-            Move();
+            if (!GO_InputsPlayer.IsPause)
+            {
+                Move();
+            }
+            else
+            {
+                _speed = 0f;
+                _animationBlend = 0f;
+                _animator.SetFloat(_animIDSpeed, _animationBlend);
+                _animator.SetFloat(_animIDMotionSpeed, 0f);
+            }
             AdjustCameraFraming();
             HandleStaminaAndSpeed();
 
@@ -213,6 +223,7 @@ namespace StarterAssets
 
         private void Move()
         {
+
             _weight = Mathf.Lerp(_weight, _input.stealth ? 1 : 0, Time.deltaTime * 5);
             _animator.SetLayerWeight(1, _weight);
             _animator.SetLayerWeight(0, 1 - _weight);

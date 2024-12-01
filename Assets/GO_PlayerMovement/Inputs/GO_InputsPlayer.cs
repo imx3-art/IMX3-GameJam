@@ -170,6 +170,10 @@ namespace StarterAssets
 
         public new void MoveInput(Vector2 newMoveDirection)
         {
+            if (IsPause)
+            {
+                newMoveDirection = Vector2.zero;
+            }
             if (GO_PlayerNetworkManager.localPlayer.isDrag > 0)
             {
                 //GO_PlayerNetworkManager.localPlayer.movePlayerNetwork = newMoveDirection;
