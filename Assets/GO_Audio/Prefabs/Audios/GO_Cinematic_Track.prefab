@@ -47,5 +47,5 @@ MonoBehaviour:
   name: GO_Cinematic_Track
   clip: {fileID: 8300000, guid: f112f774b5c14ce4b928c8f579c4fb63, type: 3}
   loop: 1
-  volume: 0.03
+  volume: 0.08
   source: {fileID: 0}

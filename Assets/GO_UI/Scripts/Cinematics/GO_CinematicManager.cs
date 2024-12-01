@@ -29,6 +29,7 @@ public class GO_CinematicManager : MonoBehaviour
         
         if (GO_LevelManager.instance != null)
         {
+            GO_AudioManager.Instance.PlayAmbientSound("GO_Final_Track");   
             GO_PlayerNetworkManager.localPlayer.gameObject.SetActive(false);
             Debug.Log("Desconectando jugador A");
             if (GO_LevelManager.instance._currentLevel == GO_LevelManager.Level.L_GO_ZombieHeaven)
