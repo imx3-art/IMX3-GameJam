@@ -33,7 +33,7 @@ public class GO_PlayerUIManager : MonoBehaviour
 
     [Header("Level UI")] public TextMeshProUGUI levelText;
 
-    [Header("Time UI")] public TextMeshProUGUI totalTime;
+        [Header("Time UI")] public TextMeshProUGUI totalTime;
     
     [Header("Session Info")]
     [SerializeField] private TextMeshProUGUI sessionPlayersCount;
