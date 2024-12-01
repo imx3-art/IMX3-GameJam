@@ -323,6 +323,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_GO_Book 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1630290697874247879, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 31.675
+      objectReference: {fileID: 0}
+    - target: {fileID: 1630290697874247879, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 20.694
+      objectReference: {fileID: 0}
+    - target: {fileID: 1645138912190185233, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4275990800465380495, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -406,6 +421,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 31.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7153270932546304315, guid: 0e414f0f272276a4a9148a1a5b8b5d02,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
